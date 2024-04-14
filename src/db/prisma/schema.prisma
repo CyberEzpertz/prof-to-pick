@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  idNumber  Int      @map("id_number")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  email     String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  role      Role     @default(USER)
+  reviews   Review[]
+
+  @@map("users")
+}
+
+model Review {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id")
+  tags        Tag[]
+  rating      Int
+  difficulty  Int
+  comment     String
+  course      Course    @relation(fields: [courseId], references: [id])
+  courseId    String    @map("course_id")
+  professor   Professor @relation(fields: [professorId], references: [id])
+  professorId Int       @map("professor_id")
+
+  @@map("reviews")
+}
+
+model Professor {
+  id        Int      @id @default(autoincrement())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  courses   Course[]
+  reviews   Review[]
+  classes   Class[]
+  tags      Tag[]
+
+  @@map("professors")
+}
+
+model Course {
+  code        String      @id
+  title       String
+  description String?
+  reviews     Review[]
+  professors  Professor[]
+  classes     Class[]
+
+  @@map("courses")
+}
+
+model Class {
+  id          String      @id @default(uuid())
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  code        Int         @unique
+  course      Course      @relation(fields: [courseId], references: [id])
+  courseId    String      @map("course_id")
+  section     String
+  professor   Professor?  @relation(fields: [professorId], references: [id])
+  professorId Int?        @map("professor_id")
+  schedules   Schedule[]
+  room        String
+  enrolled    Int
+  cap         Int
+  restriction Restriction
+  modality    Modality
+  isDeleted   Boolean     @map("is_deleted")
+
+  @@map("classes")
+}
+
+model Schedule {
+  id       Int       @id @default(autoincrement())
+  day      Day
+  start    DateTime  @db.Time(4)
+  end      DateTime  @db.Time(4)
+  classes  Class[]
+  isOnline Boolean   @map("is_online")
+  date     DateTime? @db.Date
+
+  @@unique(name: "scheduleId", [day, start, end, date])
+  @@map("schedules")
+}
+
+enum Restriction {
+  NONE
+  FROSH
+  RESTRICTED
+}
+
+enum Modality {
+  HYBRID
+  F2F
+  ONLINE
+}
+
+enum Day {
+  M
+  T
+  W
+  H
+  F
+  S
+}
+
+enum Tag {
+  WOULD_TAKE_AGAIN
+  HIGH_WORKLOAD
+  GIVES_FEEDBACK
+  CLEAR_INSTRUCTIONS
+  GRADE_CURVE
+  EXTRA_CREDIT
+  KNOWS_THEIR_SUBJECT
+  CONSIDERATE
+  AMAZING_LECTURES
+  MANDATORY_ATTENDANCE
+  FRIENDLY
+  GRADES_LATE
+  RESPONSIVE
+}
+
+enum Role {
+  ADMIN
+  VERIFIED
+  USER
+}
