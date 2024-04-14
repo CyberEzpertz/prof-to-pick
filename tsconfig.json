@@ -28,7 +28,8 @@
       "@/server-actions/*": ["server-actions/*"],
       "@/app/*": ["app/*"],
       "@/vendor/*": ["vendor/*"],
-      "@/context/*": ["context/*"]
+      "@/context/*": ["context/*"],
+      "@/styles/*": ["styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

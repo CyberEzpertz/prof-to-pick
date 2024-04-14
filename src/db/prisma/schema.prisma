@@ -60,6 +60,7 @@ model Professor {
 
 model Course {
   code        String      @id
+  newCode     String?
   title       String
   description String?
   reviews     Review[]
@@ -73,8 +74,8 @@ model Class {
   id          String      @id @default(uuid())
   updatedAt   DateTime    @updatedAt @map("updated_at")
   code        Int         @unique
-  course      Course      @relation(fields: [courseId], references: [id])
-  courseId    String      @map("course_id")
+  course      Course      @relation(fields: [course_code], references: [code])
+  course_code String      @map("course_id")
   section     String
   professor   Professor?  @relation(fields: [professorId], references: [id])
   professorId Int?        @map("professor_id")

@@ -1,4 +1,5 @@
 'use client';
+import SiteNavbar from '@/components/SiteNavbar';
 import { Button } from '@/components/ui/button';
 import { getTable } from '@/server-actions/test';
 

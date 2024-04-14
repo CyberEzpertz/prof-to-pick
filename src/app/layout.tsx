@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,14 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <NavigationMenu></NavigationMenu>
       <body
         className={cn(
-          'center flex min-h-screen items-center justify-center bg-slate-950 font-sans antialiased',
+          'flex min-w-full flex-col bg-slate-950 font-sans antialiased',
           inter.variable,
         )}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
