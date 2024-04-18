@@ -38,10 +38,10 @@ model Review {
   rating      Int
   difficulty  Int
   comment     String
-  course      Course    @relation(fields: [courseId], references: [id])
-  courseId    String    @map("course_id")
+  course      Course    @relation(fields: [courseCode], references: [code])
   professor   Professor @relation(fields: [professorId], references: [id])
   professorId Int       @map("professor_id")
+  courseCode  String
 
   @@map("reviews")
 }
@@ -60,7 +60,6 @@ model Professor {
 
 model Course {
   code        String      @id
-  newCode     String?
   title       String
   description String?
   reviews     Review[]
@@ -113,6 +112,8 @@ enum Modality {
   HYBRID
   F2F
   ONLINE
+  PREDOMINANTLY_ONLINE
+  PREDOMINANTLY_F2F
 }
 
 enum Day {

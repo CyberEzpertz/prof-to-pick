@@ -14,53 +14,148 @@ import {
 } from '@/components/ui/navigation-menu';
 import Link from 'next/link';
 import { Separator } from './ui/separator';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from './ui/button';
+import {
+  Bolt,
+  Calendar,
+  GraduationCap,
+  HelpCircle,
+  LogOut,
+  LucideIcon,
+  Presentation,
+  Search,
+  SlashSquare,
+  Star,
+} from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
-type Props = {};
+type link = {
+  href: string;
+  title: string;
+  icon: LucideIcon;
+};
 
-const SiteNavbar = (props: Props) => {
+const SiteNavbar = () => {
+  const path = usePathname();
+
+  const navLinks: link[] = [
+    {
+      href: '/',
+      title: 'Search',
+      icon: Search,
+    },
+    {
+      href: '/courses',
+      title: 'Courses',
+      icon: Presentation,
+    },
+    {
+      href: '/compare',
+      title: 'Compare',
+      icon: SlashSquare,
+    },
+    {
+      href: '/scheduler',
+      title: 'Scheduler',
+      icon: Calendar,
+    },
+    {
+      href: '/reviews',
+      title: 'Reviews',
+      icon: Star,
+    },
+  ];
+
+  const bottomLinks: link[] = [
+    {
+      href: '/help',
+      title: 'Help',
+      icon: HelpCircle,
+    },
+    {
+      href: '/settings',
+      title: 'Settings',
+      icon: Bolt,
+    },
+    {
+      href: '/login',
+      title: 'Logout',
+      icon: LogOut,
+    },
+  ];
+
   return (
     <>
-      <NavigationMenu className="sticky top-0 z-50 flex w-full max-w-full p-2 px-80 backdrop-blur">
-        <Link
-          className="mr-auto h-full text-xl font-extrabold tracking-wide"
-          href="/"
-        >
-          <div>
-            <span className="text-indigo-500">Prof</span>ToPick
-          </div>
+      <nav className="flex h-full flex-col gap-3 px-4 py-5">
+        <Link href="/">
+          <span className="flex flex-row items-center pl-4 text-2xl font-extrabold">
+            <GraduationCap className="mr-3" color="#00e3c4" size={32} />{' '}
+            ProfToPick
+          </span>
         </Link>
-        <NavigationMenuList className="justify-end">
-          <NavigationMenuItem>
-            <Link href="/home" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Professors
-              </NavigationMenuLink>
+
+        <Separator className="my-3" />
+
+        {navLinks.map((link, index) => {
+          const active = path === link.href;
+
+          return (
+            <Link
+              key={index}
+              href={link.href}
+              className={cn(
+                buttonVariants({
+                  variant: path === link.href ? 'default' : 'ghost',
+                  size: 'default',
+                }),
+                'relative justify-start pl-4 pr-32 text-base font-normal',
+                active &&
+                  'dark:bg-muted dark:hover:bg-muted font-semibold  dark:text-white dark:hover:text-white',
+                active &&
+                  "before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
+              )}
+            >
+              <link.icon
+                className="mr-4 h-6 w-6"
+                {...(active && { color: '#2dd4bf', strokeWidth: 3 })}
+              />
+              {link.title}
             </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/courses" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Courses
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/compare" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Compare
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/scheduler" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Scheduler
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-      <Separator />
+          );
+        })}
+
+        <div className="mt-auto flex flex-col gap-2">
+          {bottomLinks.map((link, index) => {
+            const active = path === link.href;
+
+            return (
+              <Link
+                key={index}
+                href={link.href}
+                className={cn(
+                  buttonVariants({
+                    variant: path === link.href ? 'default' : 'ghost',
+                    size: 'default',
+                  }),
+                  'relative justify-start pl-4 pr-32 text-base font-normal',
+                  active &&
+                    'dark:bg-muted dark:hover:bg-muted font-semibold  dark:text-white dark:hover:text-white',
+                  active &&
+                    "before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
+                )}
+              >
+                <link.icon
+                  className="mr-4 h-6 w-6"
+                  {...(active && { color: '#2dd4bf', strokeWidth: 3 })}
+                />
+                {link.title}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+      <Separator orientation="vertical" />
     </>
   );
 };

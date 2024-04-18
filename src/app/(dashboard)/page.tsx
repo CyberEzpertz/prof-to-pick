@@ -10,9 +10,5 @@ const handleClick = async () => {
 };
 
 export default function Home() {
-  return (
-    <div>
-      <Button onClick={handleClick}>Click Me!</Button>
-    </div>
-  );
+  return <div>Test</div>;
 }
