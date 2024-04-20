@@ -36,7 +36,7 @@ type link = {
   icon: LucideIcon;
 };
 
-const SiteNavbar = () => {
+const Sidebar = () => {
   const path = usePathname();
 
   const navLinks: link[] = [
@@ -57,7 +57,7 @@ const SiteNavbar = () => {
     },
     {
       href: '/scheduler',
-      title: 'Scheduler',
+      title: 'Schedule',
       icon: Calendar,
     },
     {
@@ -111,14 +111,14 @@ const SiteNavbar = () => {
                 }),
                 'relative justify-start pl-4 pr-32 text-base font-normal',
                 active &&
-                  'dark:bg-muted dark:hover:bg-muted font-semibold  dark:text-white dark:hover:text-white',
+                  'dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white',
                 active &&
                   "before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
               )}
             >
               <link.icon
                 className="mr-4 h-6 w-6"
-                {...(active && { color: '#2dd4bf', strokeWidth: 3 })}
+                {...(active && { color: '#2dd4bf', strokeWidth: 2 })}
               />
               {link.title}
             </Link>
@@ -142,12 +142,12 @@ const SiteNavbar = () => {
                   active &&
                     'dark:bg-muted dark:hover:bg-muted font-semibold  dark:text-white dark:hover:text-white',
                   active &&
-                    "before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
+                    " before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
                 )}
               >
                 <link.icon
                   className="mr-4 h-6 w-6"
-                  {...(active && { color: '#2dd4bf', strokeWidth: 3 })}
+                  {...(active && { color: '#2dd4bf', strokeWidth: 1 })}
                 />
                 {link.title}
               </Link>
@@ -160,4 +160,4 @@ const SiteNavbar = () => {
   );
 };
 
-export default SiteNavbar;
+export default Sidebar;

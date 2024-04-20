@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Anton, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
@@ -8,6 +8,12 @@ import { ThemeProvider } from '@/context/ThemeContext';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
+});
+
+const anton = Anton({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-display',
 });
 
 export const metadata: Metadata = {
@@ -26,6 +32,7 @@ export default function RootLayout({
         className={cn(
           'flex h-full min-h-full min-w-full flex-row bg-slate-950 font-sans antialiased',
           inter.variable,
+          anton.variable,
         )}
       >
         <ThemeProvider

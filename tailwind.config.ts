@@ -11,6 +11,9 @@ const config = {
   ],
   prefix: '',
   theme: {
+    fontFamily: {
+      display: ['var(--font-display)'],
+    },
     container: {
       center: true,
       padding: '2rem',

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
-import SiteNavbar from '@/components/SiteNavbar';
+import Sidebar from '@/components/Sidebar';
 import { Separator } from '@/components/ui/separator';
 
 export default function RootLayout({
@@ -10,7 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <SiteNavbar />
+      <Sidebar />
       {children}
     </>
   );

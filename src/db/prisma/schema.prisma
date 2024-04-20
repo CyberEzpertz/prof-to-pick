@@ -15,33 +15,35 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
-  idNumber  Int      @map("id_number")
+  idNumber  Int      @map("id_number") @db.SmallInt
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   email     String   @unique
-  password  String
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
+  passhash  String
   role      Role     @default(USER)
   reviews   Review[]
+  votes     Vote[]
 
   @@map("users")
 }
 
 model Review {
-  id          String    @id @default(uuid())
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String    @map("user_id")
-  tags        Tag[]
-  rating      Int
-  difficulty  Int
-  comment     String
-  course      Course    @relation(fields: [courseCode], references: [code])
-  professor   Professor @relation(fields: [professorId], references: [id])
-  professorId Int       @map("professor_id")
-  courseCode  String
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String    @map("user_id")
+  userIdNumber Int       @map("user_id_number") @db.SmallInt
+  tags         Tag[]
+  rating       Int
+  difficulty   Int
+  comment      String
+  modality     Modality
+  course       Course    @relation(fields: [courseCode], references: [code])
+  professor    Professor @relation(fields: [professorId], references: [id])
+  professorId  Int       @map("professor_id")
+  courseCode   String
+  votes        Vote[]
 
   @@map("reviews")
 }
@@ -55,6 +57,7 @@ model Professor {
   classes   Class[]
   tags      Tag[]
 
+  @@unique([firstName, lastName])
   @@map("professors")
 }
 
@@ -87,6 +90,17 @@ model Class {
   isDeleted   Boolean     @map("is_deleted")
 
   @@map("classes")
+}
+
+model Vote {
+  user     User    @relation(fields: [userId], references: [id])
+  review   Review  @relation(fields: [reviewId], references: [id])
+  userId   String  @map("user_id")
+  reviewId String  @map("review_id")
+  isLike   Boolean @map("is_like")
+
+  @@id([userId, reviewId])
+  @@map("votes")
 }
 
 model Schedule {
