@@ -14,17 +14,25 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  idNumber  Int      @map("id_number") @db.SmallInt
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  email     String   @unique
-  passhash  String
+  id        String   @id
+  idNumber  Int      @default(122) @map("id_number") @db.SmallInt
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  invites   Int      @default(2) @db.SmallInt
   role      Role     @default(USER)
   reviews   Review[]
   votes     Vote[]
+  Invite    Invite[]
 
   @@map("users")
+}
+
+model Invite {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  email  String
+
+  @@id([userId, email])
+  @@map("invites")
 }
 
 model Review {

@@ -1,31 +1,24 @@
-'use client';
 import ProfessorInfo from '@/components/ProfessorInfo';
 import ReviewCard from '@/components/ReviewCard';
-import SiteNavbar from '@/components/Sidebar';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import prisma from '@/db/prisma/prisma';
 import { ProfWithReviews } from '@/lib/types';
-import { getTable } from '@/server-actions/test';
-import { Professor, Review, User } from '@prisma/client';
+import { Review, Professor } from '@prisma/client';
+import React from 'react';
 
-const handleClick = async () => {
-  await getTable()
-    .then((table) => console.log(table))
-    .catch((error) => console.log(error));
-};
+async function getProfessor(id: number) {
+  const prof = await prisma.professor.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      reviews: true,
+    },
+  });
 
-// const user: User = {
-//   createdAt: new Date(),
-//   email: 'bruh@dlsu.edu.ph',
-//   firstName: 'bruh',
-//   id: '122',
-//   idNumber: 122,
-//   lastName: 'BROOOOOOOO',
-//   password: 'bahahaha',
-//   role: 'ADMIN',
-//   updatedAt: new Date(),
-// };
+  return prof as ProfWithReviews;
+}
 
 const review: Review = {
   id: 'test',
@@ -47,28 +40,16 @@ const review: Review = {
   userIdNumber: 122,
 };
 
-const prof: ProfWithReviews = {
-  firstName: 'DOMINIQUE ANGELA',
-  lastName: 'JUNTADO',
-  id: 123,
-  tags: [
-    'AMAZING_LECTURES',
-    'CLEAR_INSTRUCTIONS',
-    'CONSIDERATE',
-    'EXTRA_CREDIT',
-    'EXTRA_CREDIT',
-  ],
-  reviews: [],
-};
+const page = async ({ params }: { params: { id: number } }) => {
+  const prof = await getProfessor(Number(params.id));
 
-export default function Home() {
   return (
     <div className="flex w-full flex-row">
       <ScrollArea className="flex-[7]">
         <div className="flex flex-[7] flex-col gap-6 p-8">
-          <ReviewCard review={review}></ReviewCard>
-          <ReviewCard review={review}></ReviewCard>
-          <ReviewCard review={review}></ReviewCard>
+          {prof?.reviews.map((review, index) => (
+            <ReviewCard review={review} key={index} />
+          ))}
         </div>
       </ScrollArea>
       <Separator orientation="vertical" className="my-auto h-[95%]" />
@@ -77,4 +58,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default page;

@@ -6,21 +6,30 @@ import { Flame, LucideIcon, Star } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
+import { ProfWithReviews } from '@/lib/types';
 
-const getTierColor = (tier: string): string => {
-  switch (tier) {
-    case 'W':
-      return 'bg-teal-500';
-    case 'M':
-      return 'bg-purple-500';
-    default:
-      return 'bg-rose-500';
+const getTier = (rating: number, amount: number) => {
+  let tier, tierColor;
+
+  if (amount == 0) {
+    return { tier: '?', tierColor: 'bg-slate-500' };
   }
+  if (rating >= 3.33) {
+    tier = 'W';
+    tierColor = 'bg-teal-500';
+  } else if (rating >= 1.67) {
+    tier = 'M';
+    tierColor = 'bg-purple-500';
+  } else {
+    tier = 'L';
+    tierColor = 'bg-rose-500';
+  }
+
+  return { tier, tierColor };
 };
 
 type Props = {
-  tier: string;
-  prof: Professor;
+  prof: ProfWithReviews;
 };
 
 type ratingProps = {
@@ -92,14 +101,29 @@ const RatingProgress = ({
   );
 };
 
-const ProfessorInfo = ({ tier, prof }: Props) => {
+const ProfessorInfo = ({ prof }: Props) => {
+  let agg = prof.reviews.reduce(
+    (acc, review) => {
+      acc.rating += review.rating;
+      acc.diff += review.difficulty;
+      acc.count[review.rating - 1] += 1;
+      return acc;
+    },
+    { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
+  );
+
+  agg.rating /= prof.reviews.length;
+  agg.diff /= prof.reviews.length;
+
+  const { tier, tierColor } = getTier(agg.rating, prof.reviews.length);
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div
           className={cn(
             'mr-6 flex size-20 items-center justify-center rounded-lg font-display text-6xl',
-            getTierColor(tier),
+            tierColor,
           )}
         >
           {tier}
@@ -122,14 +146,14 @@ const ProfessorInfo = ({ tier, prof }: Props) => {
               hexColor="#2dd4bf"
               icon={Star}
               name="AVG. RATING"
-              rating={4.5}
+              rating={agg.rating || 0}
               twColor="bg-teal-500"
             />
             <AverageRating
               hexColor="#f43f5e"
               icon={Flame}
               name="AVG. DIFFICULTY"
-              rating={2.4}
+              rating={agg.diff || 0}
               twColor="bg-rose-500"
             />
           </div>
@@ -162,8 +186,8 @@ const ProfessorInfo = ({ tier, prof }: Props) => {
           <Card className="flex flex-col gap-2 p-4">
             {[...Array(5)].map((_, index) => (
               <RatingProgress
-                progress={100}
-                reviews={3}
+                progress={agg.count[index] / Math.max(...agg.count)}
+                reviews={agg.count[index]}
                 rating={index + 1}
                 key={index}
               />
