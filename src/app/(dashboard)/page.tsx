@@ -1,10 +1,12 @@
 'use client';
+import ProfessorInfo from '@/components/ProfessorInfo';
 import ReviewCard from '@/components/ReviewCard';
 import SiteNavbar from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { getTable } from '@/server-actions/test';
-import { Review, User } from '@prisma/client';
+import { Professor, Review, User } from '@prisma/client';
 
 const handleClick = async () => {
   await getTable()
@@ -44,16 +46,33 @@ const review: Review = {
   userIdNumber: 122,
 };
 
+const prof: Professor = {
+  firstName: 'DOMINIQUE ANGELA',
+  lastName: 'JUNTADO',
+  id: 123,
+  tags: [
+    'AMAZING_LECTURES',
+    'CLEAR_INSTRUCTIONS',
+    'CONSIDERATE',
+    'EXTRA_CREDIT',
+    'EXTRA_CREDIT',
+  ],
+};
+
 export default function Home() {
   return (
     <div className="flex w-full flex-row">
-      <div className="flex flex-[7] flex-col gap-6 p-8">
-        <div></div>
-        <ReviewCard review={review}></ReviewCard>
-        <ReviewCard review={review}></ReviewCard>
-      </div>
+      <ScrollArea className="flex-[7]">
+        <div className="flex flex-[7] flex-col gap-6 p-8">
+          <ReviewCard review={review}></ReviewCard>
+          <ReviewCard review={review}></ReviewCard>
+          <ReviewCard review={review}></ReviewCard>
+        </div>
+      </ScrollArea>
       <Separator orientation="vertical" className="my-auto h-[95%]" />
-      <div className="flex-[5]"></div>
+      <div className="flex flex-[4] flex-col justify-center gap-6 p-8">
+        <ProfessorInfo prof={prof} tier="M" />
+      </div>
     </div>
   );
 }

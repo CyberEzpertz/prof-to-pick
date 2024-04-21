@@ -37,22 +37,14 @@ const ReviewRating = (props: ratingProps) => {
         <span className="font-bold">{props.name}</span>
         <div className="flex flex-row">
           {[
-            [...Array(props.rating)].map((_, index) => (
+            [...Array(5)].map((_, index) => (
               <props.icon
                 key={index}
-                fill={props.hexColor}
+                fill={
+                  Math.floor(props.rating) > index ? props.hexColor : '#94a3b8'
+                }
                 strokeWidth={0}
-                size={15}
-              />
-            )),
-          ]}
-          {[
-            [...Array(5 - props.rating)].map((_, index) => (
-              <props.icon
-                key={index}
-                fill="#94a3b8"
-                strokeWidth={0}
-                size={15}
+                size={18}
               />
             )),
           ]}
@@ -66,8 +58,10 @@ const ReviewCard = ({ review }: { review: Review }) => {
   return (
     <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
       <CardHeader className="flex flex-row space-y-0">
-        <div className="flex flex-col gap-2">
-          <CardTitle>{review.courseCode}</CardTitle>
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-3xl font-bold text-slate-200">
+            {review.courseCode}
+          </CardTitle>
           <CardDescription className="text-slate-400">
             ID{review.userIdNumber} • {review.modality} •{' '}
             {review.createdAt.toLocaleDateString('en-US', {
@@ -94,7 +88,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
           />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-4">
         <p>{review.comment}</p>
         <Separator className="my-4" />
         <div className="flex gap-4">
@@ -107,9 +101,17 @@ const ReviewCard = ({ review }: { review: Review }) => {
           })}
         </div>
       </CardContent>
-      <CardFooter className="text-slate-400">
-        <ThumbsUp strokeWidth={1} className="mr-2" color="#94a3b8" />
-        <ThumbsDown strokeWidth={1} className="mr-4" color="#94a3b8" />
+      <CardFooter className="justify-start text-slate-400">
+        <div>
+          <ThumbsUp
+            strokeWidth={1}
+            className="mr-2 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
+          />
+          <ThumbsDown
+            strokeWidth={1}
+            className="mr-4 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
+          />
+        </div>
         XX people found this helpful.
       </CardFooter>
     </Card>

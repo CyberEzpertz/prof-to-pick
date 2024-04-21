@@ -29,15 +29,18 @@ import {
   Star,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { supabaseBrowser } from '@/lib/supabase/client';
 
 type link = {
   href: string;
   title: string;
   icon: LucideIcon;
+  onClick?: () => void;
 };
 
 const Sidebar = () => {
   const path = usePathname();
+  const supabase = supabaseBrowser();
 
   const navLinks: link[] = [
     {
@@ -82,6 +85,9 @@ const Sidebar = () => {
       href: '/login',
       title: 'Logout',
       icon: LogOut,
+      onClick: async () => {
+        await supabase.auth.signOut({ scope: 'local' });
+      },
     },
   ];
 
@@ -131,6 +137,7 @@ const Sidebar = () => {
 
             return (
               <Link
+                {...(link.onClick && { onClick: link.onClick })}
                 key={index}
                 href={link.href}
                 className={cn(
