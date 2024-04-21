@@ -27,10 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en">
       <body
         className={cn(
-          'flex h-full min-h-full min-w-full flex-row bg-slate-950 font-sans antialiased',
+          'flex h-screen min-h-full min-w-full flex-row bg-slate-950 font-sans antialiased',
           inter.variable,
           anton.variable,
         )}

@@ -137,8 +137,8 @@ const Sidebar = () => {
 
             return (
               <Link
-                {...(link.onClick && { onClick: link.onClick })}
                 key={index}
+                {...(link.onClick && { onClick: link.onClick })}
                 href={link.href}
                 className={cn(
                   buttonVariants({
