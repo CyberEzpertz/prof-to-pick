@@ -102,6 +102,7 @@ const RatingProgress = ({
 };
 
 const ProfessorInfo = ({ prof }: Props) => {
+  const numReviews = prof.reviews.length;
   let agg = prof.reviews.reduce(
     (acc, review) => {
       acc.rating += review.rating;
@@ -112,10 +113,10 @@ const ProfessorInfo = ({ prof }: Props) => {
     { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
   );
 
-  agg.rating /= prof.reviews.length;
-  agg.diff /= prof.reviews.length;
+  agg.rating /= numReviews;
+  agg.diff /= numReviews;
 
-  const { tier, tierColor } = getTier(agg.rating, prof.reviews.length);
+  const { tier, tierColor } = getTier(agg.rating, numReviews);
 
   return (
     <div className="flex flex-col">
@@ -139,7 +140,7 @@ const ProfessorInfo = ({ prof }: Props) => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col">
           <span className="mb-2 font-medium text-slate-400">
-            Based on X reviews
+            Based on {numReviews} reviews
           </span>
           <div className="flex flex-row gap-20">
             <AverageRating
