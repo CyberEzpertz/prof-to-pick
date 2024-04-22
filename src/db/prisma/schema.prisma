@@ -65,13 +65,13 @@ model Professor {
   classes   Class[]
   tags      Tag[]
 
-  @@unique([firstName, lastName])
+  @@unique(name: "fullName", [firstName, lastName])
   @@map("professors")
 }
 
 model Course {
   code        String      @id
-  title       String
+  title       String?
   description String?
   reviews     Review[]
   professors  Professor[]
@@ -81,21 +81,20 @@ model Course {
 }
 
 model Class {
-  id          String      @id @default(uuid())
+  code        Int         @id @db.SmallInt
   updatedAt   DateTime    @updatedAt @map("updated_at")
-  code        Int         @unique
   course      Course      @relation(fields: [course_code], references: [code])
-  course_code String      @map("course_id")
+  course_code String      @map("course_code")
   section     String
   professor   Professor?  @relation(fields: [professorId], references: [id])
   professorId Int?        @map("professor_id")
   schedules   Schedule[]
-  room        String
-  enrolled    Int
-  cap         Int
-  restriction Restriction
-  modality    Modality
-  isDeleted   Boolean     @map("is_deleted")
+  rooms       String[]
+  enrolled    Int         @db.SmallInt
+  cap         Int         @db.SmallInt
+  restriction Restriction @default(NONE)
+  modality    Modality    @default(TENTATIVE)
+  remarks     String?
 
   @@map("classes")
 }
@@ -112,15 +111,14 @@ model Vote {
 }
 
 model Schedule {
-  id       Int       @id @default(autoincrement())
-  day      Day
-  start    DateTime  @db.Time(4)
-  end      DateTime  @db.Time(4)
-  classes  Class[]
-  isOnline Boolean   @map("is_online")
-  date     DateTime? @db.Date
+  id      Int     @id @default(autoincrement())
+  day     Day
+  start   Int     @db.SmallInt
+  end     Int     @db.SmallInt
+  date    String
+  classes Class[]
 
-  @@unique(name: "scheduleId", [day, start, end, date])
+  @@unique(name: "scheduleParams", [day, start, end, date])
   @@map("schedules")
 }
 
@@ -136,6 +134,8 @@ enum Modality {
   ONLINE
   PREDOMINANTLY_ONLINE
   PREDOMINANTLY_F2F
+  PURE_ASYNCHRONOUS
+  TENTATIVE
 }
 
 enum Day {
@@ -145,6 +145,7 @@ enum Day {
   H
   F
   S
+  U
 }
 
 enum Tag {

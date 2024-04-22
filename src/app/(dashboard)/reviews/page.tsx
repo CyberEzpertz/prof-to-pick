@@ -1,7 +1,7 @@
 'use client';
 import SiteNavbar from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
-import { getTable } from '@/server-actions/test';
+import { getTable } from '@/server-actions/classes';
 
 export default function Home() {
   return (

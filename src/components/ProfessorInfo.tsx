@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Professor } from '@prisma/client';
+import { Professor, Review } from '@prisma/client';
 import React from 'react';
 import { Separator } from './ui/separator';
 import { Flame, LucideIcon, Star } from 'lucide-react';
@@ -101,9 +101,8 @@ const RatingProgress = ({
   );
 };
 
-const ProfessorInfo = ({ prof }: Props) => {
-  const numReviews = prof.reviews.length;
-  let agg = prof.reviews.reduce(
+const getAggregates = (reviews: Review[]) => {
+  const agg = reviews.reduce(
     (acc, review) => {
       acc.rating += review.rating;
       acc.diff += review.difficulty;
@@ -112,6 +111,13 @@ const ProfessorInfo = ({ prof }: Props) => {
     },
     { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
   );
+
+  return agg;
+};
+
+const ProfessorInfo = ({ prof }: Props) => {
+  const numReviews = prof.reviews.length;
+  const agg = getAggregates(prof.reviews);
 
   agg.rating /= numReviews;
   agg.diff /= numReviews;

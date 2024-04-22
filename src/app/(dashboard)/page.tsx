@@ -6,14 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ProfWithReviews } from '@/lib/types';
-import { getTable } from '@/server-actions/test';
 import { Professor, Review, User } from '@prisma/client';
-
-const handleClick = async () => {
-  await getTable()
-    .then((table) => console.log(table))
-    .catch((error) => console.log(error));
-};
 
 // const user: User = {
 //   createdAt: new Date(),
