@@ -36,7 +36,7 @@ model Invite {
 }
 
 model Review {
-  id           String    @id @default(uuid())
+  id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   user         User      @relation(fields: [userId], references: [id])
@@ -103,7 +103,7 @@ model Vote {
   user     User    @relation(fields: [userId], references: [id])
   review   Review  @relation(fields: [reviewId], references: [id])
   userId   String  @map("user_id")
-  reviewId String  @map("review_id")
+  reviewId Int     @map("review_id")
   isLike   Boolean @map("is_like")
 
   @@id([userId, reviewId])

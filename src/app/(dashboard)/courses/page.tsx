@@ -6,7 +6,7 @@ import { getClasses } from '@/server-actions/classes';
 export default function Home() {
   return (
     <div className="p-4 ">
-      <Button onClick={() => getClasses(12213423, 'CSSWENG')}>
+      <Button onClick={() => getClasses(12213423, 'CSMODEL')}>
         Get Courses!
       </Button>
     </div>

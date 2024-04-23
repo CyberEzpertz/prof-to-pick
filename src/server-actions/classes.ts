@@ -7,8 +7,8 @@ const insertData = async (curr: Class) => {
   let profId: number | null = null;
 
   if (curr.professor) {
-    const firstName = curr.professor.match(/.*(?=,)/)![0];
-    const lastName = curr.professor.match(/(?<=,\s).+(?=\s\s)/)![0];
+    const lastName = curr.professor.match(/.*(?=,)/)![0];
+    const firstName = curr.professor.match(/(?<=,\s).+(?=\s\s)/)![0];
 
     console.log(curr.professor, firstName, lastName);
     const prof = await prisma.professor.upsert({
@@ -63,7 +63,7 @@ const insertData = async (curr: Class) => {
     },
   });
 
-  curr.schedules.forEach(async (sched) => {
+  for (const sched of curr.schedules) {
     await prisma.schedule.upsert({
       where: {
         scheduleParams: {
@@ -92,7 +92,7 @@ const insertData = async (curr: Class) => {
         },
       },
     });
-  });
+  }
 };
 
 export const getClasses = async (id: number, subject: string) => {
@@ -100,6 +100,7 @@ export const getClasses = async (id: number, subject: string) => {
     `http://${process.env.COURSE_API_URL}/api/getClasses/?id=${id}&subject=${subject}`,
     {
       method: 'GET',
+      cache: 'no-store',
     },
   )
     .then((res) => res.json())

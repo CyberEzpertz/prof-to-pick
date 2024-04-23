@@ -101,7 +101,7 @@ const RatingProgress = ({
   );
 };
 
-const getAggregates = (reviews: Review[]) => {
+const getAggregates = (reviews: Review[], numReviews: number) => {
   const agg = reviews.reduce(
     (acc, review) => {
       acc.rating += review.rating;
@@ -112,15 +112,17 @@ const getAggregates = (reviews: Review[]) => {
     { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
   );
 
+  agg.rating /= numReviews;
+  agg.diff /= numReviews;
+  agg.rating.toFixed(1);
+  agg.diff.toFixed(1);
+
   return agg;
 };
 
 const ProfessorInfo = ({ prof }: Props) => {
   const numReviews = prof.reviews.length;
-  const agg = getAggregates(prof.reviews);
-
-  agg.rating /= numReviews;
-  agg.diff /= numReviews;
+  const agg = getAggregates(prof.reviews, numReviews);
 
   const { tier, tierColor } = getTier(agg.rating, numReviews);
 

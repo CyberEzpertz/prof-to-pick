@@ -1,44 +1,15 @@
-'use client';
-import ProfessorInfo from '@/components/ProfessorInfo';
-import ReviewCard from '@/components/ReviewCard';
-import SiteNavbar from '@/components/Sidebar';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import SearchBar from '@/components/SearchBar';
+import prisma from '@/db/prisma/prisma';
 import { ProfWithReviews } from '@/lib/types';
-import { Professor, Review, User } from '@prisma/client';
+import { Review } from '@prisma/client';
+import { z } from 'zod';
 
-// const user: User = {
-//   createdAt: new Date(),
-//   email: 'bruh@dlsu.edu.ph',
-//   firstName: 'bruh',
-//   id: '122',
-//   idNumber: 122,
-//   lastName: 'BROOOOOOOO',
-//   password: 'bahahaha',
-//   role: 'ADMIN',
-//   updatedAt: new Date(),
-// };
+async function fetchData() {
+  const profs = await prisma.professor.findMany();
+  const courses = await prisma.course.findMany();
 
-const review: Review = {
-  id: 'test',
-  comment: `My name is Skyler White, yo. My husband is Walter White, yo. Uh, huh. He told me everything. That's right. And just so you know... My brother-in-law is a DEA agent. And I will not hesitate to call him. Not if I have to. Understood? This is your one and only warning. Do not sell marijuana to my husband. I mean it. Don't call our house again. You stay away from him, or you'll be one sorry individual. You got me? You can dig it. Not that it's any of my business, but you might wanna consider a different line of work. Okay. `,
-  courseCode: 'CCDSALG',
-  createdAt: new Date(),
-  difficulty: 4,
-  modality: 'F2F',
-  professorId: 123,
-  rating: 4,
-  tags: [
-    'AMAZING_LECTURES',
-    'CLEAR_INSTRUCTIONS',
-    'CONSIDERATE',
-    'EXTRA_CREDIT',
-  ],
-  updatedAt: new Date(),
-  userId: 'hashahaha',
-  userIdNumber: 122,
-};
+  return { profs, courses };
+}
 
 const prof: ProfWithReviews = {
   firstName: 'DOMINIQUE ANGELA',
@@ -54,20 +25,23 @@ const prof: ProfWithReviews = {
   reviews: [],
 };
 
-export default function Home() {
+export default async function Home() {
+  const { profs, courses } = await fetchData();
+
   return (
-    <div className="flex w-full flex-row">
-      <ScrollArea className="flex-[7]">
-        <div className="flex flex-[7] flex-col gap-6 p-8">
-          <ReviewCard review={review}></ReviewCard>
-          <ReviewCard review={review}></ReviewCard>
-          <ReviewCard review={review}></ReviewCard>
-        </div>
-      </ScrollArea>
-      <Separator orientation="vertical" className="my-auto h-[95%]" />
-      <div className="flex flex-[4] flex-col justify-center gap-6 p-8">
-        <ProfessorInfo prof={prof} />
+    <div className="grid w-full grid-cols-6 grid-rows-6 justify-items-center gap-6">
+      <div className="col-span-4 col-start-2 row-span-2 row-start-2 flex flex-col gap-2 self-end text-center">
+        <h1 className=" text-balance text-5xl font-bold">
+          Audit your Professor with less hassle.
+        </h1>
+        <p className="text-slate-400">Just enter their name below.</p>
       </div>
+
+      <SearchBar
+        courses={courses}
+        profs={profs}
+        className="col-span-4 col-start-2 row-span-2 row-start-4"
+      />
     </div>
   );
 }
