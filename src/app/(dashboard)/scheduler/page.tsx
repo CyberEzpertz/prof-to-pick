@@ -1,12 +1,8 @@
 'use client';
 import SiteNavbar from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
-import { getTable } from '@/server-actions/classes';
+import { ComboBox } from '@/components/ui/combobox';
 
 export default function Home() {
-  return (
-    <div className="p-4 ">
-      <div>Test</div>
-    </div>
-  );
+  return <div className="p-4 ">Scheduler</div>;
 }

@@ -1,6 +1,5 @@
 import SearchBar from '@/components/SearchBar';
 import prisma from '@/db/prisma/prisma';
-import { ProfWithReviews } from '@/lib/types';
 import { Review } from '@prisma/client';
 import { z } from 'zod';
 
@@ -10,20 +9,6 @@ async function fetchData() {
 
   return { profs, courses };
 }
-
-const prof: ProfWithReviews = {
-  firstName: 'DOMINIQUE ANGELA',
-  lastName: 'JUNTADO',
-  id: 123,
-  tags: [
-    'AMAZING_LECTURES',
-    'CLEAR_INSTRUCTIONS',
-    'CONSIDERATE',
-    'EXTRA_CREDIT',
-    'EXTRA_CREDIT',
-  ],
-  reviews: [],
-};
 
 export default async function Home() {
   const { profs, courses } = await fetchData();

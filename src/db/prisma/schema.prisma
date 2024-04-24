@@ -52,6 +52,7 @@ model Review {
   professorId  Int       @map("professor_id")
   courseCode   String
   votes        Vote[]
+  voteCount    Int       @default(0)
 
   @@map("reviews")
 }

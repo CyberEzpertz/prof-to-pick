@@ -11,12 +11,13 @@ type Props = {
     cursor: number,
   ) => Promise<{ reviews: Review[]; cursor: number }>;
   initCursor: number;
+  offset: number;
 };
 
-const ReviewFeed = ({ initReviews, getReviews, initCursor }: Props) => {
+const ReviewFeed = ({ initReviews, getReviews, initCursor, offset }: Props) => {
   const [loaded, setLoaded] = useState<Review[]>(initReviews);
   const [cursor, setCursor] = useState<number>(initCursor);
-  const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [isEnd, setIsEnd] = useState<boolean>(loaded.length % offset !== 0);
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -24,13 +25,14 @@ const ReviewFeed = ({ initReviews, getReviews, initCursor }: Props) => {
       const { reviews, cursor: newCursor } = await getReviews(cursor);
       setCursor(newCursor);
       setLoaded([...loaded, ...reviews]);
-      if (reviews.length === 0) setIsEnd(true);
+      if (reviews.length < offset) setIsEnd(true);
     };
+    console.log(inView);
 
     if (inView) {
       loadReviews();
     }
-  }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [inView, loaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col gap-6">
@@ -50,7 +52,7 @@ const ReviewFeed = ({ initReviews, getReviews, initCursor }: Props) => {
           )}
         </>
       ) : (
-        <span className="self-center text-slate-500">No reviews yet...</span>
+        <span className="self-center text-slate-500">No reviews found</span>
       )}
     </div>
   );

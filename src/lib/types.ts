@@ -1,12 +1,20 @@
 import { Day, Modality, Prisma, Restriction } from '@prisma/client';
 import { z } from 'zod';
 
-const profWithReviews = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
-  include: { reviews: true },
-});
+const profWithReviewsAndCourses =
+  Prisma.validator<Prisma.ProfessorDefaultArgs>()({
+    include: {
+      reviews: true,
+      courses: {
+        select: {
+          code: true,
+        },
+      },
+    },
+  });
 
-export type ProfWithReviews = Prisma.ProfessorGetPayload<
-  typeof profWithReviews
+export type ProfWithReviewsAndCourses = Prisma.ProfessorGetPayload<
+  typeof profWithReviewsAndCourses
 >;
 
 export const scheduleSchema = z.object({
