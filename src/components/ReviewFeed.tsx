@@ -15,10 +15,14 @@ type Props = {
 };
 
 const ReviewFeed = ({ initReviews, getReviews, initCursor, offset }: Props) => {
-  const [loaded, setLoaded] = useState<Review[]>(initReviews);
+  const [loaded, setLoaded] = useState<Review[]>([]);
   const [cursor, setCursor] = useState<number>(initCursor);
   const [isEnd, setIsEnd] = useState<boolean>(loaded.length % offset !== 0);
   const { ref, inView } = useInView();
+
+  useEffect(() => {
+    setLoaded(initReviews);
+  }, [initReviews]);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -26,13 +30,13 @@ const ReviewFeed = ({ initReviews, getReviews, initCursor, offset }: Props) => {
       setCursor(newCursor);
       setLoaded([...loaded, ...reviews]);
       if (reviews.length < offset) setIsEnd(true);
+      console.log(reviews);
     };
-    console.log(inView);
 
     if (inView) {
       loadReviews();
     }
-  }, [inView, loaded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col gap-6">

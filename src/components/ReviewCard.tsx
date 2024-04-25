@@ -13,6 +13,7 @@ import { Flame, LucideIcon, Star, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
+import VoteButtons from './VoteButtons';
 
 type ratingProps = {
   name: string;
@@ -102,17 +103,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
         </div>
       </CardContent>
       <CardFooter className="justify-start text-slate-400">
-        <div>
-          <ThumbsUp
-            strokeWidth={1}
-            className="mr-2 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
-          />
-          <ThumbsDown
-            strokeWidth={1}
-            className="mr-4 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
-          />
-        </div>
-        XX people found this helpful.
+        <VoteButtons />
       </CardFooter>
     </Card>
   );

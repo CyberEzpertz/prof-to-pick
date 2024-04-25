@@ -19,7 +19,6 @@ import {
   CommandItem,
   CommandList,
 } from './ui/command';
-import { CreatableComboBox } from './ui/customComboBox';
 import {
   Form,
   FormControl,
@@ -40,6 +39,7 @@ import {
 import { Textarea } from './ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 import { toast } from './ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   profId: number;
@@ -64,6 +64,7 @@ const tagsEnum = Object.values(Tag);
 const modalityEnum = Object.values(Modality);
 
 const ReviewForm = ({ profId, courses }: Props) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof reviewFormSchema>>({
     resolver: zodResolver(reviewFormSchema),
     defaultValues: {

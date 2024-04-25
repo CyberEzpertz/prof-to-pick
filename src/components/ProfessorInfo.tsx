@@ -94,7 +94,6 @@ const RatingProgress = ({
         {rating}
       </div>
       <Star size={16} strokeWidth={0} fill="#94a3b8" />
-
       <Progress value={progress} color="dark:bg-teal-500" className="mx-2" />
       <span className="font-bold">{reviews}</span>
     </div>
@@ -195,9 +194,9 @@ const ProfessorInfo = ({ prof }: Props) => {
           <Card className="flex flex-col gap-2 p-4">
             {[...Array(5)].map((_, index) => (
               <RatingProgress
-                progress={agg.count[index] / Math.max(...agg.count)}
-                reviews={agg.count[index]}
-                rating={index + 1}
+                progress={(agg.count[4 - index] / Math.max(...agg.count)) * 100}
+                reviews={agg.count[4 - index]}
+                rating={5 - index}
                 key={index}
               />
             ))}
