@@ -51,10 +51,12 @@ const SearchBar = ({ courses, profs, className }: Props) => {
                     >
                       {prof.firstName
                         .toLowerCase()
-                        .replace(/\b\w/g, (s) => s.toUpperCase())}{' '}
+                        .replace(/((?<=( |-)|^).)/g, (s) =>
+                          s.toUpperCase(),
+                        )}{' '}
                       {prof.lastName
                         .toLowerCase()
-                        .replace(/\b\w/g, (s) => s.toUpperCase())}
+                        .replace(/((?<=( |-)|^).)/g, (s) => s.toUpperCase())}
                     </CommandItem>
                   );
                 })

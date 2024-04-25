@@ -1,51 +1,39 @@
 'use server';
 
 import prisma from '@/db/prisma/prisma';
-import { ReadonlyURLSearchParams } from 'next/navigation';
+import { createServer } from '@/lib/supabase/server';
+import { reviewFormSchema } from '@/lib/types';
+import { z } from 'zod';
 
-export const getReviews = async (
-  id: string,
-  cursor: number,
-  searchParams: { [key: string]: string | string[] | undefined },
-) => {
-  const course = searchParams['course'];
-  const rating = searchParams['rating'];
-  const sort = searchParams['sort'];
+export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
+  const supabase = createServer();
 
-  // When cursor === -1, that means it's the initial value (i.e. it hasn't searched for reviews yet)
-  const reviews = await prisma.review.findMany({
-    take: 10,
-    ...(cursor !== -1 && {
-      skip: 1,
-      cursor: {
-        id: cursor,
-      },
-    }),
+  const { data: userData, error } = await supabase.auth.getUser();
+
+  if (error) return;
+
+  const idNumber = await prisma.user.findUnique({
     where: {
-      professorId: Number(id),
-      ...(course && {
-        courseCode: course as string,
-      }),
-      ...(rating && {
-        rating: Number(rating),
-      }),
+      id: userData.user.id,
     },
-    orderBy: {
-      ...((!sort || sort === 'recent') && {
-        createdAt: 'desc',
-      }),
-      ...(sort === 'oldest' && {
-        createdAt: 'asc',
-      }),
-      ...(sort === 'popular' && {
-        voteCount: 'desc',
-      }),
+    select: {
+      idNumber: true,
     },
   });
 
-  if (reviews.length !== 0) {
-    cursor = reviews?.slice(-1)?.pop()?.id ?? -1;
-  }
+  const review = await prisma.review.create({
+    data: {
+      comment: data.comment,
+      professorId: data.professorId,
+      courseCode: data.courseCode,
+      difficulty: data.difficulty,
+      rating: data.rating,
+      modality: data.modality,
+      userId: userData.user.id,
+      userIdNumber: idNumber?.idNumber ?? 122,
+      tags: data.tags,
+    },
+  });
 
-  return { reviews, cursor };
+  console.log(review);
 };

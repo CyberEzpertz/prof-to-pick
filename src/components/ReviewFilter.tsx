@@ -50,48 +50,42 @@ const ReviewFilter = ({ courses }: Props) => {
   );
 
   return (
-    <div className="flex flex-row flex-wrap items-center gap-5">
-      <Button className="mr-auto">
-        <CirclePlus className="mr-2" />
-        Add Review
-      </Button>
-      <div className="flex flex-wrap gap-5">
-        <ComboBox
-          items={courses}
-          label="Course"
-          callback={(value) => {
-            router.push(`${pathname}?${createQueryString('course', value)}`);
-          }}
-          initVal={searchParams.get('course')}
-        />
-        <ComboBox
-          items={ratings}
-          label="Rating"
-          callback={(value) => {
-            router.push(`${pathname}?${createQueryString('rating', value)}`);
-          }}
-          noSearch
-          initVal={
-            searchParams.get('rating')
-              ? `${searchParams.get('rating')} Stars`
-              : 'Rating'
+    <div className="flex flex-wrap gap-5">
+      <ComboBox
+        items={courses}
+        label="Course"
+        callback={(value) => {
+          router.push(`${pathname}?${createQueryString('course', value)}`);
+        }}
+        initVal={searchParams.get('course')}
+      />
+      <ComboBox
+        items={ratings}
+        label="Rating"
+        callback={(value) => {
+          router.push(`${pathname}?${createQueryString('rating', value)}`);
+        }}
+        noSearch
+        initVal={
+          searchParams.get('rating')
+            ? `${searchParams.get('rating')} Stars`
+            : 'Rating'
+        }
+      />
+      <ComboBox
+        items={sorts}
+        label="Sort by"
+        callback={(value) => {
+          {
+            router.push(`${pathname}?${createQueryString('sort', value)}`);
           }
-        />
-        <ComboBox
-          items={sorts}
-          label="Sort by"
-          callback={(value) => {
-            {
-              router.push(`${pathname}?${createQueryString('sort', value)}`);
-            }
-          }}
-          noSearch
-          initVal={
-            sorts.find((sort) => sort.value === searchParams.get('sort'))
-              ?.label ?? 'Sort by'
-          }
-        />
-      </div>
+        }}
+        noSearch
+        initVal={
+          sorts.find((sort) => sort.value === searchParams.get('sort'))
+            ?.label ?? 'Sort by'
+        }
+      />
     </div>
   );
 };

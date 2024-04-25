@@ -6,7 +6,7 @@ import { Flame, LucideIcon, Star } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import { ProfWithReviews } from '@/lib/types';
+import { ProfWithReviewsAndCourses } from '@/lib/types';
 
 const getTier = (rating: number, amount: number) => {
   let tier, tierColor;
@@ -29,7 +29,7 @@ const getTier = (rating: number, amount: number) => {
 };
 
 type Props = {
-  prof: ProfWithReviews;
+  prof: ProfWithReviewsAndCourses;
 };
 
 type ratingProps = {
@@ -114,8 +114,8 @@ const getAggregates = (reviews: Review[], numReviews: number) => {
 
   agg.rating /= numReviews;
   agg.diff /= numReviews;
-  agg.rating.toFixed(1);
-  agg.diff.toFixed(1);
+  agg.rating = Number(agg.rating.toFixed(1));
+  agg.diff = Number(agg.diff.toFixed(1));
 
   return agg;
 };

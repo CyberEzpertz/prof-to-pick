@@ -2,13 +2,23 @@ import ProfessorInfo from '@/components/ProfessorInfo';
 import ReviewCard from '@/components/ReviewCard';
 import ReviewFeed from '@/components/ReviewFeed';
 import ReviewFilter from '@/components/ReviewFilter';
+import ReviewForm from '@/components/ReviewForm';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import { ComboBox } from '@/components/ui/combobox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
 import { ProfWithReviewsAndCourses } from '@/lib/types';
 import { Review, Professor } from '@prisma/client';
-import { CircleArrowLeft } from 'lucide-react';
+import { CircleArrowLeft, CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react';
@@ -86,13 +96,25 @@ const page = async ({
     return { reviews, cursor };
   };
 
+  const getCourses = async () => {
+    const courses = await prisma.course.findMany({
+      select: {
+        code: true,
+      },
+    });
+
+    return courses.map((course) => course.code);
+  };
+
+  const coursesData = getCourses();
   const profData = getProfessor(Number(params.id));
   const reviewsData = getReviews(-1);
 
   // Parallel Data Fetching
-  const [prof, { reviews, cursor }] = await Promise.all([
+  const [prof, { reviews, cursor }, courses] = await Promise.all([
     profData,
     reviewsData,
+    coursesData,
   ]);
 
   if (!prof) redirect('/not-found');
@@ -108,13 +130,30 @@ const page = async ({
             <CircleArrowLeft />
             Back to search
           </Link>
-          {
+          <div className="flex flex-row">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="default" className="mr-auto gap-2">
+                  <CirclePlus />
+                  Add Review
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="max-w-1/2 h-max w-1/2">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Writing a Review</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {`You're now writing a review for ${`${prof.firstName} ${prof.lastName}`}`}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <ReviewForm courses={courses} profId={1} />
+              </AlertDialogContent>
+            </AlertDialog>
             <ReviewFilter
               courses={prof.courses.map((course) => {
                 return { label: course.code, value: course.code };
               })}
             />
-          }
+          </div>
         </div>
         <ScrollArea className="h-full w-full p-8 pb-0">
           <Suspense
@@ -126,7 +165,7 @@ const page = async ({
               getReviews={getReviews}
               initCursor={cursor}
               offset={offset}
-            ></ReviewFeed>
+            />
           </Suspense>
         </ScrollArea>
       </div>
