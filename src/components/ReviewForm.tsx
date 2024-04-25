@@ -70,14 +70,13 @@ const ReviewForm = ({ profId, courses }: Props) => {
       rating: 1,
       difficulty: 1,
       tags: [],
+      modality: 'HYBRID',
+      professorId: profId,
     },
     reValidateMode: 'onBlur',
   });
 
   const [CoursesOpen, setCoursesOpen] = useState(false);
-
-  form.setValue('professorId', 1);
-  form.setValue('modality', 'HYBRID');
 
   return (
     <Form {...form}>
