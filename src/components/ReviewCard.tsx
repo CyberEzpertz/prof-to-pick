@@ -1,4 +1,4 @@
-import { Review } from '@prisma/client';
+import { Review, User, Vote } from '@prisma/client';
 
 import React from 'react';
 import {
@@ -55,7 +55,7 @@ const ReviewRating = (props: ratingProps) => {
   );
 };
 
-const ReviewCard = ({ review }: { review: Review }) => {
+const ReviewCard = ({ review, vote }: { review: Review; vote: Vote[] }) => {
   return (
     <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
       <CardHeader className="flex flex-row space-y-0">
@@ -103,7 +103,11 @@ const ReviewCard = ({ review }: { review: Review }) => {
         </div>
       </CardContent>
       <CardFooter className="justify-start text-slate-400">
-        <VoteButtons />
+        <VoteButtons
+          voteCount={review.voteCount}
+          vote={vote[0] || undefined}
+          reviewId={review.id}
+        />
       </CardFooter>
     </Card>
   );

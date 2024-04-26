@@ -17,6 +17,13 @@ export type ProfWithReviewsAndCourses = Prisma.ProfessorGetPayload<
   typeof profWithReviewsAndCourses
 >;
 
+const reviewsWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
+  include: {
+    votes: true,
+  },
+});
+export type ReviewsWithVotes = Prisma.ReviewGetPayload<typeof reviewsWithVotes>;
+
 export const scheduleSchema = z.object({
   day: z.nativeEnum(Day),
   start: z.number(),

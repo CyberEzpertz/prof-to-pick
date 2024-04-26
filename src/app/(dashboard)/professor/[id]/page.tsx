@@ -16,6 +16,7 @@ import { ComboBox } from '@/components/ui/combobox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
+import { createServer } from '@/lib/supabase/server';
 import { ProfWithReviewsAndCourses } from '@/lib/types';
 import { Review, Professor } from '@prisma/client';
 import { CircleArrowLeft, CirclePlus } from 'lucide-react';
@@ -57,6 +58,9 @@ const page = async ({
     const course = searchParams['course'];
     const rating = searchParams['rating'];
     const sort = searchParams['sort'];
+    const supabase = createServer();
+    const { data, error } = await supabase.auth.getUser();
+    const user = data.user?.id as string;
 
     // When cursor === -1, that means it's the initial value (i.e. it hasn't searched for reviews yet)
     const reviews = await prisma.review.findMany({
@@ -86,6 +90,13 @@ const page = async ({
         ...(sort === 'popular' && {
           voteCount: 'desc',
         }),
+      },
+      include: {
+        votes: {
+          where: {
+            userId: user,
+          },
+        },
       },
     });
 
