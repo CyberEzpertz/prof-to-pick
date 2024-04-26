@@ -4,6 +4,7 @@ import { LogIn, LogOut } from 'lucide-react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { FaGoogle } from 'react-icons/fa';
 
 const signIn = async () => {
   'use server';
@@ -34,8 +35,11 @@ const Login = () => {
       action={signIn}
       className="flex min-h-screen flex-1 items-center justify-center"
     >
-      <Button className="flex gap-2">
-        <LogIn />
+      <Button className="group flex h-max flex-col gap-4 p-8" variant="outline">
+        <FaGoogle
+          size={100}
+          className="fill-slate-300 transition-colors duration-300 group-hover:fill-teal-400"
+        />
         Sign in with Google
       </Button>
     </form>

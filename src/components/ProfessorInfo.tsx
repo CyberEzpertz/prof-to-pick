@@ -7,6 +7,8 @@ import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import { ProfWithReviewsAndCourses } from '@/lib/types';
+import Link from 'next/link';
+import { buttonVariants } from './ui/button';
 
 const getTier = (rating: number, amount: number) => {
   let tier, tierColor;
@@ -182,6 +184,26 @@ const ProfessorInfo = ({ prof }: Props) => {
                   >
                     {tag.replaceAll('_', ' ')}
                   </Badge>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+        <div className="flex flex-col">
+          <span className="mb-2 font-medium text-slate-400">
+            Verifiably teaches these courses
+          </span>
+          <Card>
+            <CardContent className="flex flex-row flex-wrap gap-2 p-3">
+              {prof.courses.map((tag, index) => {
+                return (
+                  <Link
+                    href={`/courses/${tag.code}`}
+                    className={buttonVariants({ variant: 'outline' })}
+                    key={tag.code}
+                  >
+                    {tag.code}
+                  </Link>
                 );
               })}
             </CardContent>

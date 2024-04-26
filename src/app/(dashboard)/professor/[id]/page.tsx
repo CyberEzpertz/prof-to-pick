@@ -16,6 +16,7 @@ import { CircleArrowLeft, CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react';
+import { number } from 'zod';
 
 async function getProfessor(id: number) {
   const prof = await prisma.professor.findUnique({
@@ -110,16 +111,29 @@ const page = async ({
     return courses.map((course) => course.code);
   };
 
+  const getReviewCourses = async () => {
+    const reviewCourses = await prisma.review.groupBy({
+      by: ['courseCode'],
+      where: {
+        professorId: Number(params.id),
+      },
+      _count: {
+        id: true,
+      },
+    });
+
+    return reviewCourses;
+  };
+
   const coursesData = getCourses();
+  const reviewCoursesData = getReviewCourses();
   const profData = getProfessor(Number(params.id));
   const reviewsData = getReviews(-1);
 
   // Parallel Data Fetching
-  const [prof, { reviews, cursor }, courses] = await Promise.all([
-    profData,
-    reviewsData,
-    coursesData,
-  ]);
+  const [prof, { reviews, cursor }, courses, reviewCourses] = await Promise.all(
+    [profData, reviewsData, coursesData, reviewCoursesData],
+  );
 
   if (!prof) redirect('/not-found');
 
@@ -141,8 +155,11 @@ const page = async ({
               courses={courses}
             />
             <ReviewFilter
-              courses={prof.courses.map((course) => {
-                return { label: course.code, value: course.code };
+              courses={reviewCourses.map((course) => {
+                return {
+                  label: `${course.courseCode} (${course._count.id})`,
+                  value: course.courseCode,
+                };
               })}
             />
           </div>

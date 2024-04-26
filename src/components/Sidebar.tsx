@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase/client';
+import nProgress from 'nprogress';
 
 type link = {
   href: string;
@@ -86,6 +87,7 @@ const Sidebar = () => {
       title: 'Logout',
       icon: LogOut,
       onClick: async () => {
+        nProgress.start();
         await supabase.auth.signOut({ scope: 'local' });
       },
     },
@@ -95,9 +97,9 @@ const Sidebar = () => {
     <>
       <nav className="flex h-full flex-col gap-3 px-4 py-5">
         <Link href="/">
-          <span className="flex flex-row items-center pl-4 text-2xl font-extrabold">
+          <span className="flex flex-row items-center pl-4 text-3xl font-extrabold">
             <GraduationCap className="mr-3" color="#00e3c4" size={32} />{' '}
-            ProfToPick
+            ProfAudit
           </span>
         </Link>
 

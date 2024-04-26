@@ -83,7 +83,7 @@ const ReviewFilter = ({ courses }: Props) => {
         noSearch
         initVal={
           sorts.find((sort) => sort.value === searchParams.get('sort'))
-            ?.label ?? 'Sort by'
+            ?.label ?? 'Most Recent'
         }
       />
     </div>
