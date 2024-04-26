@@ -175,17 +175,23 @@ const ProfessorInfo = ({ prof }: Props) => {
           </span>
           <Card>
             <CardContent className="flex flex-row flex-wrap gap-2 p-3">
-              {prof.tags.map((tag, index) => {
-                return (
-                  <Badge
-                    className="h-8 whitespace-nowrap text-sm"
-                    variant="default"
-                    key={index}
-                  >
-                    {tag.replaceAll('_', ' ')}
-                  </Badge>
-                );
-              })}
+              {prof.tags.length ? (
+                prof.tags.map((tag, index) => {
+                  return (
+                    <Badge
+                      className="h-8 whitespace-nowrap text-sm"
+                      variant="default"
+                      key={index}
+                    >
+                      {tag.replaceAll('_', ' ')}
+                    </Badge>
+                  );
+                })
+              ) : (
+                <p className="text-sm italic text-slate-400">
+                  No tags for this prof. yet...
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
