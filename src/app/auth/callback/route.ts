@@ -27,8 +27,14 @@ export async function GET(request: Request) {
         },
       },
     );
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const timeDiff =
+        (new Date().getTime() - new Date(data.user.created_at).getTime()) /
+        1000;
+
+      if (timeDiff <= 30) return NextResponse.redirect(`${origin}/setup`);
+
       return NextResponse.redirect(`${origin}${next}`);
     }
     console.log(error);

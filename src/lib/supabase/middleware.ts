@@ -59,9 +59,18 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // TODO: Re-enable this when deploying
+  // Enable this during production to authenticate users first
   if (!user) {
     return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  if (request.nextUrl.pathname.startsWith('/setup')) {
+    const timeDiff =
+      (new Date().getTime() - new Date(user.created_at).getTime()) / 1000;
+
+    if (timeDiff <= 120) return NextResponse.next();
+
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return response;
