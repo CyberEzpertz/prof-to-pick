@@ -24,6 +24,15 @@ const reviewsWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
 });
 export type ReviewsWithVotes = Prisma.ReviewGetPayload<typeof reviewsWithVotes>;
 
+const reviewVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
+  select: {
+    voteCount: true,
+    votes: true,
+  },
+});
+
+export type ReviewVotes = Prisma.ReviewGetPayload<typeof reviewVotes>;
+
 export const scheduleSchema = z.object({
   day: z.nativeEnum(Day),
   start: z.number(),
