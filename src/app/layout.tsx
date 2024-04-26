@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Toaster } from '@/components/ui/toaster';
+import ReactQueryProvider from '@/context/QueryContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,14 +37,16 @@ export default function RootLayout({
           anton.variable,
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </ReactQueryProvider>
         <Toaster />
       </body>
     </html>

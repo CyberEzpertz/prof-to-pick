@@ -18,6 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { ProfWithReviewsAndCourses } from '@/lib/types';
+import { fetchReviews } from '@/server-actions/reviews';
 import { Review, Professor } from '@prisma/client';
 import { CircleArrowLeft, CirclePlus } from 'lucide-react';
 import Link from 'next/link';
@@ -42,6 +43,16 @@ async function getProfessor(id: number) {
   return prof as ProfWithReviewsAndCourses;
 }
 
+async function getCourses() {
+  const courses = await prisma.course.findMany({
+    select: {
+      code: true,
+    },
+  });
+
+  return courses.map((course) => course.code);
+}
+
 export const dynamic = 'force-dynamic';
 
 const page = async ({
@@ -51,78 +62,18 @@ const page = async ({
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const offset = 10;
-
-  const getReviews = async (cursor: number) => {
-    'use server';
-    const course = searchParams['course'];
-    const rating = searchParams['rating'];
-    const sort = searchParams['sort'];
-    const supabase = createServer();
-    const { data, error } = await supabase.auth.getUser();
-    const user = data.user?.id as string;
-
-    // When cursor === -1, that means it's the initial value (i.e. it hasn't searched for reviews yet)
-    const reviews = await prisma.review.findMany({
-      take: offset,
-      ...(cursor !== -1 && {
-        skip: 1,
-        cursor: {
-          id: cursor,
-        },
-      }),
-      where: {
-        professorId: Number(params.id),
-        ...(course && {
-          courseCode: course as string,
-        }),
-        ...(rating && {
-          rating: Number(rating),
-        }),
-      },
-      orderBy: {
-        ...((!sort || sort === 'recent') && {
-          createdAt: 'desc',
-        }),
-        ...(sort === 'oldest' && {
-          createdAt: 'asc',
-        }),
-        ...(sort === 'popular' && {
-          voteCount: 'desc',
-        }),
-      },
-      include: {
-        votes: {
-          where: {
-            userId: user,
-          },
-        },
-      },
-    });
-
-    if (reviews.length !== 0) {
-      cursor = reviews?.slice(-1)?.pop()?.id ?? -1;
-    }
-
-    return { reviews, cursor };
-  };
-
-  const getCourses = async () => {
-    const courses = await prisma.course.findMany({
-      select: {
-        code: true,
-      },
-    });
-
-    return courses.map((course) => course.code);
-  };
-
+  const reviewsData = fetchReviews(
+    Number(params.id),
+    -1,
+    new URLSearchParams(
+      (searchParams as { [key: string]: string }) ?? {},
+    ).toString(),
+  );
   const coursesData = getCourses();
   const profData = getProfessor(Number(params.id));
-  const reviewsData = getReviews(-1);
 
   // Parallel Data Fetching
-  const [prof, { reviews, cursor }, courses] = await Promise.all([
+  const [prof, reviews, courses] = await Promise.all([
     profData,
     reviewsData,
     coursesData,
@@ -171,12 +122,7 @@ const page = async ({
             fallback={<p>Loading reviews...</p>}
             key={JSON.stringify(searchParams)}
           >
-            <ReviewFeed
-              initReviews={reviews}
-              getReviews={getReviews}
-              initCursor={cursor}
-              offset={offset}
-            />
+            <ReviewFeed professorId={prof.id} initReviews={reviews} />
           </Suspense>
         </ScrollArea>
       </div>

@@ -5,54 +5,74 @@ import React, { useEffect, useState } from 'react';
 import ReviewCard from './ReviewCard';
 import { useInView } from 'react-intersection-observer';
 import { ReviewsWithVotes } from '@/lib/types';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { fetchReviews } from '@/server-actions/reviews';
+import { useSearchParams } from 'next/navigation';
+import { Button } from './ui/button';
+import { LoadingSpinner } from './ui/spinner';
 
 type Props = {
+  professorId: number;
   initReviews: ReviewsWithVotes[];
-  getReviews: (
-    cursor: number,
-  ) => Promise<{ reviews: ReviewsWithVotes[]; cursor: number }>;
-  initCursor: number;
-  offset: number;
 };
 
-const ReviewFeed = ({ initReviews, getReviews, initCursor, offset }: Props) => {
-  const [loaded, setLoaded] = useState<ReviewsWithVotes[]>([]);
-  const [cursor, setCursor] = useState<number>(initCursor);
-  const [isEnd, setIsEnd] = useState<boolean>(loaded.length % offset !== 0);
+const ReviewFeed = ({ professorId, initReviews }: Props) => {
+  const handleFetch = async ({ pageParam }: { pageParam: number }) => {
+    console.log('Fetching Reviews...');
+    return fetchReviews(professorId, pageParam, '');
+  };
+
   const { ref, inView } = useInView();
 
-  useEffect(() => {
-    setLoaded(initReviews);
-  }, [initReviews]);
+  const { data, error, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ['reviews'],
+      queryFn: handleFetch,
+      initialPageParam: -1,
+      getNextPageParam: (lastPage) => {
+        return lastPage?.slice(-1)?.pop()?.id;
+      },
+      refetchOnWindowFocus: false,
+      initialData: {
+        pages: [initReviews],
+        pageParams: [initReviews?.slice(-1)?.pop()?.id ?? -999],
+      },
+    });
+
+  console.log(initReviews);
 
   useEffect(() => {
-    const loadReviews = async () => {
-      const { reviews, cursor: newCursor } = await getReviews(cursor);
-      setCursor(newCursor);
-      setLoaded([...loaded, ...reviews]);
-      if (reviews.length < offset) setIsEnd(true);
-      console.log(reviews);
-    };
-
     if (inView) {
-      loadReviews();
+      fetchNextPage();
     }
-  }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [inView, fetchNextPage]);
+
+  if (error && error instanceof Error) {
+    return <h2>{error.message}</h2>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="mb-20 flex items-center justify-center">
+        <LoadingSpinner size={48} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
-      {loaded.length ? (
+      {data?.pages.length ? (
         <>
-          {loaded.map((review, index) => (
-            <ReviewCard review={review} key={index} vote={review.votes} />
+          {data.pages.map((page, i) => (
+            <React.Fragment key={i}>
+              {page?.map((review, index) => (
+                <ReviewCard review={review} key={index} vote={review.votes} />
+              ))}
+            </React.Fragment>
           ))}
-
-          {!isEnd && (
-            <div
-              ref={ref}
-              className="flex items-center justify-center italic text-slate-500"
-            >
-              Loading...
+          {hasNextPage && (
+            <div className="my-5 flex items-center justify-center" ref={ref}>
+              <LoadingSpinner size={48} />
             </div>
           )}
         </>
