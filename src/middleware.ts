@@ -10,23 +10,23 @@ const rateLimit = new Ratelimit({
 });
 
 export async function middleware(request: NextRequest) {
-  if (request.method === 'POST') {
-    const ip = request.ip ?? '127.0.0.1';
-    const { success, pending, limit, reset, remaining } =
-      await rateLimit.limit(ip);
+  // if (request.method === 'POST') {
+  //   const ip = request.ip ?? '127.0.0.1';
+  //   const { success, pending, limit, reset, remaining } =
+  //     await rateLimit.limit(ip);
 
-    console.log(success);
-    if (!success) {
-      const now = Date.now();
-      const retryAfter = Math.floor((reset - now) / 1000);
-      return new NextResponse('Too Many Requests', {
-        status: 429,
-        headers: {
-          ['retry-after']: `${retryAfter}`,
-        },
-      });
-    }
-  }
+  //   console.log(success);
+  //   if (!success) {
+  //     const now = Date.now();
+  //     const retryAfter = Math.floor((reset - now) / 1000);
+  //     return new NextResponse('Too Many Requests', {
+  //       status: 429,
+  //       headers: {
+  //         ['retry-after']: `${retryAfter}`,
+  //       },
+  //     });
+  //   }
+  // }
 
   return await updateSession(request);
 }

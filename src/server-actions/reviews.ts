@@ -41,7 +41,7 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
   redirect(`/professor/${data.professorId}`);
 };
 
-export const handleLike = async (
+export const handleVote = async (
   type: 'LIKE' | 'DISLIKE',
   oldVote: boolean | undefined,
   reviewId: number,
@@ -56,7 +56,6 @@ export const handleLike = async (
   }
 
   const userId = data.user?.id as string;
-  console.log(reviewId, userId);
 
   try {
     if (oldVote === undefined) {

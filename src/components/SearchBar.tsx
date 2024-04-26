@@ -1,22 +1,18 @@
 'use client';
 import { Course, Professor } from '@prisma/client';
-import { Input } from './ui/input';
 import { Button, buttonVariants } from './ui/button';
 import {
   Command,
-  CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from '@/components/ui/command';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import nProgress, * as NProgress from 'nprogress';
 
 type Props = {
   courses: Course[];
@@ -47,6 +43,7 @@ const SearchBar = ({ courses, profs, className }: Props) => {
                       key={index}
                       onSelect={() => {
                         router.push(`/professor/${prof.id}`);
+                        NProgress.start();
                       }}
                     >
                       {prof.firstName
@@ -66,6 +63,7 @@ const SearchBar = ({ courses, profs, className }: Props) => {
                       key={index}
                       onSelect={() => {
                         router.push(`/course/${course.code}`);
+                        NProgress.start();
                       }}
                     >
                       {course.code}

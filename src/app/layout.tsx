@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { NavigationMenu } from '@/components/ui/navigation-menu';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Toaster } from '@/components/ui/toaster';
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,6 +37,7 @@ export default function RootLayout({
           anton.variable,
         )}
       >
+        <NextTopLoader color="#14b8a6" showSpinner={false} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -1,6 +1,6 @@
 'use client';
 
-import { handleLike } from '@/server-actions/reviews';
+import { handleVote } from '@/server-actions/reviews';
 import { Vote } from '@prisma/client';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -20,7 +20,7 @@ type voteState = {
 const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
   const pathname = usePathname();
 
-  const handleVote = async (
+  const handleSubmit = async (
     type: 'LIKE' | 'DISLIKE',
     oldVote: boolean | undefined,
   ) => {
@@ -29,7 +29,7 @@ const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
     if ((type === 'LIKE') === oldVote) newVote = undefined;
     else newVote = type === 'LIKE';
     setVoteState(newVote);
-    const vote = await handleLike(type, oldVote, reviewId, pathname);
+    const vote = await handleVote(type, oldVote, reviewId, pathname);
   };
 
   const [voteState, setVoteState] = useOptimistic(
@@ -66,14 +66,14 @@ const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
     <>
       <div>
         <ThumbsUp
-          onClick={() => handleVote('LIKE', voteState.isLike)}
+          onClick={() => handleSubmit('LIKE', voteState.isLike)}
           strokeWidth={voteState.isLike === true ? 0 : 1}
           fill="#10b981"
           fillOpacity={voteState.isLike === true ? 100 : 0}
           className="mr-2 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
         />
         <ThumbsDown
-          onClick={() => handleVote('DISLIKE', voteState.isLike)}
+          onClick={() => handleSubmit('DISLIKE', voteState.isLike)}
           strokeWidth={voteState.isLike === false ? 0 : 1}
           fill="#f43f5e"
           fillOpacity={voteState.isLike === false ? 100 : 0}

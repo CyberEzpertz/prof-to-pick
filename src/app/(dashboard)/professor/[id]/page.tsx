@@ -3,14 +3,7 @@ import ReviewCard from '@/components/ReviewCard';
 import ReviewFeed from '@/components/ReviewFeed';
 import ReviewFilter from '@/components/ReviewFilter';
 import ReviewForm from '@/components/ReviewForm';
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+
 import { Button } from '@/components/ui/button';
 import { ComboBox } from '@/components/ui/combobox';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -142,23 +135,11 @@ const page = async ({
             Back to search
           </Link>
           <div className="flex flex-row">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="default" className="mr-auto gap-2">
-                  <CirclePlus />
-                  Add Review
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="max-w-1/2 h-max w-1/2">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Writing a Review</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {`You're now writing a review for ${`${prof.firstName} ${prof.lastName}`}`}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <ReviewForm courses={courses} profId={1} />
-              </AlertDialogContent>
-            </AlertDialog>
+            <ReviewForm
+              profId={prof.id}
+              profName={`${prof.firstName} ${prof.lastName}`}
+              courses={courses}
+            />
             <ReviewFilter
               courses={prof.courses.map((course) => {
                 return { label: course.code, value: course.code };

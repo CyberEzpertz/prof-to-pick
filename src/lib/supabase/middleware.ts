@@ -60,9 +60,9 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // TODO: Re-enable this when deploying
-  // if (!user) {
-  //   return NextResponse.redirect(new URL('/login', request.url));
-  // }
+  if (!user) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
   return response;
 }
