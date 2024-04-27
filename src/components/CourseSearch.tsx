@@ -25,7 +25,6 @@ const formSchema = z.object({
 });
 
 const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  console.log(values);
   nProgress.start();
   const success = await getClasses(values.idNumber, values.courseCode);
   nProgress.done();

@@ -23,7 +23,7 @@ const signIn = async () => {
   });
 
   if (error) {
-    console.log(error);
+    console.error(error);
   } else {
     return redirect(data.url);
   }

@@ -99,7 +99,6 @@ const SearchBar = ({ courses, profs, className }: Props) => {
       <Button
         variant="outline"
         onClick={() => {
-          console.log(suggestions);
           setData(data === 'Courses' ? 'Professors' : 'Courses');
           setSuggestions(data === 'Courses' ? profs : courses);
         }}

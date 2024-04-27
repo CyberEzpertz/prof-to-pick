@@ -71,8 +71,6 @@ export const deleteReview = async (reviewId: number) => {
       },
     });
 
-    console.log(review);
-
     return true;
   } catch (error) {
     console.error('Failed to delete post');

@@ -12,7 +12,6 @@ const insertData = async (curr: Class) => {
     let lastName = curr.professor.match(/.*(?=,)/)![0];
     let firstName = curr.professor.match(/((?<=,\s).+(?=\s\s)|(?<=,\s).+)/)![0];
 
-    console.log(firstName, lastName);
     try {
       const prof = await prisma.professor.upsert({
         where: {
@@ -114,15 +113,13 @@ export const getClasses = async (idString: string, subject: string) => {
   )
     .then((res) => res.json())
     .then(async (data) => {
-      console.log(data);
-
       // validate the shape of the response
       const parsed = classArraySchema.safeParse(data);
 
       // if it's not the correct shape, return prematurely
       if (!parsed.success) {
         console.error(parsed.error);
-        // console.log('Unsuccesful parse.');
+        console.error('Unsuccesful parse.');
         return;
       }
 
@@ -139,14 +136,13 @@ export const getClasses = async (idString: string, subject: string) => {
       });
 
       for (const curr of classes) {
-        console.log(curr);
         await insertData(curr);
       }
       revalidateTag('searchBar');
       return true;
     })
     .catch((error) => {
-      console.log('Error fetching classes data.');
+      console.error('Error fetching classes data.');
       console.error(error);
       return false;
     });

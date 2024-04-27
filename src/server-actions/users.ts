@@ -30,6 +30,5 @@ export const getCurrUserId = async () => {
 
   if (error) throw new Error('Failed to validate user');
 
-  console.log(userData);
   return userData.user.id;
 };

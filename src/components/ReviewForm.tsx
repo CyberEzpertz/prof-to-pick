@@ -74,7 +74,6 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
   });
 
   const handleSubmit = async (data: z.infer<typeof reviewFormSchema>) => {
-    console.log(data);
     const success = await createReview(data);
     setOpen(false);
 
