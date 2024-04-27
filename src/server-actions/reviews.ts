@@ -38,7 +38,6 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
   });
 
   revalidatePath(`/professor`);
-  redirect(`/professor/${data.professorId}`);
 };
 
 export const handleVote = async (
