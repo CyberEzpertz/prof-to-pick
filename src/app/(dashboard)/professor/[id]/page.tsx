@@ -47,6 +47,7 @@ const page = async ({
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
+  const profId = Number(params.id);
   const offset = 10;
 
   const getReviews = async (cursor: number) => {
@@ -68,7 +69,7 @@ const page = async ({
         },
       }),
       where: {
-        professorId: Number(params.id),
+        professorId: profId,
         ...(course && {
           courseCode: course as string,
         }),
@@ -117,7 +118,7 @@ const page = async ({
     const reviewCourses = await prisma.review.groupBy({
       by: ['courseCode'],
       where: {
-        professorId: Number(params.id),
+        professorId: profId,
       },
       _count: {
         id: true,
@@ -129,7 +130,7 @@ const page = async ({
 
   const coursesData = getCourses();
   const reviewCoursesData = getReviewCourses();
-  const profData = getProfessor(Number(params.id));
+  const profData = getProfessor(profId);
   const reviewsData = getReviews(-1);
 
   // Parallel Data Fetching
