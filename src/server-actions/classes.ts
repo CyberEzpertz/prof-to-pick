@@ -106,7 +106,7 @@ export const getClasses = async (idString: string, subject: string) => {
   const id = Number(idString);
 
   const res = await fetch(
-    `http://${process.env.COURSE_API_URL}/api/getClasses/?id=${id}&subject=${subject}`,
+    `${process.env.COURSE_API_URL}/api/getClasses/?id=${id}&subject=${subject}`,
     {
       method: 'GET',
       cache: 'no-store',
