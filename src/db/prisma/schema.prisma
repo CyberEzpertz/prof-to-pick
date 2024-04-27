@@ -14,14 +14,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id
-  idNumber  Int      @default(122) @map("id_number") @db.SmallInt
-  isDeleted Boolean  @default(false) @map("is_deleted")
-  invites   Int      @default(2) @db.SmallInt
-  role      Role     @default(USER)
-  reviews   Review[]
-  votes     Vote[]
-  Invite    Invite[]
+  id           String   @id
+  idNumber     Int      @default(122) @map("id_number") @db.SmallInt
+  isDeleted    Boolean  @default(false) @map("is_deleted")
+  invites      Int      @default(2) @db.SmallInt
+  invitedBy    User?    @relation("UserInvites", fields: [invitedById], references: [id])
+  invitedById  String?
+  role         Role     @default(USER)
+  reviews      Review[]
+  votes        Vote[]
+  Invite       Invite[]
+  invitedUsers User[]   @relation("UserInvites")
 
   @@map("users")
 }

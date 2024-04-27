@@ -99,7 +99,7 @@ const ReviewCard = ({ review, vote, byCurrentUser }: reviewProps) => {
       <CardContent className="pb-4">
         <p>{review.comment}</p>
         <Separator className="my-4" />
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-2">
           {review.tags.map((tag, index) => {
             return (
               <Badge className="h-8 text-sm" variant="default" key={index}>
