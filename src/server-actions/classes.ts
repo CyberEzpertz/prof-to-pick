@@ -2,40 +2,47 @@
 
 import prisma from '@/db/prisma/prisma';
 import { Class, classArraySchema, classSchema } from '@/lib/types';
+import { revalidateTag } from 'next/cache';
 
 const insertData = async (curr: Class) => {
   let profId: number | null = null;
 
+  console.log(curr.professor);
   if (curr.professor) {
-    const lastName = curr.professor.match(/.*(?=,)/)![0];
-    const firstName = curr.professor.match(/(?<=,\s).+(?=\s\s)/)![0];
+    let lastName = curr.professor.match(/.*(?=,)/)![0];
+    let firstName = curr.professor.match(/((?<=,\s).+(?=\s\s)|(?<=,\s).+)/)![0];
 
-    console.log(curr.professor, firstName, lastName);
-    const prof = await prisma.professor.upsert({
-      where: {
-        fullName: {
+    console.log(firstName, lastName);
+    try {
+      const prof = await prisma.professor.upsert({
+        where: {
+          fullName: {
+            firstName: firstName,
+            lastName: lastName,
+          },
+        },
+        create: {
           firstName: firstName,
           lastName: lastName,
-        },
-      },
-      create: {
-        firstName: firstName,
-        lastName: lastName,
-        courses: {
-          connect: {
-            code: curr.course,
+          courses: {
+            connect: {
+              code: curr.course,
+            },
           },
         },
-      },
-      update: {
-        courses: {
-          connect: {
-            code: curr.course,
+        update: {
+          courses: {
+            connect: {
+              code: curr.course,
+            },
           },
         },
-      },
-    });
-    profId = prof.id;
+      });
+      profId = prof.id;
+    } catch (error) {
+      console.error('Last Professor logged:');
+      console.error(error);
+    }
   }
 
   const newClass = await prisma.class.upsert({
@@ -95,7 +102,9 @@ const insertData = async (curr: Class) => {
   }
 };
 
-export const getClasses = async (id: number, subject: string) => {
+export const getClasses = async (idString: string, subject: string) => {
+  const id = Number(idString);
+
   const res = await fetch(
     `http://${process.env.COURSE_API_URL}/api/getClasses/?id=${id}&subject=${subject}`,
     {
@@ -130,7 +139,17 @@ export const getClasses = async (id: number, subject: string) => {
       });
 
       for (const curr of classes) {
+        console.log(curr);
         await insertData(curr);
       }
+      revalidateTag('searchBar');
+      return true;
+    })
+    .catch((error) => {
+      console.log('Error fetching classes data.');
+      console.error(error);
+      return false;
     });
+
+  return res;
 };

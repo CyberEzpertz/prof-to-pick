@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from './lib/supabase/middleware';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import prisma from './db/prisma/prisma';
 
 const rateLimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -28,7 +29,19 @@ export async function middleware(request: NextRequest) {
   //   }
   // }
 
-  return await updateSession(request);
+  const { user, response } = await updateSession(request);
+
+  if (user === null) return response;
+
+  // Check if going to setup
+  if (request.nextUrl.pathname.startsWith('/setup')) {
+    const timeDiff =
+      (new Date().getTime() - new Date(user.created_at).getTime()) / 1000;
+
+    if (timeDiff > 30) return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  return response;
 }
 
 export const config = {

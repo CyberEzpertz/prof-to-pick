@@ -16,13 +16,13 @@ async function fetchData() {
 const getCachedCourses = unstable_cache(
   async () => fetchAllCourses(),
   ['searchbar-courses'],
-  { tags: ['courses'] },
+  { tags: ['courses', 'searchBar'] },
 );
 
 const getCachedProfs = unstable_cache(
   async () => fetchAllProfs(),
   ['searchbar-courses'],
-  { tags: ['courses'] },
+  { tags: ['courses', 'searchBar'] },
 );
 
 export default async function Home() {

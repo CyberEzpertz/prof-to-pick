@@ -1,8 +1,14 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { redirect } from 'next/navigation';
 import { NextResponse, type NextRequest } from 'next/server';
+import { type User } from '@supabase/supabase-js/src/index';
 
-export async function updateSession(request: NextRequest) {
+type returnData = {
+  user: User | null;
+  response: NextResponse;
+};
+
+export async function updateSession(request: NextRequest): Promise<returnData> {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -61,17 +67,11 @@ export async function updateSession(request: NextRequest) {
 
   // Enable this during production to authenticate users first
   if (!user) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return {
+      user: user,
+      response: NextResponse.redirect(new URL('/login', request.url)),
+    };
   }
 
-  if (request.nextUrl.pathname.startsWith('/setup')) {
-    const timeDiff =
-      (new Date().getTime() - new Date(user.created_at).getTime()) / 1000;
-
-    if (timeDiff <= 120) return NextResponse.next();
-
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  return response;
+  return { user: user, response: response };
 }
