@@ -41,8 +41,8 @@ export default async function Home() {
       </div>
 
       <SearchBar
-        courses={courses ?? []}
-        profs={profs ?? []}
+        courses={courses}
+        profs={profs}
         className="col-span-4 col-start-2 row-span-2 row-start-4"
       />
     </div>
