@@ -12,7 +12,7 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
 
   const { data: userData, error } = await supabase.auth.getUser();
 
-  if (error) return;
+  if (error) return undefined;
 
   const idNumber = await prisma.user.findUnique({
     where: {
@@ -23,21 +23,32 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
     },
   });
 
-  const review = await prisma.review.create({
-    data: {
-      comment: data.comment,
-      professorId: data.professorId,
-      courseCode: data.courseCode,
-      difficulty: data.difficulty,
-      rating: data.rating,
-      modality: data.modality,
-      userId: userData.user.id,
-      userIdNumber: idNumber?.idNumber ?? 122,
-      tags: data.tags,
-    },
-  });
+  const success = await prisma.review
+    .create({
+      data: {
+        comment: data.comment,
+        professorId: data.professorId,
+        courseCode: data.courseCode,
+        difficulty: data.difficulty,
+        rating: data.rating,
+        modality: data.modality,
+        userId: userData.user.id,
+        userIdNumber: idNumber?.idNumber ?? 122,
+        tags: data.tags,
+      },
+    })
+    .then((review) => {
+      return true;
+    })
+    .catch((error) => {
+      console.error('Something happened during submission of review.');
+      console.error(error);
+    })
+    .finally(() => {
+      revalidatePath(`/professor`);
+    });
 
-  revalidatePath(`/professor`);
+  return success;
 };
 
 export const handleVote = async (

@@ -1,3 +1,4 @@
+'use client';
 import { Review, User, Vote } from '@prisma/client';
 
 import React from 'react';

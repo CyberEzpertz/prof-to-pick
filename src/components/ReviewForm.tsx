@@ -75,17 +75,18 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
 
   const handleSubmit = async (data: z.infer<typeof reviewFormSchema>) => {
     console.log(data);
-    await createReview(data);
+    const success = await createReview(data);
     setOpen(false);
 
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    if (success)
+      toast({
+        description: 'Your review has been successfully submitted.',
+      });
+    else
+      toast({
+        variant: 'destructive',
+        description: "Your review didn't get submitted. Please try again.",
+      });
   };
 
   const [CoursesOpen, setCoursesOpen] = useState(false);
@@ -323,7 +324,9 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
 
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                Submit
+              </Button>
             </AlertDialogFooter>
           </form>
         </Form>
