@@ -1,9 +1,7 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from './lib/supabase/middleware';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
-import prisma from './db/prisma/prisma';
 
 const rateLimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -33,7 +31,7 @@ export async function middleware(request: NextRequest) {
 
   if (user === null) return response;
 
-  // Check if going to setup
+  // Check if going to setup page
   if (request.nextUrl.pathname.startsWith('/setup')) {
     const timeDiff =
       (new Date().getTime() - new Date(user.created_at).getTime()) / 1000;

@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
+import DeleteButton from './DeleteButton';
 
 type ratingProps = {
   name: string;
@@ -22,6 +23,11 @@ type ratingProps = {
   icon: LucideIcon;
   hexColor: string;
   twColor: string;
+};
+type reviewProps = {
+  review: Review;
+  vote: Vote[];
+  byCurrentUser?: boolean;
 };
 
 const ReviewRating = (props: ratingProps) => {
@@ -56,7 +62,7 @@ const ReviewRating = (props: ratingProps) => {
   );
 };
 
-const ReviewCard = ({ review, vote }: { review: Review; vote: Vote[] }) => {
+const ReviewCard = ({ review, vote, byCurrentUser }: reviewProps) => {
   return (
     <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
       <CardHeader className="flex flex-row space-y-0">
@@ -104,11 +110,14 @@ const ReviewCard = ({ review, vote }: { review: Review; vote: Vote[] }) => {
         </div>
       </CardContent>
       <CardFooter className="justify-start text-slate-400">
-        <VoteButtons
-          voteCount={review.voteCount}
-          vote={vote[0] || undefined}
-          reviewId={review.id}
-        />
+        <div className=" mr-auto flex flex-row">
+          <VoteButtons
+            voteCount={review.voteCount}
+            vote={vote[0] || undefined}
+            reviewId={review.id}
+          />
+        </div>
+        {byCurrentUser && <DeleteButton reviewId={review.id} />}
       </CardFooter>
     </Card>
   );

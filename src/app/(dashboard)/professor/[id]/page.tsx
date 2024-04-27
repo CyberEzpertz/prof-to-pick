@@ -19,6 +19,7 @@ import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { number } from 'zod';
 import Loading from './loading';
+import { getCurrUserId } from '@/server-actions/users';
 
 async function getProfessor(id: number) {
   const prof = await prisma.professor.findUnique({
@@ -128,15 +129,15 @@ const page = async ({
     return reviewCourses;
   };
 
-  const coursesData = getCourses();
-  const reviewCoursesData = getReviewCourses();
-  const profData = getProfessor(profId);
-  const reviewsData = getReviews(-1);
-
   // Parallel Data Fetching
-  const [prof, { reviews, cursor }, courses, reviewCourses] = await Promise.all(
-    [profData, reviewsData, coursesData, reviewCoursesData],
-  );
+  const [prof, { reviews, cursor }, courses, reviewCourses, userId] =
+    await Promise.all([
+      getProfessor(profId),
+      getReviews(-1),
+      getCourses(),
+      getReviewCourses(),
+      getCurrUserId(),
+    ]);
 
   if (!prof) redirect('/not-found');
 
@@ -175,6 +176,7 @@ const page = async ({
             getReviews={getReviews}
             initCursor={cursor}
             offset={offset}
+            userId={userId}
           />
         </ScrollArea>
       </div>

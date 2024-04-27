@@ -1,6 +1,6 @@
 'use client';
 
-import { handleVote } from '@/server-actions/reviews';
+import { handleVote } from '@/server-actions/votes';
 import { Vote } from '@prisma/client';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
