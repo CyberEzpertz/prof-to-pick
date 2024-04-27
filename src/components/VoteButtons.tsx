@@ -5,6 +5,7 @@ import { Vote } from '@prisma/client';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React, { useOptimistic } from 'react';
+import { toast, useToast } from './ui/use-toast';
 
 type Props = {
   voteCount: number;
@@ -19,6 +20,7 @@ type voteState = {
 
 const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
   const pathname = usePathname();
+  const { toast } = useToast();
 
   const handleSubmit = async (
     type: 'LIKE' | 'DISLIKE',
@@ -30,6 +32,13 @@ const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
     else newVote = type === 'LIKE';
     setVoteState(newVote);
     const vote = await handleVote(type, oldVote, reviewId, pathname);
+    if (vote === undefined) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem voting on that post, try again.',
+      });
+    }
   };
 
   const [voteState, setVoteState] = useOptimistic(

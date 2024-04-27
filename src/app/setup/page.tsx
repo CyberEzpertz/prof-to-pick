@@ -30,7 +30,7 @@ const Setup = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Account Setup</AlertDialogTitle>
             <AlertDialogDescription>
-              Please input your ID Number below. This will be used for your
+              Please select your ID Number below. This will be used for your
               reviews.
             </AlertDialogDescription>
           </AlertDialogHeader>

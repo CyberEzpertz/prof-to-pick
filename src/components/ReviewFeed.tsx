@@ -6,6 +6,7 @@ import ReviewCard from './ReviewCard';
 import { useInView } from 'react-intersection-observer';
 import { ReviewsWithVotes } from '@/lib/types';
 import { LoadingSpinner } from './ui/spinner';
+import ReviewCardSkeleton from './skeletons/ReviewCardSkeleton';
 
 type Props = {
   initReviews: ReviewsWithVotes[];
@@ -43,9 +44,17 @@ const ReviewFeed = ({ initReviews, getReviews, initCursor, offset }: Props) => {
     <div className="flex flex-col gap-6">
       {initReviews.length ? (
         <>
-          {loaded.map((review, index) => (
-            <ReviewCard review={review} key={index} vote={review.votes} />
-          ))}
+          {loaded.length ? (
+            loaded.map((review, index) => (
+              <ReviewCard review={review} key={index} vote={review.votes} />
+            ))
+          ) : (
+            <>
+              <ReviewCardSkeleton />
+              <ReviewCardSkeleton />
+              <ReviewCardSkeleton />
+            </>
+          )}
 
           {loaded.length % offset === 0 && (
             <div

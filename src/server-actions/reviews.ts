@@ -102,8 +102,8 @@ export const handleVote = async (
   } catch (error) {
     console.error('Encountered problem in liking/disliking');
     console.error(error);
+    return undefined;
   } finally {
     revalidatePath('/professor');
-    redirect(pathname);
   }
 };

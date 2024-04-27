@@ -3,6 +3,7 @@ import ReviewCard from '@/components/ReviewCard';
 import ReviewFeed from '@/components/ReviewFeed';
 import ReviewFilter from '@/components/ReviewFilter';
 import ReviewForm from '@/components/ReviewForm';
+import ReviewCardSkeleton from '@/components/skeletons/ReviewCardSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { ComboBox } from '@/components/ui/combobox';
@@ -17,6 +18,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { number } from 'zod';
+import Loading from './loading';
 
 async function getProfessor(id: number) {
   const prof = await prisma.professor.findUnique({
@@ -137,6 +139,8 @@ const page = async ({
 
   if (!prof) redirect('/not-found');
 
+  // return <Loading />;
+
   return (
     <div className="flex w-full flex-row">
       <div className="flex w-full flex-[7] flex-col">
@@ -165,17 +169,12 @@ const page = async ({
           </div>
         </div>
         <ScrollArea className="h-full w-full p-8 pb-0">
-          <Suspense
-            fallback={<p>Loading reviews...</p>}
-            key={JSON.stringify(searchParams)}
-          >
-            <ReviewFeed
-              initReviews={reviews}
-              getReviews={getReviews}
-              initCursor={cursor}
-              offset={offset}
-            />
-          </Suspense>
+          <ReviewFeed
+            initReviews={reviews}
+            getReviews={getReviews}
+            initCursor={cursor}
+            offset={offset}
+          />
         </ScrollArea>
       </div>
       <Separator orientation="vertical" className="my-auto h-[95%]" />
