@@ -13,18 +13,35 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import nProgress, * as NProgress from 'nprogress';
+import { toast, useToast } from './ui/use-toast';
 
 type Props = {
-  courses: Course[];
-  profs: Professor[];
+  courses: Course[] | undefined;
+  profs: Professor[] | undefined;
   className: string;
 };
 
 const SearchBar = ({ courses, profs, className }: Props) => {
-  const [suggestions, setSuggestions] = useState<Course[] | Professor[]>(profs);
+  const [suggestions, setSuggestions] = useState<
+    Course[] | Professor[] | undefined
+  >(profs ?? []);
   const [data, setData] = useState<'Professors' | 'Courses'>('Professors');
   const [search, setSearch] = useState('');
   const router = useRouter();
+
+  if (profs === undefined)
+    toast({
+      variant: 'destructive',
+      title: 'Uh oh! Something went wrong.',
+      description: 'There was a problem fetching professor names.',
+    });
+
+  if (courses === undefined)
+    toast({
+      variant: 'destructive',
+      title: 'Uh oh! Something went wrong.',
+      description: 'There was a problem fetching courses.',
+    });
 
   return (
     <div className={cn('flex h-max flex-row gap-3', className)}>
@@ -36,7 +53,7 @@ const SearchBar = ({ courses, profs, className }: Props) => {
         />
         <CommandList className={search ? '' : 'h-0'}>
           <CommandGroup>
-            {search && data === 'Professors'
+            {search && suggestions !== undefined && data === 'Professors'
               ? (suggestions as Professor[]).map((prof, index) => {
                   return (
                     <CommandItem
