@@ -5,16 +5,16 @@ import { Separator } from '@/components/ui/separator';
 import { unstable_cache } from 'next/cache';
 import { checkIsAdmin } from '@/server-actions/users';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAdmin = checkIsAdmin();
+  const isAdmin = await checkIsAdmin();
 
   return (
     <>
-      <Sidebar isAdmin />
+      <Sidebar isAdmin={isAdmin} />
       {children}
     </>
   );
