@@ -15,7 +15,7 @@ import {
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { getClasses } from '@/server-actions/classes';
+import { checkClasses, getClasses } from '@/server-actions/classes';
 import { toast, useToast } from './ui/use-toast';
 import nProgress from 'nprogress';
 
@@ -39,6 +39,25 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
       variant: 'destructive',
       title: `Something went wrong...`,
       description: `Either ${values.courseCode} has no classes, or your ID number is wrong. Try again.`,
+    });
+  }
+};
+
+const checkSite = async () => {
+  nProgress.start();
+  const success = await checkClasses();
+  nProgress.done();
+  if (success) {
+    toast({
+      variant: 'default',
+      title: `Site has spun up!`,
+      description: `Site is ready to receive requests.`,
+    });
+  } else {
+    toast({
+      variant: 'destructive',
+      title: `Site is not yet ready.`,
+      description: `Give it a little bit more time.`,
     });
   }
 };
@@ -85,7 +104,12 @@ const CourseSearch = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-row justify-end gap-2">
+          <Button type="button" onClick={checkSite} variant="secondary">
+            Check
+          </Button>
+          <Button type="submit">Submit</Button>
+        </div>
       </form>
     </Form>
   );

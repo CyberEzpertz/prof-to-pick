@@ -149,3 +149,19 @@ export const getClasses = async (idString: string, subject: string) => {
 
   return res;
 };
+
+export async function checkClasses() {
+  try {
+    const res = await fetch(`${process.env.COURSE_API_URL}/api/isReady`, {
+      method: 'GET',
+      cache: 'no-store',
+    });
+
+    if (res.status === 200) return true;
+    return false;
+  } catch (error) {
+    console.error('Site is not ready yet.');
+    console.error(error);
+    return false;
+  }
+}
