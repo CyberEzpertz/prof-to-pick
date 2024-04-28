@@ -65,7 +65,7 @@ export function ComboBox({
                 Empty...
               </CommandEmpty>
             )}
-            <CommandGroup>
+            <CommandGroup className="p-0">
               {items.map((item) => (
                 <CommandItem
                   key={item.value}

@@ -37,7 +37,15 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
         tags: data.tags,
       },
     })
-    .then((review) => {
+    .then(async (review) => {
+      const vote = await prisma.vote.create({
+        data: {
+          isLike: true,
+          reviewId: review.id,
+          userId: userData.user.id,
+        },
+      });
+
       return true;
     })
     .catch((error) => {
