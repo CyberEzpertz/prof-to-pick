@@ -22,8 +22,20 @@ model User {
   reviews   Review[]
   votes     Vote[]
   Invite    Invite[]
+  Report    Report[]
 
   @@map("users")
+}
+
+model Report {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now()) @map("created_at")
+  reportType ReportType @map("report_type")
+  reviewId   Int        @map("review_id")
+  userId     String?    @map("user_id")
+  review     Review     @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  reason     String?
 }
 
 model Invite {
@@ -54,6 +66,7 @@ model Review {
   courseCode   String
   votes        Vote[]
   voteCount    Int       @default(0) @map("vote_count")
+  Report       Report[]
 
   @@map("reviews")
 }
@@ -138,6 +151,14 @@ enum Modality {
   PREDOMINANTLY_F2F
   PURE_ASYNCHRONOUS
   TENTATIVE
+}
+
+enum ReportType {
+  FAKE_REVIEW
+  OFFENSIVE_CONTENT
+  SPAM
+  INVALID_COURSE
+  OTHER
 }
 
 enum Day {

@@ -16,6 +16,7 @@ type Props = {
   initCursor: number;
   offset: number;
   userId: string;
+  isAdmin?: boolean;
 };
 
 let cursor: number;
@@ -26,6 +27,7 @@ const ReviewFeed = ({
   initCursor,
   offset,
   userId,
+  isAdmin = false,
 }: Props) => {
   const [loaded, setLoaded] = useState<ReviewsWithVotes[]>([]);
   const { ref, inView } = useInView();
@@ -58,6 +60,7 @@ const ReviewFeed = ({
                 key={index}
                 vote={review.votes}
                 {...(userId === review.userId && { byCurrentUser: true })}
+                isAdmin
               />
             ))
           ) : (

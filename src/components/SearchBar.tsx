@@ -53,7 +53,7 @@ const SearchBar = ({ courses, profs, className }: Props) => {
         />
         <CommandList className={search ? '' : 'h-0'}>
           <CommandGroup>
-            {search && suggestions !== undefined && data === 'Professors'
+            {search.trim() && suggestions !== undefined && data === 'Professors'
               ? (suggestions as Professor[]).map((prof, index) => {
                   return (
                     <CommandItem

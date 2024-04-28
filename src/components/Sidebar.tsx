@@ -1,17 +1,5 @@
 'use client';
-import React from 'react';
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
 import Link from 'next/link';
 import { Separator } from './ui/separator';
 import { cn } from '@/lib/utils';
@@ -19,7 +7,7 @@ import { buttonVariants } from './ui/button';
 import {
   Bolt,
   Calendar,
-  GraduationCap,
+  Cat,
   HelpCircle,
   LogOut,
   LucideIcon,
@@ -40,7 +28,7 @@ type link = {
   onClick?: () => void;
 };
 
-const Sidebar = () => {
+const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const path = usePathname();
   const supabase = supabaseBrowser();
 
@@ -69,6 +57,11 @@ const Sidebar = () => {
       href: '/reviews',
       title: 'Reviews',
       icon: Star,
+    },
+    {
+      href: '/admin',
+      title: 'Admin',
+      icon: Cat,
     },
   ];
 

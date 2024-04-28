@@ -10,12 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { Flame, LucideIcon, Star, ThumbsDown, ThumbsUp } from 'lucide-react';
+import {
+  Flame,
+  LucideIcon,
+  Star,
+  ThumbsDown,
+  ThumbsUp,
+  TriangleAlert,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
 import DeleteButton from './DeleteButton';
+import PopupReportForm from './PopupReportForm';
+import { Button } from './ui/button';
+import ReportForm from './ReportForm';
 
 type ratingProps = {
   name: string;
@@ -28,6 +38,7 @@ type reviewProps = {
   review: Review;
   vote: Vote[];
   byCurrentUser?: boolean;
+  isAdmin?: boolean;
 };
 
 const ReviewRating = (props: ratingProps) => {
@@ -62,7 +73,12 @@ const ReviewRating = (props: ratingProps) => {
   );
 };
 
-const ReviewCard = ({ review, vote, byCurrentUser }: reviewProps) => {
+const ReviewCard = ({
+  review,
+  vote,
+  byCurrentUser,
+  isAdmin = false,
+}: reviewProps) => {
   return (
     <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
       <CardHeader className="flex flex-row space-y-0">
@@ -117,7 +133,15 @@ const ReviewCard = ({ review, vote, byCurrentUser }: reviewProps) => {
             reviewId={review.id}
           />
         </div>
-        {byCurrentUser && <DeleteButton reviewId={review.id} />}
+        {
+          <PopupReportForm reviewId={review.id}>
+            <Button variant="ghost">
+              <TriangleAlert className="mr-2" strokeWidth={1} />
+              Report
+            </Button>
+          </PopupReportForm>
+        }
+        {(byCurrentUser || isAdmin) && <DeleteButton reviewId={review.id} />}
       </CardFooter>
     </Card>
   );

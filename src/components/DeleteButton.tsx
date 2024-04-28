@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { Trash } from 'lucide-react';
 import { toast } from './ui/use-toast';
 import { deleteReview } from '@/server-actions/reviews';
@@ -36,8 +36,8 @@ const DeleteButton = ({ reviewId }: { reviewId: number }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" className="flex gap-2">
-          <Trash />
+        <Button variant="ghost">
+          <Trash className="mr-2" strokeWidth={1} />
           Delete
         </Button>
       </AlertDialogTrigger>
@@ -51,10 +51,11 @@ const DeleteButton = ({ reviewId }: { reviewId: number }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Go Back</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={handleSubmit}>
-              Delete
-            </Button>
+          <AlertDialogAction
+            asChild
+            className={buttonVariants({ variant: 'destructive' })}
+          >
+            <Button onClick={handleSubmit}>Delete</Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -57,9 +57,14 @@ export function ComboBox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn(`w-[200px] p-0`, width)} align="start">
-        <Command className={`border border-slate-800/50 shadow-md`}>
+        <Command className="border border-slate-800/50 shadow-md">
           {!noSearch && <CommandInput placeholder={label} />}
           <CommandList>
+            {items.length === 0 && (
+              <CommandEmpty className="py-3 text-slate-400">
+                Empty...
+              </CommandEmpty>
+            )}
             <CommandGroup>
               {items.map((item) => (
                 <CommandItem

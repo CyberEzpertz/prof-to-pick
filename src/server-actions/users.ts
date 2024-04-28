@@ -4,7 +4,7 @@ import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
-export const updateUserId = async ({ idNumber }: { idNumber: number }) => {
+export async function updateUserId({ idNumber }: { idNumber: number }) {
   const supabase = createServer();
 
   const { data: userData, error } = await supabase.auth.getUser();
@@ -21,9 +21,9 @@ export const updateUserId = async ({ idNumber }: { idNumber: number }) => {
   });
 
   return user;
-};
+}
 
-export const getCurrUserId = async () => {
+export async function getCurrUserId() {
   const supabase = createServer();
 
   const { data: userData, error } = await supabase.auth.getUser();
@@ -31,4 +31,22 @@ export const getCurrUserId = async () => {
   if (error) throw new Error('Failed to validate user');
 
   return userData.user.id;
-};
+}
+
+export async function checkIsAdmin() {
+  const supabase = createServer();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) return false;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: data.user.id,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  return user?.role === 'ADMIN';
+}

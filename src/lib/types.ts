@@ -1,4 +1,11 @@
-import { Day, Modality, Prisma, Restriction, Tag } from '@prisma/client';
+import {
+  Day,
+  Modality,
+  Prisma,
+  ReportType,
+  Restriction,
+  Tag,
+} from '@prisma/client';
 import { z } from 'zod';
 
 const profWithReviewsAndCourses =
@@ -55,6 +62,12 @@ export const reviewFormSchema = z.object({
   courseCode: z.string({
     required_error: 'Please select a course.',
   }),
+});
+
+export const reportFormSchema = z.object({
+  reportType: z.nativeEnum(ReportType),
+  reviewId: z.number(),
+  reason: z.string().max(300).nullable(),
 });
 
 export const classArraySchema = z.array(classSchema);

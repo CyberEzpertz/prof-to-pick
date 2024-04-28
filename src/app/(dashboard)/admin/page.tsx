@@ -5,30 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { fetchAllCourses } from '@/server-actions/courses';
+import { checkIsAdmin } from '@/server-actions/users';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import React from 'react';
-
-async function checkIsAdmin(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      role: true,
-    },
-  });
-
-  return user?.role === 'ADMIN';
-}
-
-const checkIsAdminCache = unstable_cache(
-  async (userId: string) => checkIsAdmin(userId),
-  ['isAdmin'],
-  {
-    revalidate: 86400,
-  },
-);
 
 const getCachedCourses = unstable_cache(
   async () => fetchAllCourses(),
@@ -37,14 +17,10 @@ const getCachedCourses = unstable_cache(
 );
 
 const AdminPage = async () => {
-  const supabase = createServer();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error) redirect('/');
-
-  const isAdmin = await checkIsAdminCache(data.user.id);
-  const courses = await getCachedCourses();
+  const isAdmin = await checkIsAdmin();
   if (!isAdmin) redirect('/');
+
+  const courses = await getCachedCourses();
 
   return (
     <div className="flex w-full flex-row items-center justify-center gap-4">
