@@ -26,6 +26,7 @@ import {
   Presentation,
   Search,
   SlashSquare,
+  SquareSigma,
   Star,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -97,9 +98,9 @@ const Sidebar = () => {
     <>
       <nav className="flex h-full flex-col gap-3 px-4 py-5">
         <Link href="/">
-          <span className="flex flex-row items-center pl-4 text-3xl font-extrabold">
-            <GraduationCap className="mr-3" color="#00e3c4" size={32} />{' '}
-            ProfAudit
+          <span className="flex flex-row items-center pl-4 text-2xl font-extrabold">
+            <SquareSigma className="mr-3" color="#00e3c4" size={32} /> Fides et
+            Ratio
           </span>
         </Link>
 

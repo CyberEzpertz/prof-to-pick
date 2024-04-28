@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
     const { success, pending, limit, reset, remaining } =
       await rateLimit.limit(ip);
 
-    console.log(success);
     if (!success) {
       const now = Date.now();
       const retryAfter = Math.floor((reset - now) / 1000);

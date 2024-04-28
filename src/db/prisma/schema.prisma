@@ -14,25 +14,23 @@ datasource db {
 }
 
 model User {
-  id           String   @id
-  idNumber     Int      @default(122) @map("id_number") @db.SmallInt
-  isDeleted    Boolean  @default(false) @map("is_deleted")
-  invites      Int      @default(2) @db.SmallInt
-  invitedBy    User?    @relation("UserInvites", fields: [invitedById], references: [id])
-  invitedById  String?
-  role         Role     @default(USER)
-  reviews      Review[]
-  votes        Vote[]
-  Invite       Invite[]
-  invitedUsers User[]   @relation("UserInvites")
+  id        String   @id
+  idNumber  Int      @default(122) @map("id_number") @db.SmallInt
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  invites   Int      @default(2) @db.SmallInt
+  role      Role     @default(USER)
+  reviews   Review[]
+  votes     Vote[]
+  Invite    Invite[]
 
   @@map("users")
 }
 
 model Invite {
-  user   User   @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
   email  String
+  used   Boolean @default(false)
 
   @@id([userId, email])
   @@map("invites")
@@ -42,16 +40,16 @@ model Review {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
-  user         User      @relation(fields: [userId], references: [id])
-  userId       String    @map("user_id")
+  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?   @map("user_id")
   userIdNumber Int       @map("user_id_number") @db.SmallInt
   tags         Tag[]
   rating       Int
   difficulty   Int
   comment      String
   modality     Modality
-  course       Course    @relation(fields: [courseCode], references: [code])
-  professor    Professor @relation(fields: [professorId], references: [id])
+  course       Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  professor    Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId  Int       @map("professor_id")
   courseCode   String
   votes        Vote[]
@@ -87,10 +85,10 @@ model Course {
 model Class {
   code        Int         @id @db.SmallInt
   updatedAt   DateTime    @updatedAt @map("updated_at")
-  course      Course      @relation(fields: [course_code], references: [code])
+  course      Course      @relation(fields: [course_code], references: [code], onDelete: Cascade)
   course_code String      @map("course_code")
   section     String
-  professor   Professor?  @relation(fields: [professorId], references: [id])
+  professor   Professor?  @relation(fields: [professorId], references: [id], onDelete: SetNull)
   professorId Int?        @map("professor_id")
   schedules   Schedule[]
   rooms       String[]
@@ -104,8 +102,8 @@ model Class {
 }
 
 model Vote {
-  user     User    @relation(fields: [userId], references: [id])
-  review   Review  @relation(fields: [reviewId], references: [id])
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   userId   String  @map("user_id")
   reviewId Int     @map("review_id")
   isLike   Boolean @map("is_like")
