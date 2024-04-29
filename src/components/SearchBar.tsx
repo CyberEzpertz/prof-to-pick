@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import nProgress, * as NProgress from 'nprogress';
 import { toast, useToast } from './ui/use-toast';
+import { useMediaQuery } from 'usehooks-ts';
 
 type Props = {
   courses: Course[] | undefined;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 const SearchBar = ({ courses, profs, className }: Props) => {
+  const isPhone = useMediaQuery('(max-width: 768px)');
   const [suggestions, setSuggestions] = useState<
     Course[] | Professor[] | undefined
   >(profs ?? []);
@@ -44,8 +46,13 @@ const SearchBar = ({ courses, profs, className }: Props) => {
     });
 
   return (
-    <div className={cn('flex h-max flex-row gap-3', className)}>
-      <Command className="w-96 border border-slate-800/50 shadow-md">
+    <div
+      className={cn(
+        'flex h-max w-full flex-row justify-center gap-3',
+        className,
+      )}
+    >
+      <Command className="w-full max-w-80 border border-slate-800/50 shadow-md lg:max-w-96">
         <CommandInput
           placeholder={data === 'Professors' ? 'Juan dela Cruz' : 'GESTSOC'}
           value={search}
@@ -90,18 +97,21 @@ const SearchBar = ({ courses, profs, className }: Props) => {
           </CommandGroup>
         </CommandList>
       </Command>
-      <Link
-        href={`/prof/${search}`}
-        className={buttonVariants({ variant: 'default' })}
-      >
-        Search
-      </Link>
+      {/* {!isPhone && (
+        <Link
+          href={`/prof/${search}`}
+          className={buttonVariants({ variant: 'default' })}
+        >
+          Search
+        </Link>
+      )} */}
       <Button
         variant="outline"
         onClick={() => {
           setData(data === 'Courses' ? 'Professors' : 'Courses');
           setSuggestions(data === 'Courses' ? profs : courses);
         }}
+        className="h-11 w-28"
       >
         {data}
       </Button>

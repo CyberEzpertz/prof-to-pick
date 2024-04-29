@@ -32,19 +32,18 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="grid w-full grid-cols-6 grid-rows-6 justify-items-center gap-6">
-      <div className="col-span-4 col-start-2 row-span-2 row-start-2 flex flex-col gap-2 self-end text-center">
+    <div className="flex h-full w-full flex-col items-center gap-4 px-10">
+      <div className="flex h-1/2 flex-col justify-end gap-2 text-balance text-center">
         <h1 className=" text-balance text-5xl font-bold">
-          Audit your Professor with less hassle.
+          Audit your Professor
         </h1>
-        <p className="text-slate-400">Just enter their name below.</p>
+        <p className="text-slate-400">
+          Wanna know more about a certain professor? Just search their name
+          below.
+        </p>
       </div>
 
-      <SearchBar
-        courses={courses}
-        profs={profs}
-        className="col-span-4 col-start-2 row-span-2 row-start-4"
-      />
+      <SearchBar courses={courses} profs={profs} className="" />
     </div>
   );
 }
