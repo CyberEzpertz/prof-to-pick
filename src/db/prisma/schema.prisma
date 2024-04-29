@@ -36,6 +36,8 @@ model Report {
   review     Review     @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   reason     String?
+
+  @@unique(name: "reportInstance", [userId, reviewId])
 }
 
 model Invite {

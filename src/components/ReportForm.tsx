@@ -31,9 +31,16 @@ const ReportForm = ({ reviewId, setOpen }: Props) => {
   });
 
   const handleSubmit = async (data: z.infer<typeof reportFormSchema>) => {
-    const success = await createReport(data);
+    const response = await createReport(data);
 
-    if (success) {
+    if (response === 'P2002') {
+      toast({
+        variant: 'destructive',
+        title: 'Cannot report same review twice!',
+        description:
+          'Thanks, but we already got your report. Only 1 report per person is allowed.',
+      });
+    } else if (response) {
       toast({
         variant: 'default',
         title: 'Report successfully submitted!',
