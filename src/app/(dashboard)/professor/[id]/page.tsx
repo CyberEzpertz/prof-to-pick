@@ -149,7 +149,7 @@ const page = async ({
         <div className="m-8 mb-0 flex flex-col gap-4">
           <Link
             href="/"
-            className=" flex w-max cursor-pointer flex-row gap-3 rounded-md p-2 text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+            className="flex w-max cursor-pointer flex-row gap-3 rounded-md p-2 text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
           >
             <CircleArrowLeft />
             Back to search

@@ -33,17 +33,7 @@ export default async function Home() {
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-4 px-10">
-      <div className="flex h-1/2 flex-col justify-end gap-2 text-balance text-center">
-        <h1 className=" text-balance text-5xl font-bold">
-          Audit your Professor
-        </h1>
-        <p className="text-slate-400">
-          Wanna know more about a certain professor? Just search their name
-          below.
-        </p>
-      </div>
-
-      <SearchBar courses={courses} profs={profs} className="" />
+      <SearchBar courses={courses} profs={profs} />
     </div>
   );
 }

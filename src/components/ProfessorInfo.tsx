@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn, getAggregates, getTier } from '@/lib/utils';
 import { Professor, Review } from '@prisma/client';
 import React from 'react';
 import { Separator } from './ui/separator';
@@ -9,26 +9,6 @@ import { Progress } from './ui/progress';
 import { ProfWithReviewsAndCourses } from '@/lib/types';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
-
-const getTier = (rating: number, amount: number) => {
-  let tier, tierColor;
-
-  if (amount == 0) {
-    return { tier: '?', tierColor: 'bg-slate-500' };
-  }
-  if (rating >= 3.33) {
-    tier = 'W';
-    tierColor = 'bg-teal-500';
-  } else if (rating >= 1.67) {
-    tier = 'M';
-    tierColor = 'bg-purple-500';
-  } else {
-    tier = 'L';
-    tierColor = 'bg-rose-500';
-  }
-
-  return { tier, tierColor };
-};
 
 type Props = {
   prof: ProfWithReviewsAndCourses;
@@ -102,34 +82,13 @@ const RatingProgress = ({
   );
 };
 
-const getAggregates = (reviews: Review[], numReviews: number) => {
-  const agg = reviews.reduce(
-    (acc, review) => {
-      acc.rating += review.rating;
-      acc.diff += review.difficulty;
-      acc.count[review.rating - 1] += 1;
-      return acc;
-    },
-    { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
-  );
-
-  agg.rating /= numReviews;
-  agg.diff /= numReviews;
-  agg.rating = Number(agg.rating.toFixed(1));
-  agg.diff = Number(agg.diff.toFixed(1));
-
-  return agg;
-};
-
-const ProfessorInfo = ({ prof }: Props) => {
-  const numReviews = prof.reviews.length;
-  const agg = getAggregates(prof.reviews, numReviews);
-
-  const { tier, tierColor } = getTier(agg.rating, numReviews);
+export const ProfessorInfo = ({ prof }: Props) => {
+  const agg = getAggregates(prof.reviews);
+  const { tier, tierColor } = getTier(agg.rating, prof.reviews.length);
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center">
         <div
           className={cn(
             'mr-6 flex size-20 items-center justify-center rounded-lg font-display text-6xl',
@@ -138,9 +97,9 @@ const ProfessorInfo = ({ prof }: Props) => {
         >
           {tier}
         </div>
-        <div className="flex flex-col gap-1 text-4xl font-extrabold">
-          <span>{prof.lastName},</span>
-          <span>{prof.firstName}</span>
+        <div className="flex flex-col gap-1 text-3xl font-extrabold">
+          <span className="text-4xl">{prof.lastName},</span>
+          <span className="font-medium">{prof.firstName}</span>
         </div>
       </div>
 
@@ -149,7 +108,7 @@ const ProfessorInfo = ({ prof }: Props) => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col">
           <span className="mb-2 font-medium text-slate-400">
-            Based on {numReviews} reviews
+            Based on {prof.reviews.length} reviews
           </span>
           <div className="flex flex-row gap-20">
             <AverageRating

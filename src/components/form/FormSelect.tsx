@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { ReportType } from '@prisma/client';
-import { enumToProperCase } from '@/lib/utils';
+import { toProperCase } from '@/lib/utils';
 
 type Props = {
   onValueChange: (value: string) => void;
@@ -45,7 +45,7 @@ const FormSelect = ({
         <SelectContent>
           {items.map((item) => (
             <SelectItem value={item} key={item}>
-              {isEnum ? enumToProperCase(item) : item}
+              {isEnum ? toProperCase(item) : item}
             </SelectItem>
           ))}
         </SelectContent>

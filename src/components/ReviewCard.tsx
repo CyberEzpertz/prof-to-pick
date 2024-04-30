@@ -26,51 +26,13 @@ import DeleteButton from './DeleteButton';
 import PopupReportForm from './PopupReportForm';
 import { Button } from './ui/button';
 import ReportForm from './ReportForm';
+import ReviewRating from './ReviewRating';
 
-type ratingProps = {
-  name: string;
-  rating: number;
-  icon: LucideIcon;
-  hexColor: string;
-  twColor: string;
-};
 type reviewProps = {
   review: Review;
   vote: Vote[];
   byCurrentUser?: boolean;
   isAdmin?: boolean;
-};
-
-const ReviewRating = (props: ratingProps) => {
-  return (
-    <div className="m-0 ml-8 flex w-min flex-row">
-      <div
-        className={cn(
-          'mr-3 flex size-14 items-center justify-center rounded-lg font-display text-3xl',
-          props.twColor,
-        )}
-      >
-        {props.rating}
-      </div>
-      <div className="flex flex-col justify-center">
-        <span className="font-bold">{props.name}</span>
-        <div className="flex flex-row">
-          {[
-            [...Array(5)].map((_, index) => (
-              <props.icon
-                key={index}
-                fill={
-                  Math.floor(props.rating) > index ? props.hexColor : '#94a3b8'
-                }
-                strokeWidth={0}
-                size={18}
-              />
-            )),
-          ]}
-        </div>
-      </div>
-    </div>
-  );
 };
 
 const ReviewCard = ({
@@ -95,20 +57,12 @@ const ReviewCard = ({
             })}
           </CardDescription>
         </div>
-        <div className="ml-auto inline-flex">
+        <div className="ml-auto inline-flex gap-8">
+          <ReviewRating name="RATING" rating={review.rating} />
           <ReviewRating
-            hexColor="#2dd4bf"
-            icon={Star}
-            name="RATING"
-            rating={review.rating}
-            twColor="bg-teal-500"
-          />
-          <ReviewRating
-            hexColor="#f43f5e"
-            icon={Flame}
             name="DIFFICULTY"
             rating={review.difficulty}
-            twColor="bg-rose-500"
+            isDifficulty
           />
         </div>
       </CardHeader>
