@@ -103,7 +103,7 @@ const ReviewCard = ({
         <div className="flex flex-row">
           {
             <PopupReportForm reviewId={review.id}>
-              <Button variant="ghost" className="">
+              <Button variant="ghost">
                 <TriangleAlert className="lg:mr-2" strokeWidth={1} />
                 {!isPhone && isMounted && 'Report'}
               </Button>

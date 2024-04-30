@@ -69,7 +69,9 @@ const SearchBar = ({ courses, profs, className = '' }: Props) => {
             value={search}
             onValueChange={setSearch}
           />
-          <CommandList className={search ? '' : 'h-0'}>
+          <CommandList
+            className={search ? 'max-h-[150px] lg:max-h-[200px]' : 'h-0'}
+          >
             <CommandGroup>
               {search.trim() &&
               suggestions !== undefined &&
