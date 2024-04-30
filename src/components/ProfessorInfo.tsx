@@ -107,7 +107,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
         </div>
       </div>
 
-      <Separator className="my-4" />
+      <Separator className="my-2" />
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col">

@@ -15,6 +15,7 @@ import { cn, toProperCase } from '@/lib/utils';
 import nProgress, * as NProgress from 'nprogress';
 import { toast, useToast } from './ui/use-toast';
 import { useMediaQuery } from 'usehooks-ts';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 type Props = {
   courses: Course[] | undefined;
@@ -120,9 +121,19 @@ const SearchBar = ({ courses, profs, className = '' }: Props) => {
             setData(data === 'Courses' ? 'Professors' : 'Courses');
             setSuggestions(data === 'Courses' ? profs : courses);
           }}
-          className="h-11 w-28"
+          className="h-11 w-32"
         >
-          {data}
+          {data === 'Courses' ? (
+            <>
+              {data}
+              <ChevronUp className="ml-1" size={16} color="#64748b" />
+            </>
+          ) : (
+            <>
+              {data}
+              <ChevronDown className="ml-1" size={16} color="#64748b" />
+            </>
+          )}
         </Button>
       </div>
     </>

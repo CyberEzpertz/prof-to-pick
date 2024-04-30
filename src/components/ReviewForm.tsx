@@ -50,6 +50,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CirclePlus } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
+import { ScrollArea } from './ui/scroll-area';
 
 type Props = {
   profId: number;
@@ -106,7 +107,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
           {!isPhone && isMounted ? 'Add Review' : ''}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="max-w-1/2 h-max w-1/2">
+      <AlertDialogContent className="h-max max-h-[80%] w-max max-w-[80%] overflow-y-scroll lg:max-w-4xl">
         <AlertDialogHeader>
           <AlertDialogTitle>Writing a Review</AlertDialogTitle>
           <AlertDialogDescription>
@@ -118,7 +119,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
-            <div className="flex flex-row gap-12">
+            <div className="flex flex-row flex-wrap gap-x-12 gap-y-8">
               <FormField
                 control={form.control}
                 name="courseCode"
@@ -144,7 +145,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-[200px] p-0">
-                        <Command>
+                        <Command className="border-slate-800/50">
                           <CommandInput placeholder="Search course..." />
                           <CommandEmpty>No course found.</CommandEmpty>
                           <CommandList>
@@ -175,7 +176,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>
+                    <FormDescription className="text-balance">
                       This is the course that will be used in the dashboard.
                     </FormDescription>
                     <FormMessage />
@@ -187,7 +188,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                 name="modality"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Rating</FormLabel>
+                    <FormLabel>Modality</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={'HYBRID'}
@@ -198,14 +199,17 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {modalityEnum.map((modality) => (
-                          <SelectItem value={modality} key={modality}>
-                            {modality.replaceAll('_', ' ')}
-                          </SelectItem>
-                        ))}
+                        {modalityEnum.map(
+                          (modality) =>
+                            modality !== 'TENTATIVE' && (
+                              <SelectItem value={modality} key={modality}>
+                                {modality.replaceAll('_', ' ')}
+                              </SelectItem>
+                            ),
+                        )}
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription className="text-balance">
                       How was your overall experience with this professor?
                     </FormDescription>
                     <FormMessage />
@@ -213,7 +217,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                 )}
               />
             </div>
-            <div className="flex flex-row gap-12">
+            <div className="flex flex-row flex-wrap gap-x-12 gap-y-8">
               <FormField
                 control={form.control}
                 name="rating"
@@ -284,7 +288,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="Write a few words about your experience with this prof."
-                      className="resize-none"
+                      className="w-full resize-none"
                       {...field}
                     />
                   </FormControl>
@@ -328,7 +332,6 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                 </FormItem>
               )}
             />
-
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <Button type="submit" disabled={form.formState.isSubmitting}>

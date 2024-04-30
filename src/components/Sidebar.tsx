@@ -47,11 +47,11 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       title: 'Search',
       icon: Search,
     },
-    {
-      href: '/courses',
-      title: 'Courses',
-      icon: Presentation,
-    },
+    // {
+    //   href: '/courses',
+    //   title: 'Courses',
+    //   icon: Presentation,
+    // },
     {
       href: '/compare',
       title: 'Compare',

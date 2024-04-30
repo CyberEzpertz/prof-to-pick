@@ -13,10 +13,10 @@ const ReviewRating = ({ name, rating, isDifficulty = false }: ratingProps) => {
   const Symbol = isDifficulty ? Flame : Star;
 
   return (
-    <div className="m-0 flex w-min flex-row">
+    <div className="m-0 flex w-min flex-row items-center">
       <div
         className={cn(
-          'mr-3 flex size-14 flex-none items-center justify-center rounded-lg font-display text-3xl text-slate-200',
+          'mr-3 flex size-12 flex-none items-center justify-center rounded-lg font-display text-3xl text-slate-200',
           twColor,
         )}
       >
