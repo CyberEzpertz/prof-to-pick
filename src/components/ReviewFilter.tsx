@@ -4,6 +4,7 @@ import { ComboBox } from './ui/combobox';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { CirclePlus } from 'lucide-react';
+import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 type Props = {
   courses: {
@@ -50,43 +51,46 @@ const ReviewFilter = ({ courses }: Props) => {
   );
 
   return (
-    <div className="flex flex-wrap gap-5">
-      <ComboBox
-        items={courses}
-        label="Course"
-        callback={(value) => {
-          router.push(`${pathname}?${createQueryString('course', value)}`);
-        }}
-        initVal={searchParams.get('course')}
-      />
-      <ComboBox
-        items={ratings}
-        label="Rating"
-        callback={(value) => {
-          router.push(`${pathname}?${createQueryString('rating', value)}`);
-        }}
-        noSearch
-        initVal={
-          searchParams.get('rating')
-            ? `${searchParams.get('rating')} Stars`
-            : 'Rating'
-        }
-      />
-      <ComboBox
-        items={sorts}
-        label="Sort by"
-        callback={(value) => {
-          {
-            router.push(`${pathname}?${createQueryString('sort', value)}`);
+    <ScrollArea>
+      <div className="flex gap-5">
+        <ComboBox
+          items={courses}
+          label="Course"
+          callback={(value) => {
+            router.push(`${pathname}?${createQueryString('course', value)}`);
+          }}
+          initVal={searchParams.get('course')}
+        />
+        <ComboBox
+          items={ratings}
+          label="Rating"
+          callback={(value) => {
+            router.push(`${pathname}?${createQueryString('rating', value)}`);
+          }}
+          noSearch
+          initVal={
+            searchParams.get('rating')
+              ? `${searchParams.get('rating')} Stars`
+              : 'Rating'
           }
-        }}
-        noSearch
-        initVal={
-          sorts.find((sort) => sort.value === searchParams.get('sort'))
-            ?.label ?? 'Most Recent'
-        }
-      />
-    </div>
+        />
+        <ComboBox
+          items={sorts}
+          label="Sort by"
+          callback={(value) => {
+            {
+              router.push(`${pathname}?${createQueryString('sort', value)}`);
+            }
+          }}
+          noSearch
+          initVal={
+            sorts.find((sort) => sort.value === searchParams.get('sort'))
+              ?.label ?? 'Most Recent'
+          }
+        />
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 };
 

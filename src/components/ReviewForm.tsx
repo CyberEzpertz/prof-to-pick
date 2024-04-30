@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Modality, Tag } from '@prisma/client';
 import { CommandGroup } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from './ui/button';
@@ -49,6 +49,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { CirclePlus } from 'lucide-react';
+import { useMediaQuery } from 'usehooks-ts';
 
 type Props = {
   profId: number;
@@ -61,6 +62,12 @@ const modalityEnum = Object.values(Modality);
 
 const ReviewForm = ({ profId, profName, courses }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [isMounted, setMounted] = useState<boolean>(false);
+  const isPhone = useMediaQuery('(max-width: 1024px)');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const form = useForm<z.infer<typeof reviewFormSchema>>({
     resolver: zodResolver(reviewFormSchema),
@@ -96,7 +103,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
       <AlertDialogTrigger asChild>
         <Button variant="default" className="mr-auto gap-2">
           <CirclePlus />
-          Add Review
+          {!isPhone && isMounted ? 'Add Review' : ''}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="max-w-1/2 h-max w-1/2">

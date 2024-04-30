@@ -2,15 +2,13 @@
 
 import {
   AlertDialog,
-  AlertDialogCancel,
-  AlertDialogFooter,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import React, { ComponentType, ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import ReportForm from './ReportForm';
 
 type Props = {

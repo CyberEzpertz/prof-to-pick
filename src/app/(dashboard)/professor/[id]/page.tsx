@@ -144,9 +144,9 @@ const page = async ({
   // return <Loading />;
 
   return (
-    <div className="flex w-full flex-row">
-      <div className="flex w-full flex-[7] flex-col">
-        <div className="m-8 mb-0 flex flex-col gap-4">
+    <div className="flex w-full flex-col lg:flex-row">
+      <div className="order-3 flex w-full flex-[7] flex-col lg:order-1">
+        <div className="m-8 mb-0 flex flex-col gap-4 ">
           <Link
             href="/"
             className="flex w-max cursor-pointer flex-row gap-3 rounded-md p-2 text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
@@ -154,7 +154,7 @@ const page = async ({
             <CircleArrowLeft />
             Back to search
           </Link>
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-4">
             <ReviewForm
               profId={prof.id}
               profName={`${prof.firstName} ${prof.lastName}`}
@@ -180,11 +180,9 @@ const page = async ({
           />
         </ScrollArea>
       </div>
-      <Separator orientation="vertical" className="my-auto h-[95%]" />
-      <div className="flex flex-[4] flex-col justify-center gap-6 p-8">
-        <Suspense fallback={<p>Loading Professor...</p>}>
-          <ProfessorInfo prof={prof} />
-        </Suspense>
+      <Separator className="order-2 mx-auto h-[1px] w-[80%] lg:my-auto lg:h-[95%] lg:w-[1px]" />
+      <div className="order-1 gap-6 p-8 lg:order-3 lg:flex lg:flex-[4] lg:flex-col lg:justify-center">
+        <ProfessorInfo prof={prof} />
       </div>
     </div>
   );

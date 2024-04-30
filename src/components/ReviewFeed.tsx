@@ -81,7 +81,9 @@ const ReviewFeed = ({
           )}
         </>
       ) : (
-        <span className="self-center text-slate-500">No reviews found</span>
+        <span className="self-center pb-8 text-slate-500">
+          No reviews found
+        </span>
       )}
     </div>
   );

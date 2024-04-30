@@ -17,7 +17,13 @@ import { Trash } from 'lucide-react';
 import { toast } from './ui/use-toast';
 import { deleteReview } from '@/server-actions/reviews';
 
-const DeleteButton = ({ reviewId }: { reviewId: number }) => {
+const DeleteButton = ({
+  reviewId,
+  isPhone,
+}: {
+  reviewId: number;
+  isPhone: boolean;
+}) => {
   const handleSubmit = async () => {
     const success = await deleteReview(reviewId);
 
@@ -37,8 +43,8 @@ const DeleteButton = ({ reviewId }: { reviewId: number }) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="ghost">
-          <Trash className="mr-2" strokeWidth={1} />
-          Delete
+          <Trash className="lg:mr-2" strokeWidth={1} />
+          {!isPhone && 'Delete'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

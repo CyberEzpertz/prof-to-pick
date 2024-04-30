@@ -11,6 +11,7 @@ type Props = {
   voteCount: number;
   vote: Vote | undefined;
   reviewId: number;
+  isPhone: boolean;
 };
 
 type voteState = {
@@ -18,7 +19,7 @@ type voteState = {
   voteCount: number;
 };
 
-const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
+const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
   const pathname = usePathname();
   const { toast } = useToast();
 
@@ -73,14 +74,15 @@ const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
 
   return (
     <>
-      <div>
+      <div className="flex flex-row gap-2">
         <ThumbsUp
           onClick={() => handleSubmit('LIKE', voteState.isLike)}
           strokeWidth={voteState.isLike === true ? 0 : 1}
           fill="#10b981"
           fillOpacity={voteState.isLike === true ? 100 : 0}
-          className="mr-2 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
+          className="inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
         />
+        {isPhone && voteState.voteCount}
         <ThumbsDown
           onClick={() => handleSubmit('DISLIKE', voteState.isLike)}
           strokeWidth={voteState.isLike === false ? 0 : 1}
@@ -89,7 +91,7 @@ const VoteButtons = ({ voteCount, vote, reviewId }: Props) => {
           className="mr-4 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
         />
       </div>
-      {voteState.voteCount} people found this helpful.
+      {!isPhone && `${voteState.voteCount} found this helpful`}
     </>
   );
 };

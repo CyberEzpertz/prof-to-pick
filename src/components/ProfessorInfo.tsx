@@ -87,19 +87,23 @@ export const ProfessorInfo = ({ prof }: Props) => {
   const { tier, tierColor } = getTier(agg.rating, prof.reviews.length);
 
   return (
-    <div className="flex flex-col">
+    <>
       <div className="flex flex-row items-center">
         <div
           className={cn(
-            'mr-6 flex size-20 items-center justify-center rounded-lg font-display text-6xl',
+            'mr-6 flex size-16 items-center justify-center rounded-lg font-display text-6xl lg:size-20',
             tierColor,
           )}
         >
           {tier}
         </div>
-        <div className="flex flex-col gap-1 text-3xl font-extrabold">
-          <span className="text-4xl">{prof.lastName},</span>
-          <span className="font-medium">{prof.firstName}</span>
+        <div className="flex flex-col gap-1">
+          <span className="text-3xl font-extrabold lg:text-4xl">
+            {prof.lastName},
+          </span>
+          <span className="text-base font-medium lg:text-3xl">
+            {prof.firstName}
+          </span>
         </div>
       </div>
 
@@ -110,7 +114,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
           <span className="mb-2 font-medium text-slate-400">
             Based on {prof.reviews.length} reviews
           </span>
-          <div className="flex flex-row gap-20">
+          <div className="flex flex-col gap-x-20 gap-y-4 lg:flex-row">
             <AverageRating
               hexColor="#2dd4bf"
               icon={Star}
@@ -190,7 +194,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
           </Card>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 'use client';
 import { Review, User, Vote } from '@prisma/client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -27,6 +27,7 @@ import PopupReportForm from './PopupReportForm';
 import { Button } from './ui/button';
 import ReportForm from './ReportForm';
 import ReviewRating from './ReviewRating';
+import { useMediaQuery } from 'usehooks-ts';
 
 type reviewProps = {
   review: Review;
@@ -41,14 +42,21 @@ const ReviewCard = ({
   byCurrentUser,
   isAdmin = false,
 }: reviewProps) => {
+  const isPhone = useMediaQuery('(max-width: 1024px)');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
-      <CardHeader className="flex flex-row space-y-0">
+      <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
         <div className="flex flex-col gap-1">
-          <CardTitle className="text-3xl font-bold text-slate-200">
+          <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
           </CardTitle>
-          <CardDescription className="text-slate-400">
+          <CardDescription className="text-sm text-slate-400">
             ID{review.userIdNumber} • {review.modality} •{' '}
             {review.createdAt.toLocaleDateString('en-US', {
               year: 'numeric',
@@ -57,7 +65,7 @@ const ReviewCard = ({
             })}
           </CardDescription>
         </div>
-        <div className="ml-auto inline-flex gap-8">
+        <div className="flex flex-col gap-x-8 gap-y-4 lg:ml-auto lg:flex-row">
           <ReviewRating name="RATING" rating={review.rating} />
           <ReviewRating
             name="DIFFICULTY"
@@ -67,35 +75,44 @@ const ReviewCard = ({
         </div>
       </CardHeader>
       <CardContent className="pb-4">
-        <p>{review.comment}</p>
+        <p className="text-sm lg:text-base">{review.comment}</p>
         <Separator className="my-4" />
         <div className="flex flex-wrap gap-2">
           {review.tags.map((tag, index) => {
             return (
-              <Badge className="h-8 text-sm" variant="default" key={index}>
+              <Badge
+                className="h-6 text-xs lg:h-8 lg:text-sm "
+                variant="default"
+                key={index}
+              >
                 {tag.replaceAll('_', ' ')}
               </Badge>
             );
           })}
         </div>
       </CardContent>
-      <CardFooter className="justify-start text-slate-400">
-        <div className=" mr-auto flex flex-row">
+      <CardFooter className="flex flex-row flex-wrap justify-center gap-2 pt-2 text-slate-400 lg:justify-start">
+        <div className="flex flex-row items-center lg:mr-auto">
           <VoteButtons
             voteCount={review.voteCount}
             vote={vote[0] || undefined}
             reviewId={review.id}
+            isPhone={isPhone && isMounted}
           />
         </div>
-        {
-          <PopupReportForm reviewId={review.id}>
-            <Button variant="ghost">
-              <TriangleAlert className="mr-2" strokeWidth={1} />
-              Report
-            </Button>
-          </PopupReportForm>
-        }
-        {(byCurrentUser || isAdmin) && <DeleteButton reviewId={review.id} />}
+        <div className="flex flex-row">
+          {
+            <PopupReportForm reviewId={review.id}>
+              <Button variant="ghost" className="">
+                <TriangleAlert className="lg:mr-2" strokeWidth={1} />
+                {!isPhone && isMounted && 'Report'}
+              </Button>
+            </PopupReportForm>
+          }
+          {(byCurrentUser || isAdmin) && (
+            <DeleteButton reviewId={review.id} isPhone={isPhone && isMounted} />
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
