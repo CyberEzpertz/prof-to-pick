@@ -2,9 +2,9 @@
 
 import { reportFormSchema } from '@/lib/types';
 import { z } from 'zod';
-import { getCurrUserId } from './users';
 import prisma from '@/db/prisma/prisma';
 import { Prisma } from '@prisma/client';
+import { getCurrUserId } from '@/lib/fetch';
 
 export const createReport = async (data: z.infer<typeof reportFormSchema>) => {
   const userId = await getCurrUserId();

@@ -1,43 +1,21 @@
 import ProfessorInfo from '@/components/ProfessorInfo';
-import ReviewCard from '@/components/ReviewCard';
 import ReviewFeed from '@/components/ReviewFeed';
 import ReviewFilter from '@/components/ReviewFilter';
 import ReviewForm from '@/components/ReviewForm';
-import ReviewCardSkeleton from '@/components/skeletons/ReviewCardSkeleton';
 
-import { Button } from '@/components/ui/button';
-import { ComboBox } from '@/components/ui/combobox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
-import { ProfWithReviewsAndCourses } from '@/lib/types';
-import { Review, Professor } from '@prisma/client';
-import { CircleArrowLeft, CirclePlus } from 'lucide-react';
+import { CircleArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import React, { Suspense } from 'react';
-import { number } from 'zod';
-import Loading from './loading';
-import { getCurrUserId } from '@/server-actions/users';
-
-async function getProfessor(id: number) {
-  const prof = await prisma.professor.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      reviews: true,
-      courses: {
-        select: {
-          code: true,
-        },
-      },
-    },
-  });
-
-  return prof as ProfWithReviewsAndCourses;
-}
+import {
+  getCoursesCodes,
+  getCurrUserId,
+  getProfessor,
+  getReviewCourses,
+} from '@/lib/fetch';
 
 export const dynamic = 'force-dynamic';
 
@@ -105,43 +83,17 @@ const page = async ({
     return { reviews, cursor };
   };
 
-  const getCourses = async () => {
-    const courses = await prisma.course.findMany({
-      select: {
-        code: true,
-      },
-    });
-
-    return courses.map((course) => course.code);
-  };
-
-  const getReviewCourses = async () => {
-    const reviewCourses = await prisma.review.groupBy({
-      by: ['courseCode'],
-      where: {
-        professorId: profId,
-      },
-      _count: {
-        id: true,
-      },
-    });
-
-    return reviewCourses;
-  };
-
   // Parallel Data Fetching
   const [prof, { reviews, cursor }, courses, reviewCourses, userId] =
     await Promise.all([
       getProfessor(profId),
       getReviews(-1),
-      getCourses(),
-      getReviewCourses(),
+      getCoursesCodes(),
+      getReviewCourses(profId),
       getCurrUserId(),
     ]);
 
   if (!prof) redirect('/not-found');
-
-  // return <Loading />;
 
   return (
     <div className="flex w-full flex-col lg:flex-row">

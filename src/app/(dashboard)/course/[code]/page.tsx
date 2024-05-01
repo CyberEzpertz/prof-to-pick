@@ -1,7 +1,7 @@
 import ProfessorCard from '@/components/ProfessorCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { fetchCourseWithProfessors } from '@/server-actions/courses';
+import { fetchCourseWithProfessors } from '@/lib/fetch';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react';

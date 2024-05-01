@@ -23,16 +23,6 @@ export async function updateUserId({ idNumber }: { idNumber: number }) {
   return user;
 }
 
-export async function getCurrUserId() {
-  const supabase = createServer();
-
-  const { data: userData, error } = await supabase.auth.getUser();
-
-  if (error) throw new Error('Failed to validate user');
-
-  return userData.user.id;
-}
-
 export async function checkIsAdmin() {
   const supabase = createServer();
   const { data, error } = await supabase.auth.getUser();
