@@ -166,7 +166,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
               {prof.courses.map((tag, index) => {
                 return (
                   <Link
-                    href={`/courses/${tag.code}`}
+                    href={`/course/${tag.code}`}
                     className={buttonVariants({ variant: 'outline' })}
                     key={tag.code}
                   >

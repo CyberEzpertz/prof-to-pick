@@ -36,11 +36,16 @@ const ProfessorCard = ({ prof, noTier = false }: Props) => {
           <Separator />
           <span className="text-sm text-slate-400">{`Based on ${prof._count.reviews} reviews`}</span>
           <div className="flex w-full flex-row flex-wrap gap-4">
-            <ReviewRating name="RATING" rating={prof.avgRating} />
+            <ReviewRating
+              name="RATING"
+              rating={prof.avgRating}
+              variation="noStar"
+            />
             <ReviewRating
               name="DIFFICULTY"
               rating={prof.avgDifficulty}
               isDifficulty
+              variation="noStar"
             />
           </div>
         </CardContent>

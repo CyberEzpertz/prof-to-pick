@@ -18,6 +18,22 @@ export const fetchCourseWithProfessors = async (
   searchParams: { [key: string]: string | string[] | undefined },
 ) => {
   try {
+    let tier;
+
+    switch (searchParams['tier']) {
+      case 'W':
+        tier = { gte: 3.67 };
+        break;
+      case 'M':
+        tier = { gte: 2.33, lt: 3.67 };
+        break;
+      case 'L':
+        tier = { gte: 1, lt: 2.33 };
+        break;
+      default:
+        tier = null;
+    }
+
     const course = await prisma.course.findUnique({
       where: {
         code: code,
@@ -29,14 +45,20 @@ export const fetchCourseWithProfessors = async (
           },
         },
         professors: {
-          orderBy: {
-            ...(searchParams['sort'] === 'most' && {
-              reviews: {
-                _count: 'desc',
-              },
-            }),
-            lastName: 'asc',
+          where: {
+            avgRating: {
+              ...(tier !== null && tier),
+            },
           },
+          orderBy: [
+            searchParams['sort'] === 'most'
+              ? {
+                  reviews: {
+                    _count: 'desc',
+                  },
+                }
+              : { lastName: 'asc' },
+          ],
           include: {
             _count: {
               select: {

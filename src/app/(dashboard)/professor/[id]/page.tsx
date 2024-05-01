@@ -7,8 +7,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
-import { CircleArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import {
   getCoursesCodes,
@@ -16,6 +14,7 @@ import {
   getProfessor,
   getReviewCourses,
 } from '@/lib/fetch';
+import BackButton from '@/components/BackButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -99,13 +98,7 @@ const page = async ({
     <div className="flex w-full flex-col lg:flex-row">
       <div className="order-3 flex w-full flex-[7] flex-col lg:order-1">
         <div className="m-8 mb-0 flex flex-col gap-4 ">
-          <Link
-            href="/"
-            className="flex w-max cursor-pointer flex-row gap-3 rounded-md p-2 text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
-          >
-            <CircleArrowLeft />
-            Back to search
-          </Link>
+          <BackButton text="Go Back" />
           <div className="flex flex-row gap-4">
             <ReviewForm
               profId={prof.id}
