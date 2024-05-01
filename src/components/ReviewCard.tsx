@@ -10,23 +10,73 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import {
-  TriangleAlert,
-} from 'lucide-react';
+import { ChevronRight, TriangleAlert } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
 import DeleteButton from './DeleteButton';
 import PopupReportForm from './PopupReportForm';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import ReviewRating from './ReviewRating';
 import { useMediaQuery } from 'usehooks-ts';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 type reviewProps = {
   review: Review;
   vote: Vote[];
   byCurrentUser?: boolean;
   isAdmin?: boolean;
+};
+
+const ReviewCardPreview = ({ review }: { review: Review }) => {
+  const isPhone = useMediaQuery('(max-width: 1024px)');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return (
+    <Card className="flex h-60 w-full select-none flex-col text-left">
+      <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
+            {review.courseCode}
+          </CardTitle>
+          <CardDescription className="text-sm text-slate-400">
+            ID{review.userIdNumber} • {review.modality} •{' '}
+            {new Date(review.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </CardDescription>
+        </div>
+        <div className="flex flex-col gap-x-8 gap-y-4 lg:ml-auto lg:flex-row">
+          <ReviewRating name="RATING" rating={review.rating} />
+          <ReviewRating
+            name="DIFFICULTY"
+            rating={review.difficulty}
+            isDifficulty
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="flex h-full min-h-0 flex-col pb-4">
+        <p className="line-clamp-3 max-h-16 w-full select-none overflow-hidden text-ellipsis text-wrap text-justify text-xs lg:text-sm">
+          {review.comment}
+        </p>
+        <div className="mt-auto flex items-end justify-end gap-2">
+          <Link
+            href={`/professor/${review.professorId}`}
+            className={cn(buttonVariants({ variant: 'outline' }))}
+          >
+            Check this Review <ChevronRight />
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
+  );
 };
 
 const ReviewCard = ({
@@ -111,4 +161,4 @@ const ReviewCard = ({
   );
 };
 
-export default ReviewCard;
+export { ReviewCard, ReviewCardPreview };

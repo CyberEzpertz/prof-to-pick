@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ReviewCard from './ReviewCard';
+import { ReviewCard } from './ReviewCard';
 import { useInView } from 'react-intersection-observer';
 import { ReviewsWithVotes } from '@/lib/types';
 import { LoadingSpinner } from './ui/spinner';

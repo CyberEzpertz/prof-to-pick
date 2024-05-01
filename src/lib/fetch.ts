@@ -9,7 +9,7 @@ export const fetchAllCourses = async () => {
   } catch (error) {
     console.error('Error fetching all courses');
     console.error(error);
-    return undefined;
+    return null;
   }
 };
 
@@ -87,7 +87,7 @@ export const fetchAllProfs = async () => {
   } catch (error) {
     console.error('Error fetching all professors');
     console.error(error);
-    return undefined;
+    return null;
   }
 };
 
@@ -130,15 +130,38 @@ export const getCoursesCodes = async () => {
 };
 
 export const getReviewCourses = async (profId: number) => {
-  const reviewCourses = await prisma.review.groupBy({
-    by: ['courseCode'],
-    where: {
-      professorId: profId,
-    },
-    _count: {
-      id: true,
-    },
-  });
+  try {
+    const reviewCourses = await prisma.review.groupBy({
+      by: ['courseCode'],
+      where: {
+        professorId: profId,
+      },
+      _count: {
+        id: true,
+      },
+    });
 
-  return reviewCourses;
+    return reviewCourses;
+  } catch (error) {
+    console.error(error);
+    console.error('Error fetching review courses.');
+    return null;
+  }
+};
+
+export const getRecentReviews = async () => {
+  try {
+    const recents = await prisma.review.findMany({
+      take: 5,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return recents;
+  } catch (error) {
+    console.error(error);
+    console.error('Error fetching recent reviews.');
+    return null;
+  }
 };

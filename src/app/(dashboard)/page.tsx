@@ -1,6 +1,10 @@
 import SearchBar from '@/components/SearchBar';
 import prisma from '@/db/prisma/prisma';
-import { fetchAllCourses, fetchAllProfs } from '@/lib/fetch';
+import {
+  fetchAllCourses,
+  fetchAllProfs,
+  getRecentReviews as fetchRecentReviews,
+} from '@/lib/fetch';
 import { unstable_cache } from 'next/cache';
 
 async function fetchData() {
@@ -22,15 +26,22 @@ const getCachedProfs = unstable_cache(
   { tags: ['professors', 'searchBar'] },
 );
 
+const getCachedRecents = unstable_cache(
+  async () => fetchRecentReviews(),
+  ['recent-reviews'],
+  { tags: ['reviews', 'searchBar'] },
+);
+
 export default async function Home() {
-  const [courses, profs] = await Promise.all([
+  const [courses, profs, recents] = await Promise.all([
     getCachedCourses(),
     getCachedProfs(),
+    getCachedRecents(),
   ]);
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-4 px-10">
-      <SearchBar courses={courses} profs={profs} />
+    <div className="flex h-full w-full min-w-0 grow-0 flex-col items-center gap-4 px-10">
+      <SearchBar recents={recents} courses={courses} profs={profs} />
     </div>
   );
 }

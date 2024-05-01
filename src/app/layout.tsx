@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'flex h-screen min-h-full min-w-full flex-col bg-slate-950 font-sans antialiased lg:flex-row',
+          'flex h-screen max-h-full w-screen max-w-full flex-col bg-slate-950 font-sans antialiased lg:flex-row',
           inter.variable,
           anton.variable,
         )}

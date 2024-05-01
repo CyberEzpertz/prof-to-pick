@@ -106,12 +106,12 @@ const page = async ({
               courses={courses}
             />
             <ReviewFilter
-              courses={reviewCourses.map((course) => {
-                return {
+              courses={
+                reviewCourses?.map((course) => ({
                   label: `${course.courseCode} (${course._count.id})`,
                   value: course.courseCode,
-                };
-              })}
+                })) ?? []
+              }
             />
           </div>
         </div>
