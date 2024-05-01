@@ -41,10 +41,10 @@ export function getTier(rating: number, amount: number) {
   if (amount == 0) {
     return { tier: '?', tierColor: 'bg-slate-600' };
   }
-  if (rating >= 3.33) {
+  if (rating >= 3.67) {
     tier = 'W';
     tierColor = 'bg-teal-500';
-  } else if (rating >= 1.67) {
+  } else if (rating >= 2.33) {
     tier = 'M';
     tierColor = 'bg-purple-500';
   } else {

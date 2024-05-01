@@ -48,7 +48,7 @@ const SearchBar = ({ courses, profs, className = '' }: Props) => {
 
   return (
     <>
-      <div className="flex h-1/2 flex-col justify-end gap-2 text-balance text-center">
+      <div className="flex h-1/2 flex-col justify-end gap-2 text-balance p-4 text-center">
         <h1 className=" text-balance text-5xl font-bold">
           Audit your {data === 'Professors' ? 'Professors' : 'Courses'}
         </h1>

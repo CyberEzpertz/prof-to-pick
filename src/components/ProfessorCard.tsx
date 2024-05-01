@@ -24,10 +24,10 @@ type Props = {
   totalReviews: number;
 };
 
-const ProfessorCard = ({ prof, totalReviews }: Props) => {
+const ProfessorCard = ({ prof }: Props) => {
   return (
     <Link className="group size-max" href={`/professor/${prof.id}`}>
-      <Card className="flex w-full flex-row gap-2 overflow-hidden rounded-2xl transition-all group-hover:bg-slate-800/50 md:w-max">
+      <Card className="flex w-full flex-row gap-2 overflow-hidden rounded-2xl pr-4 shadow-2xl transition-all group-hover:bg-slate-800/50 md:w-max">
         <div
           className={cn(
             'flex w-16 flex-shrink-0 items-center justify-center font-display text-5xl',

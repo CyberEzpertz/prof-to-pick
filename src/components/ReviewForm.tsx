@@ -107,7 +107,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
           {!isPhone && isMounted ? 'Add Review' : ''}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="h-max max-h-[80%] w-max max-w-[80%] overflow-y-scroll lg:max-w-4xl">
+      <AlertDialogContent className="h-max max-h-[90%] w-max max-w-[80%] overflow-y-scroll lg:max-w-[50rem]">
         <AlertDialogHeader>
           <AlertDialogTitle>Writing a Review</AlertDialogTitle>
           <AlertDialogDescription>
@@ -119,7 +119,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
-            <div className="flex flex-row flex-wrap gap-x-12 gap-y-8">
+            <div className="flex flex-row flex-wrap gap-x-8 gap-y-4 lg:grid lg:grid-cols-2 lg:grid-rows-2">
               <FormField
                 control={form.control}
                 name="courseCode"
@@ -177,7 +177,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                       </PopoverContent>
                     </Popover>
                     <FormDescription className="text-balance">
-                      This is the course that will be used in the dashboard.
+                      What course did you take this professor?
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -210,14 +210,12 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                       </SelectContent>
                     </Select>
                     <FormDescription className="text-balance">
-                      How was your overall experience with this professor?
+                      What modality did you take this professor under?
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="flex flex-row flex-wrap gap-x-12 gap-y-8">
               <FormField
                 control={form.control}
                 name="rating"

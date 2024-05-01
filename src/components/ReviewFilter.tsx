@@ -1,9 +1,7 @@
 'use client';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { ComboBox } from './ui/combobox';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { Button } from './ui/button';
-import { CirclePlus } from 'lucide-react';
 import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 type Props = {

@@ -7,6 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import { ReviewsWithVotes } from '@/lib/types';
 import { LoadingSpinner } from './ui/spinner';
 import ReviewCardSkeleton from './skeletons/ReviewCardSkeleton';
+import { motion } from 'framer-motion';
 
 type Props = {
   initReviews: ReviewsWithVotes[];
@@ -17,6 +18,24 @@ type Props = {
   offset: number;
   userId: string;
   isAdmin?: boolean;
+};
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 60 },
+  show: {
+    opacity: 1,
+    y: 0,
+  },
 };
 
 let cursor: number;
@@ -50,19 +69,31 @@ const ReviewFeed = ({
   }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col ">
       {initReviews.length ? (
         <>
           {loaded.length ? (
-            loaded.map((review, index) => (
-              <ReviewCard
-                review={review}
-                key={index}
-                vote={review.votes}
-                {...(userId === review.userId && { byCurrentUser: true })}
-                isAdmin
-              />
-            ))
+            <motion.ul
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="flex flex-col gap-6"
+            >
+              {loaded.map((review, index) => (
+                <motion.li
+                  key={index}
+                  variants={item}
+                  transition={{ ease: 'easeInOut', duration: 0.3 }}
+                >
+                  <ReviewCard
+                    review={review}
+                    vote={review.votes}
+                    {...(userId === review.userId && { byCurrentUser: true })}
+                    isAdmin
+                  />
+                </motion.li>
+              ))}
+            </motion.ul>
           ) : (
             <>
               <ReviewCardSkeleton />

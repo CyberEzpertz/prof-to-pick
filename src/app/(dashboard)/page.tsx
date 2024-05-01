@@ -1,9 +1,7 @@
 import SearchBar from '@/components/SearchBar';
 import prisma from '@/db/prisma/prisma';
 import { fetchAllCourses, fetchAllProfs } from '@/lib/fetch';
-import { Review } from '@prisma/client';
-import { unstable_cache, unstable_noStore } from 'next/cache';
-import { z } from 'zod';
+import { unstable_cache } from 'next/cache';
 
 async function fetchData() {
   const profs = await prisma.professor.findMany();
