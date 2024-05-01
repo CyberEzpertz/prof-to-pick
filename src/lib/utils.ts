@@ -13,32 +13,24 @@ export function toProperCase(val: string) {
     .replace(/((?<=( |-)|^).)/g, (s) => s.toUpperCase());
 }
 
-export function getAggregates(
+export function getStarsCount(
   reviews: Review[] | { rating: number; difficulty: number }[],
 ) {
-  const numReviews = reviews.length;
-  const agg = reviews.reduce(
+  const ratings = reviews.reduce(
     (acc, review) => {
-      acc.rating += review.rating;
-      acc.diff += review.difficulty;
-      acc.count[review.rating - 1] += 1;
+      acc[review.rating - 1] += 1;
       return acc;
     },
-    { rating: 0, diff: 0, count: [0, 0, 0, 0, 0] },
+    [0, 0, 0, 0, 0],
   );
 
-  agg.rating /= numReviews;
-  agg.diff /= numReviews;
-  agg.rating = Number(agg.rating.toFixed(1));
-  agg.diff = Number(agg.diff.toFixed(1));
-
-  return agg;
+  return ratings;
 }
 
-export function getTier(rating: number, amount: number) {
+export function getTier(rating: number | null, amount: number) {
   let tier, tierColor;
 
-  if (amount == 0) {
+  if (amount == 0 || rating === null) {
     return { tier: '?', tierColor: 'bg-slate-600' };
   }
   if (rating >= 3.67) {

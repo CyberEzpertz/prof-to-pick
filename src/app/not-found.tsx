@@ -1,5 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
-import { Bomb, CircleX } from 'lucide-react';
+import { Bomb } from 'lucide-react';
 import Link from 'next/link';
 
 export default function NotFound() {

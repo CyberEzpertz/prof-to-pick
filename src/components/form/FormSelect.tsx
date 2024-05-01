@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   FormControl,
   FormDescription,
@@ -13,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { ReportType } from '@prisma/client';
 import { toProperCase } from '@/lib/utils';
 
 type Props = {

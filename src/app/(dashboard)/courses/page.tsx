@@ -1,8 +1,5 @@
 'use client';
-import SiteNavbar from '@/components/Sidebar';
 import UnderConstruction from '@/components/UnderConstruction';
-import { Button } from '@/components/ui/button';
-import { getClasses } from '@/server-actions/classes';
 
 export default function Home() {
   return (

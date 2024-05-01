@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
-import { Flame, LucideIcon, Star } from 'lucide-react';
+import { Flame, Star } from 'lucide-react';
 
 type ratingProps = {
   name: string;
-  rating: number;
+  rating: number | null;
   isDifficulty?: boolean;
 };
 
@@ -29,7 +29,13 @@ const ReviewRating = ({ name, rating, isDifficulty = false }: ratingProps) => {
             [...Array(5)].map((_, index) => (
               <Symbol
                 key={index}
-                fill={Math.floor(rating) > index ? hexColor : '#94a3b8'}
+                fill={
+                  rating
+                    ? Math.floor(rating) > index
+                      ? hexColor
+                      : '#94a3b8'
+                    : '#94a3b8'
+                }
                 strokeWidth={0}
                 size={18}
               />

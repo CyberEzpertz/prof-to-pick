@@ -8,20 +8,43 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 
-const profWithReviewsAndCourses =
-  Prisma.validator<Prisma.ProfessorDefaultArgs>()({
-    include: {
-      reviews: true,
-      courses: {
-        select: {
-          code: true,
-        },
+const profWithReviews = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
+  include: {
+    reviews: true,
+  },
+});
+
+export type ProfWithReviews = Prisma.ProfessorGetPayload<
+  typeof profWithReviews
+>;
+
+const profWithReviewsCourses = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
+  include: {
+    reviews: true,
+    courses: {
+      select: {
+        code: true,
       },
     },
-  });
+  },
+});
 
-export type ProfWithReviewsAndCourses = Prisma.ProfessorGetPayload<
-  typeof profWithReviewsAndCourses
+export type ProfWithReviewsCourses = Prisma.ProfessorGetPayload<
+  typeof profWithReviewsCourses
+>;
+
+const profWithReviewCount = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
+  include: {
+    _count: {
+      select: {
+        reviews: true,
+      },
+    },
+  },
+});
+
+export type ProfWithReviewCount = Prisma.ProfessorGetPayload<
+  typeof profWithReviewCount
 >;
 
 const reviewsWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({

@@ -5,7 +5,6 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from './ui/scroll-area';
 import { Tag } from '@prisma/client';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
-import { cn } from '@/lib/utils';
 
 const tiers = [
   {
@@ -35,12 +34,8 @@ const sorts = [
     value: 'tier',
   },
   {
-    label: 'Recently Reviewed',
-    value: 'recent',
-  },
-  {
     label: 'Most Reviewed',
-    value: 'reviewed',
+    value: 'most',
   },
 ];
 

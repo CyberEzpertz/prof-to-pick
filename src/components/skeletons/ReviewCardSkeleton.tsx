@@ -4,8 +4,6 @@ import {
   CardHeader,
   CardContent,
   CardFooter,
-  CardDescription,
-  CardTitle,
 } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 import { Separator } from '../ui/separator';

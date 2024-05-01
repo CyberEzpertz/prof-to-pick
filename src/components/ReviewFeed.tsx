@@ -1,6 +1,5 @@
 'use client';
 
-import { Review, Vote } from '@prisma/client';
 import React, { useEffect, useState } from 'react';
 import ReviewCard from './ReviewCard';
 import { useInView } from 'react-intersection-observer';

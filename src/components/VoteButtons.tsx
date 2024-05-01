@@ -5,7 +5,7 @@ import { Vote } from '@prisma/client';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React, { useOptimistic } from 'react';
-import { toast, useToast } from './ui/use-toast';
+import { useToast } from './ui/use-toast';
 
 type Props = {
   voteCount: number;

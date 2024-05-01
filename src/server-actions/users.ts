@@ -2,7 +2,6 @@
 
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
 
 export async function updateUserId({ idNumber }: { idNumber: number }) {
   const supabase = createServer();

@@ -1,6 +1,6 @@
 'use client';
 import { Course, Professor } from '@prisma/client';
-import { Button, buttonVariants } from './ui/button';
+import { Button } from './ui/button';
 import {
   Command,
   CommandGroup,
@@ -9,11 +9,10 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn, toProperCase } from '@/lib/utils';
-import nProgress, * as NProgress from 'nprogress';
-import { toast, useToast } from './ui/use-toast';
+import * as NProgress from 'nprogress';
+import { toast } from './ui/use-toast';
 import { useMediaQuery } from 'usehooks-ts';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 

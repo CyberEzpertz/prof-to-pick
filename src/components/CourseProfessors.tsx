@@ -1,27 +1,12 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Professor } from '@prisma/client';
 import ProfessorCard from './ProfessorCard';
-
-interface ProfessorWithAggs extends Professor {
-  aveRating: number;
-  aveDifficulty: number;
-  tier: {
-    tier: string;
-    tierColor: string;
-  };
-  reviews: {
-    rating: number;
-    difficulty: number;
-  }[];
-  _count: {
-    reviews: number;
-  };
-}
+import { useSearchParams } from 'next/navigation';
+import { ProfWithReviewCount } from '@/lib/types';
 
 type Props = {
-  professors: ProfessorWithAggs[] | null;
+  professors: ProfWithReviewCount[];
 };
 
 const container = {
@@ -43,7 +28,7 @@ const item = {
 };
 
 const CourseProfessors = ({ professors }: Props) => {
-  if (professors === null) return null;
+  const searchParams = useSearchParams();
 
   return (
     <motion.ul
@@ -59,10 +44,7 @@ const CourseProfessors = ({ professors }: Props) => {
             variants={item}
             transition={{ ease: 'easeInOut', duration: 0.5 }}
           >
-            <ProfessorCard
-              prof={professor}
-              totalReviews={professor._count.reviews}
-            />
+            <ProfessorCard prof={professor} />
           </motion.li>
         );
       })}

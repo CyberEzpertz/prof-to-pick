@@ -1,14 +1,10 @@
 import CourseDelete from '@/components/CourseDelete';
 import CourseSearch from '@/components/CourseSearch';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import prisma from '@/db/prisma/prisma';
 import { fetchAllCourses } from '@/lib/fetch';
-import { createServer } from '@/lib/supabase/server';
 import { checkIsAdmin } from '@/server-actions/users';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
-import React from 'react';
 
 const getCachedCourses = unstable_cache(
   async () => fetchAllCourses(),

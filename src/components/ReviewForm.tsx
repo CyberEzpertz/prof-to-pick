@@ -50,7 +50,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CirclePlus } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
-import { ScrollArea } from './ui/scroll-area';
 
 type Props = {
   profId: number;

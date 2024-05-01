@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/prisma/prisma';
-import { Class, classArraySchema, classSchema } from '@/lib/types';
+import { Class, classArraySchema } from '@/lib/types';
 import { revalidateTag } from 'next/cache';
 
 const insertData = async (curr: Class) => {

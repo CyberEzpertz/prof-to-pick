@@ -11,7 +11,6 @@ import {
   HelpCircle,
   LogOut,
   LucideIcon,
-  Presentation,
   Search,
   SlashSquare,
   SquareSigma,

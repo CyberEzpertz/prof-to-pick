@@ -1,8 +1,6 @@
 import 'server-only';
 import prisma from '@/db/prisma/prisma';
-import { getAggregates, getTier } from '@/lib/utils';
 import { createServer } from './supabase/server';
-import { ProfWithReviewsAndCourses } from './types';
 
 export const fetchAllCourses = async () => {
   try {
@@ -15,7 +13,10 @@ export const fetchAllCourses = async () => {
   }
 };
 
-export const fetchCourseWithProfessors = async (code: string) => {
+export const fetchCourseWithProfessors = async (
+  code: string,
+  searchParams: { [key: string]: string | string[] | undefined },
+) => {
   try {
     const course = await prisma.course.findUnique({
       where: {
@@ -29,22 +30,17 @@ export const fetchCourseWithProfessors = async (code: string) => {
         },
         professors: {
           orderBy: {
+            ...(searchParams['sort'] === 'most' && {
+              reviews: {
+                _count: 'desc',
+              },
+            }),
             lastName: 'asc',
           },
-          select: {
+          include: {
             _count: {
               select: {
                 reviews: true,
-              },
-            },
-            id: true,
-            firstName: true,
-            lastName: true,
-            tags: true,
-            reviews: {
-              select: {
-                rating: true,
-                difficulty: true,
               },
             },
           },
@@ -52,24 +48,13 @@ export const fetchCourseWithProfessors = async (code: string) => {
       },
     });
 
-    if (course === null) return { course: null, professors: null };
+    if (course === null) return null;
 
-    const professors = course.professors.map((prof) => {
-      const agg = getAggregates(prof.reviews);
-      const tier = getTier(agg.rating, prof.reviews.length);
-      return {
-        ...prof,
-        aveRating: agg.rating,
-        aveDifficulty: agg.diff,
-        tier: tier,
-      };
-    });
-
-    return { course, professors };
+    return course;
   } catch (error) {
     console.error('Error fetching course');
     console.error(error);
-    return { course: null, professors: null };
+    return null;
   }
 };
 
@@ -109,7 +94,7 @@ export async function getProfessor(id: number) {
     },
   });
 
-  return prof as ProfWithReviewsAndCourses;
+  return prof;
 }
 
 export const getCoursesCodes = async () => {

@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { Input } from './ui/input';
-import { Label } from './ui/label';
 import { Button } from './ui/button';
 import {
   Form,
@@ -16,7 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { checkClasses, getClasses } from '@/server-actions/classes';
-import { toast, useToast } from './ui/use-toast';
+import { toast } from './ui/use-toast';
 import nProgress from 'nprogress';
 
 const formSchema = z.object({

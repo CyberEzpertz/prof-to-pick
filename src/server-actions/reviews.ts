@@ -4,7 +4,6 @@ import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { reviewFormSchema } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {

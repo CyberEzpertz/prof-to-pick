@@ -1,5 +1,5 @@
 'use client';
-import { Review, User, Vote } from '@prisma/client';
+import { Review, Vote } from '@prisma/client';
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -11,21 +11,14 @@ import {
   CardTitle,
 } from './ui/card';
 import {
-  Flame,
-  LucideIcon,
-  Star,
-  ThumbsDown,
-  ThumbsUp,
   TriangleAlert,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
 import DeleteButton from './DeleteButton';
 import PopupReportForm from './PopupReportForm';
 import { Button } from './ui/button';
-import ReportForm from './ReportForm';
 import ReviewRating from './ReviewRating';
 import { useMediaQuery } from 'usehooks-ts';
 

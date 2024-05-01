@@ -1,17 +1,16 @@
-import { cn, getAggregates, getTier } from '@/lib/utils';
-import { Professor, Review } from '@prisma/client';
+import { cn, getStarsCount, getTier } from '@/lib/utils';
 import React from 'react';
 import { Separator } from './ui/separator';
 import { Flame, LucideIcon, Star } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import { ProfWithReviewsAndCourses } from '@/lib/types';
+import { ProfWithReviewsCourses as ProfWithReviewsCourseCodes } from '@/lib/types';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
 
 type Props = {
-  prof: ProfWithReviewsAndCourses;
+  prof: ProfWithReviewsCourseCodes;
 };
 
 type ratingProps = {
@@ -83,8 +82,8 @@ const RatingProgress = ({
 };
 
 export const ProfessorInfo = ({ prof }: Props) => {
-  const agg = getAggregates(prof.reviews);
-  const { tier, tierColor } = getTier(agg.rating, prof.reviews.length);
+  const starsCount = getStarsCount(prof.reviews);
+  const { tier, tierColor } = getTier(prof.avgRating, prof.reviews.length);
 
   return (
     <>
@@ -119,14 +118,14 @@ export const ProfessorInfo = ({ prof }: Props) => {
               hexColor="#2dd4bf"
               icon={Star}
               name="AVG. RATING"
-              rating={agg.rating || 0}
+              rating={prof.avgRating || 0}
               twColor="bg-teal-500"
             />
             <AverageRating
               hexColor="#f43f5e"
               icon={Flame}
               name="AVG. DIFFICULTY"
-              rating={agg.diff || 0}
+              rating={prof.avgDifficulty || 0}
               twColor="bg-rose-500"
             />
           </div>
@@ -185,8 +184,10 @@ export const ProfessorInfo = ({ prof }: Props) => {
           <Card className="flex flex-col gap-2 p-4">
             {[...Array(5)].map((_, index) => (
               <RatingProgress
-                progress={(agg.count[4 - index] / Math.max(...agg.count)) * 100}
-                reviews={agg.count[4 - index]}
+                progress={
+                  (starsCount[4 - index] / Math.max(...starsCount)) * 100
+                }
+                reviews={starsCount[4 - index]}
                 rating={5 - index}
                 key={index}
               />

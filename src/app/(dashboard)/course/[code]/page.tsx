@@ -1,5 +1,4 @@
 import CourseFilters from '@/components/CourseFilter';
-import ProfessorCard from '@/components/ProfessorCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { fetchCourseWithProfessors } from '@/lib/fetch';
@@ -7,8 +6,7 @@ import { CircleArrowLeft } from 'lucide-react';
 import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import React, { Suspense } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import CourseProfessors from '@/components/CourseProfessors';
 
 const page = async ({
@@ -27,7 +25,7 @@ const page = async ({
     },
   );
 
-  const { course, professors } = await getCachedCourse(params.code);
+  const course = await getCachedCourse(params.code, searchParams);
 
   if (!course) redirect('/not-found');
 
@@ -48,7 +46,7 @@ const page = async ({
         <CourseFilters />
       </div>
       <Separator className="my-8" />
-      <CourseProfessors professors={professors} />
+      <CourseProfessors professors={course.professors} />
     </ScrollArea>
   );
 };

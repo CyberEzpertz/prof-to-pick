@@ -74,13 +74,16 @@ model Review {
 }
 
 model Professor {
-  id        Int      @id @default(autoincrement())
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
-  courses   Course[]
-  reviews   Review[]
-  classes   Class[]
-  tags      Tag[]
+  id            Int    @id @default(autoincrement())
+  firstName     String @map("first_name")
+  lastName      String @map("last_name")
+  avgRating     Float? @map("avg_rating")
+  avgDifficulty Float? @map("avg_difficulty")
+
+  courses Course[]
+  reviews Review[]
+  classes Class[]
+  tags    Tag[]
 
   @@unique(name: "fullName", [firstName, lastName])
   @@map("professors")

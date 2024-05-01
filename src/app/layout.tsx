@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Anton, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
-import { NavigationMenu } from '@/components/ui/navigation-menu';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Toaster } from '@/components/ui/toaster';
 import NextTopLoader from 'nextjs-toploader';
