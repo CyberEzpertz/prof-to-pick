@@ -40,7 +40,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex h-full w-full min-w-0 grow-0 flex-col items-center gap-4 px-10">
+    <div className="flex h-full w-full min-w-0 grow-0 flex-col items-center justify-center gap-4 px-5 lg:px-10">
       <SearchBar recents={recents} courses={courses} profs={profs} />
     </div>
   );

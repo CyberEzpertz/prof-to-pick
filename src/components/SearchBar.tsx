@@ -56,18 +56,7 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
 
   return (
     <>
-      <div className="flex h-[55%] w-full flex-col items-center justify-end gap-2 text-balance p-4">
-        <Carousel className="mb-8 h-max w-1/2">
-          <CarouselContent className="items-center">
-            {recents?.map((review) => (
-              <CarouselItem key={review.id} className="basis-11/12">
-                <ReviewCardPreview review={review} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+      <div className="flex w-full flex-col items-center justify-end gap-2 text-balance p-4">
         <h1 className=" text-balance text-center text-5xl font-bold">
           Audit your {data === 'Professors' ? 'Professors' : 'Courses'}
         </h1>
@@ -79,7 +68,7 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
       </div>
       <div
         className={cn(
-          'flex h-max w-full flex-row justify-center gap-3',
+          'flex h-max w-full flex-row justify-center gap-3 pb-12',
           className,
         )}
       >
@@ -154,6 +143,24 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
             </>
           )}
         </Button>
+      </div>
+
+      <div className="flex w-full min-w-0 flex-col items-center gap-4">
+        <Carousel
+          className="h-96 w-56 lg:h-max lg:w-1/2"
+          opts={{ align: 'center', loop: true }}
+        >
+          <CarouselContent className="items-center">
+            {recents?.map((review) => (
+              <CarouselItem key={review.id} className="basis-11/12">
+                <ReviewCardPreview review={review} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        <p className="text-sm italic text-slate-500">Recent Reviews</p>
       </div>
     </>
   );

@@ -38,13 +38,13 @@ const ReviewCardPreview = ({ review }: { review: Review }) => {
   }, []);
 
   return (
-    <Card className="flex h-60 w-full select-none flex-col text-left">
-      <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
+    <Card className="h-68 flex w-full select-none flex-col text-left lg:h-60">
+      <CardHeader className="flex flex-col gap-y-4 space-y-0 p-4 pb-0 lg:flex-row lg:p-6 lg:pb-6">
         <div className="flex flex-col gap-1">
           <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
           </CardTitle>
-          <CardDescription className="text-sm text-slate-400">
+          <CardDescription className="text-xs text-slate-400 lg:text-sm">
             ID{review.userIdNumber} • {review.modality} •{' '}
             {new Date(review.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -53,20 +53,25 @@ const ReviewCardPreview = ({ review }: { review: Review }) => {
             })}
           </CardDescription>
         </div>
-        <div className="flex flex-col gap-x-8 gap-y-4 lg:ml-auto lg:flex-row">
-          <ReviewRating name="RATING" rating={review.rating} />
+        <div className="flex flex-col gap-x-8 gap-y-2 lg:ml-auto lg:flex-row">
+          <ReviewRating
+            name="RATING"
+            rating={review.rating}
+            variation="noStar"
+          />
           <ReviewRating
             name="DIFFICULTY"
             rating={review.difficulty}
             isDifficulty
+            variation="noStar"
           />
         </div>
       </CardHeader>
-      <CardContent className="flex h-full min-h-0 flex-col pb-4">
-        <p className="line-clamp-3 max-h-16 w-full select-none overflow-hidden text-ellipsis text-wrap text-justify text-xs lg:text-sm">
+      <CardContent className="flex h-full min-h-0 flex-col pb-2 pt-2 lg:p-6 lg:pb-4 lg:pt-0">
+        <p className="hidden lg:line-clamp-3 lg:max-h-16 lg:w-full lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
           {review.comment}
         </p>
-        <div className="mt-auto flex items-end justify-end gap-2">
+        <div className="flex items-center justify-center gap-2 lg:mt-auto lg:items-end lg:justify-end">
           <Link
             href={`/professor/${review.professorId}`}
             className={cn(buttonVariants({ variant: 'outline' }))}
