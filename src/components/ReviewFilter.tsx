@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { ComboBox } from './ui/combobox';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from './ui/scroll-area';
+import SelectFilter from './SelectFilter';
 
 type Props = {
   courses: {
@@ -55,7 +56,7 @@ const ReviewFilter = ({ courses }: Props) => {
           items={courses}
           label="Course"
           callback={(value) => {
-            router.push(`${pathname}?${createQueryString('course', value)}`);
+            router.replace(`${pathname}?${createQueryString('course', value)}`);
           }}
           initVal={searchParams.get('course')}
         />
@@ -63,7 +64,7 @@ const ReviewFilter = ({ courses }: Props) => {
           items={ratings}
           label="Rating"
           callback={(value) => {
-            router.push(`${pathname}?${createQueryString('rating', value)}`);
+            router.replace(`${pathname}?${createQueryString('rating', value)}`);
           }}
           noSearch
           initVal={
@@ -72,19 +73,12 @@ const ReviewFilter = ({ courses }: Props) => {
               : 'Rating'
           }
         />
-        <ComboBox
-          items={sorts}
-          label="Sort by"
+        <SelectFilter
+          items={[{ groupItems: sorts }]}
           callback={(value) => {
-            {
-              router.push(`${pathname}?${createQueryString('sort', value)}`);
-            }
+            router.replace(`${pathname}?${createQueryString('sort', value)}`);
           }}
-          noSearch
-          initVal={
-            sorts.find((sort) => sort.value === searchParams.get('sort'))
-              ?.label ?? 'Most Recent'
-          }
+          defaultValue={searchParams.get('sort') ?? 'recent'}
         />
       </div>
       <ScrollBar orientation="horizontal" />

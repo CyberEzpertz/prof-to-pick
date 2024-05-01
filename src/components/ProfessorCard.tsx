@@ -18,7 +18,7 @@ const ProfessorCard = ({ prof, noTier = false }: Props) => {
   return (
     <Link className="group size-max" href={`/professor/${prof.id}`}>
       <Card
-        className={`flex w-full flex-row gap-2 overflow-hidden rounded-2xl ${noTier ? 'p-4' : 'pr-4'} shadow-2xl transition-all group-hover:bg-slate-800/50 md:w-max`}
+        className={`flex w-full flex-row gap-2 overflow-hidden rounded-2xl ${noTier ? 'p-2' : 'pr-4'} shadow-2xl transition-all group-hover:bg-slate-800/50 md:w-max`}
       >
         {!noTier && (
           <div
