@@ -20,7 +20,6 @@ const page = async ({
     [params.code],
     {
       tags: ['courses', params.code],
-      revalidate: 5,
     },
   );
 

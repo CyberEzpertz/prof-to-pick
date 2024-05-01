@@ -51,13 +51,26 @@ export const fetchCourseWithProfessors = async (
             },
           },
           orderBy: [
-            searchParams['sort'] === 'most'
-              ? {
-                  reviews: {
-                    _count: 'desc',
-                  },
-                }
-              : { lastName: 'asc' },
+            {
+              ...(searchParams['sort'] === 'highest' && {
+                avgRating: { sort: 'desc', nulls: 'last' },
+              }),
+            },
+            {
+              ...(searchParams['sort'] === 'mostReviewed' && {
+                reviews: {
+                  _count: 'desc',
+                },
+              }),
+            },
+            {
+              ...(searchParams['sort'] === 'mostDifficult' && {
+                avgDifficulty: { sort: 'desc', nulls: 'last' },
+              }),
+            },
+            {
+              lastName: 'asc',
+            },
           ],
           include: {
             _count: {

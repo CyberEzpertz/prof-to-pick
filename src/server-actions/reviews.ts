@@ -3,6 +3,7 @@
 import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { reviewFormSchema } from '@/lib/types';
+import { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -50,6 +51,12 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
     .catch((error) => {
       console.error('Something happened during submission of review.');
       console.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          return 'P2002';
+        }
+      }
+      return false;
     })
     .finally(() => {
       revalidatePath(`/professor`);

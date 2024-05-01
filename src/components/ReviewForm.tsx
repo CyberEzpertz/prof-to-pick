@@ -85,7 +85,13 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
     const success = await createReview(data);
     setOpen(false);
 
-    if (success)
+    if (success === 'P2002') {
+      toast({
+        variant: 'destructive',
+        description:
+          'You already have a review for that subject. Only 1 review per subject per professor is allowed.',
+      });
+    } else if (success)
       toast({
         description: 'Your review has been successfully submitted.',
       });

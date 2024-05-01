@@ -70,6 +70,7 @@ model Review {
   voteCount    Int       @default(0) @map("vote_count")
   Report       Report[]
 
+  @@unique([professorId, courseCode, userId])
   @@map("reviews")
 }
 

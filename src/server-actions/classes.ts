@@ -138,7 +138,8 @@ export const getClasses = async (idString: string, subject: string) => {
       for (const curr of classes) {
         await insertData(curr);
       }
-      revalidateTag('searchBar');
+      revalidateTag('courses');
+      revalidateTag('professors');
       return true;
     })
     .catch((error) => {

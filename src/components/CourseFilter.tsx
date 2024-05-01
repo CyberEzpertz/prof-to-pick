@@ -5,6 +5,7 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from './ui/scroll-area';
 import { Tag } from '@prisma/client';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
+import { Toggle } from './ui/toggle';
 
 const tiers = [
   {
@@ -30,12 +31,16 @@ const sorts = [
     value: 'name',
   },
   {
-    label: 'Tier',
-    value: 'tier',
+    label: 'Highest Rated',
+    value: 'highest',
   },
   {
     label: 'Most Reviewed',
-    value: 'most',
+    value: 'mostReviewed',
+  },
+  {
+    label: 'Most Difficult',
+    value: 'mostDifficult',
   },
 ];
 
@@ -63,11 +68,24 @@ const CourseFilters = () => {
   return (
     <ScrollArea>
       <div className="flex items-center gap-5">
+        <Toggle
+          variant="outline"
+          onPressedChange={(pressed) => {
+            if (pressed)
+              router.replace(
+                `${pathname}?${createQueryString('group', 'true')}`,
+              );
+            else
+              router.replace(`${pathname}?${createQueryString('group', '')}`);
+          }}
+        >
+          Group By Tier
+        </Toggle>
         <p className="text-sm text-slate-400">Tiers</p>
         <ToggleGroup
           type="single"
           onValueChange={(value) => {
-            router.push(`${pathname}?${createQueryString('tier', value)}`);
+            router.replace(`${pathname}?${createQueryString('tier', value)}`);
           }}
           defaultValue={searchParams.get('tier') ?? undefined}
         >
@@ -87,7 +105,7 @@ const CourseFilters = () => {
           label="Sort by"
           callback={(value) => {
             {
-              router.push(`${pathname}?${createQueryString('sort', value)}`);
+              router.replace(`${pathname}?${createQueryString('sort', value)}`);
             }
           }}
           noSearch

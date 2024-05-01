@@ -14,7 +14,12 @@ import { cn, toProperCase } from '@/lib/utils';
 import * as NProgress from 'nprogress';
 import { toast } from './ui/use-toast';
 import { useMediaQuery } from 'usehooks-ts';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  GraduationCap,
+  Presentation,
+} from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -57,6 +62,11 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-end gap-2 text-balance p-4">
+        {data === 'Professors' ? (
+          <GraduationCap size={64} className="text-teal-500" />
+        ) : (
+          <Presentation size={64} className="text-teal-500" />
+        )}
         <h1 className=" text-balance text-center text-5xl font-bold">
           Audit your {data === 'Professors' ? 'Professors' : 'Courses'}
         </h1>

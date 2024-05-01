@@ -57,13 +57,13 @@ const ReviewCardPreview = ({ review }: { review: Review }) => {
           <ReviewRating
             name="RATING"
             rating={review.rating}
-            variation="noStar"
+            variation={isPhone && isMounted ? 'noStar' : 'default'}
           />
           <ReviewRating
             name="DIFFICULTY"
             rating={review.difficulty}
             isDifficulty
-            variation="noStar"
+            variation={isPhone && isMounted ? 'noStar' : 'default'}
           />
         </div>
       </CardHeader>

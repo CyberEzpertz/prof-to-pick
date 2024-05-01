@@ -66,6 +66,6 @@ export const handleVote = async (
     console.error(error);
     return undefined;
   } finally {
-    revalidatePath('/professor');
+    revalidatePath(pathname);
   }
 };

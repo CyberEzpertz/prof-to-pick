@@ -79,7 +79,7 @@ export const reviewFormSchema = z.object({
   tags: z.array(z.nativeEnum(Tag)).max(5, 'Only up to 5 tags can be selected.'),
   rating: z.coerce.number().min(1).max(5),
   difficulty: z.coerce.number().min(1).max(5),
-  comment: z.string().trim().min(10).max(600),
+  comment: z.string().trim().min(10).max(700),
   modality: z.nativeEnum(Modality),
   professorId: z.number(),
   courseCode: z.string({
