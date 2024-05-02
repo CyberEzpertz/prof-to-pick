@@ -22,6 +22,9 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        gradient: "url('/sitebg.png')",
+      },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],
       },

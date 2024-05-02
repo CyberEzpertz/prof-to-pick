@@ -8,7 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { cn, toProperCase } from '@/lib/utils';
 import * as NProgress from 'nprogress';
@@ -45,6 +45,8 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
   );
   const [data, setData] = useState<'Professors' | 'Courses'>('Professors');
   const [search, setSearch] = useState('');
+  const listRef = useRef<HTMLDivElement>(null);
+  const scrollId = useRef<ReturnType<typeof setTimeout>>();
   const router = useRouter();
 
   if (profs === null)
@@ -63,13 +65,13 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-end gap-2 text-balance p-4">
+      <div className="mt-10 flex w-full flex-col items-center justify-end gap-2 text-balance p-4">
         {data === 'Professors' ? (
           <GraduationCap size={64} className="text-teal-500" />
         ) : (
           <Presentation size={64} className="text-teal-500" />
         )}
-        <h1 className=" text-balance text-center text-5xl font-bold">
+        <h1 className=" text-balance text-center text-5xl font-extrabold">
           Audit your {data === 'Professors' ? 'Professors' : 'Courses'}
         </h1>
         <p className="text-center text-slate-400">
@@ -88,11 +90,18 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
           <CommandInput
             placeholder={data === 'Professors' ? 'Juan dela Cruz' : 'GESTSOC'}
             value={search}
-            onValueChange={setSearch}
+            onValueChange={(val) => {
+              setSearch(val);
+              scrollId.current = setTimeout(() => {
+                const div = listRef.current;
+                div?.scrollTo({ top: 0 });
+              });
+            }}
           />
           <div className="relative z-50 w-full">
             <CommandList
-              className={`absolute max-h-[150px] w-full border border-slate-800/50 bg-slate-950 lg:max-h-[200px] ${!search && 'h-0 overflow-hidden border-0'}`}
+              ref={listRef}
+              className={`absolute max-h-[150px] w-full border border-slate-800/50 bg-slate-950 lg:max-h-[200px] ${!search.trim() && 'h-0 overflow-hidden border-0'}`}
             >
               <CommandGroup>
                 {search.trim() && suggestions !== null && data === 'Professors'
@@ -161,7 +170,7 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
         <Carousel
           className="h-max w-56 lg:w-1/2"
           opts={{ loop: true }}
-          plugins={[Autoplay({ delay: 5000 })]}
+          plugins={[Autoplay({ delay: 4000 })]}
         >
           <CarouselContent className="items-center">
             {recents?.map((review) => (

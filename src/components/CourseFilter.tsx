@@ -70,10 +70,11 @@ const CourseFilters = () => {
       <div className="flex items-center gap-5">
         <Toggle
           variant="outline"
+          defaultPressed={true}
           onPressedChange={(pressed) => {
-            if (pressed)
+            if (!pressed)
               router.replace(
-                `${pathname}?${createQueryString('group', 'true')}`,
+                `${pathname}?${createQueryString('group', 'false')}`,
               );
             else
               router.replace(`${pathname}?${createQueryString('group', '')}`);

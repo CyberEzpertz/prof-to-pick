@@ -95,7 +95,11 @@ export const fetchCourseWithProfessors = async (
 
 export const fetchAllProfs = async () => {
   try {
-    const professors = await prisma.professor.findMany();
+    const professors = await prisma.professor.findMany({
+      orderBy: {
+        firstName: 'asc',
+      },
+    });
     return professors;
   } catch (error) {
     console.error('Error fetching all professors');

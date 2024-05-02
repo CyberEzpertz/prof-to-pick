@@ -86,8 +86,9 @@ const TierBox = ({
 
 const CourseProfessors = ({ professors }: Props) => {
   const searchParams = useSearchParams();
+  const tier = searchParams.get('tier');
 
-  if (searchParams.get('group') === 'true') {
+  if (searchParams.get('group') !== 'false') {
     const tiers = professors.reduce<Record<string, ProfWithReviewCount[]>>(
       (acc, curr) => {
         if (curr.avgRating === null) acc.U.push(curr);
@@ -102,10 +103,10 @@ const CourseProfessors = ({ professors }: Props) => {
 
     return (
       <motion.ul variants={container} initial="hidden" animate="show">
-        <TierBox profs={tiers.W} tier="W" />
-        <TierBox profs={tiers.M} tier="M" />
-        <TierBox profs={tiers.L} tier="L" />
-        <TierBox profs={tiers.U} tier="Unknown" />
+        {(!tier || tier === 'W') && <TierBox profs={tiers.W} tier="W" />}
+        {(!tier || tier === 'M') && <TierBox profs={tiers.M} tier="M" />}
+        {(!tier || tier === 'L') && <TierBox profs={tiers.L} tier="L" />}
+        {(!tier || tier === 'U') && <TierBox profs={tiers.U} tier="Unknown" />}
       </motion.ul>
     );
   }

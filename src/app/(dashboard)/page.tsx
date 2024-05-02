@@ -23,7 +23,7 @@ const getCachedCourses = unstable_cache(
 const getCachedProfs = unstable_cache(
   async () => fetchAllProfs(),
   ['all-profs'],
-  { tags: ['professors', 'searchBar'] },
+  { tags: ['professors', 'searchBar'], revalidate: 1 },
 );
 
 const getCachedRecents = unstable_cache(
@@ -40,7 +40,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex h-full w-full min-w-0 grow-0 flex-col items-center justify-center gap-4 px-5 lg:px-10">
+    <div className="bg-gradient flex h-full w-full min-w-0 grow-0 flex-col items-center justify-center gap-4 bg-cover px-5 lg:px-10">
       <SearchBar recents={recents} courses={courses} profs={profs} />
     </div>
   );
