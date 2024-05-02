@@ -13,7 +13,7 @@ import { Button } from './ui/button';
 import { FaGoogle } from 'react-icons/fa';
 import { signIn, validateCode } from '@/server-actions/auth';
 
-const LoginForm = () => {
+const LoginForm = ({ isDev = false }: { isDev?: boolean }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [validated, setValidated] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const LoginForm = () => {
   useEffect(() => {
     setOpen(true);
   }, []);
-  if (!validated)
+  if (!(validated || isDev))
     return (
       <div className="flex items-center justify-center">
         <AlertDialog open={open} onOpenChange={setOpen}>

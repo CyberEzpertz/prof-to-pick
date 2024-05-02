@@ -87,8 +87,8 @@ const ReviewFeed = ({
                   <ReviewCard
                     review={review}
                     vote={review.votes}
-                    {...(userId === review.userId && { byCurrentUser: true })}
-                    isAdmin
+                    byCurrentUser={userId === review.userId}
+                    isAdmin={isAdmin}
                   />
                 </motion.li>
               ))}

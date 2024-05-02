@@ -137,6 +137,9 @@ export const getCoursesCodes = async () => {
     select: {
       code: true,
     },
+    orderBy: {
+      code: 'asc',
+    },
   });
 
   return courses.map((course) => course.code);
@@ -175,6 +178,36 @@ export const getRecentReviews = async () => {
   } catch (error) {
     console.error(error);
     console.error('Error fetching recent reviews.');
+    return null;
+  }
+};
+
+export const getCurrentUserReviews = async (
+  userId: string,
+  skip?: number,
+  take?: number,
+) => {
+  try {
+    const reviews = prisma.review.findMany({
+      ...(skip && { skip: skip }),
+      ...(take && { take: take }),
+      where: {
+        userId: userId,
+      },
+      include: {
+        votes: {
+          where: {
+            userId: userId,
+          },
+        },
+      },
+    });
+
+    return reviews;
+  } catch (error) {
+    console.error(`Error fetching user ${userId}'s reviews.`);
+    console.error(error);
+
     return null;
   }
 };

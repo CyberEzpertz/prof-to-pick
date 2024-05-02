@@ -28,6 +28,7 @@ import {
   CarouselPrevious,
 } from './ui/carousel';
 import { ReviewCardPreview } from './ReviewCard';
+import Autoplay from 'embla-carousel-autoplay';
 
 type Props = {
   courses: Course[] | null;
@@ -158,7 +159,8 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
       <div className="flex w-full min-w-0 flex-col items-center gap-4">
         <Carousel
           className="h-96 w-56 lg:h-max lg:w-1/2"
-          opts={{ align: 'center', loop: true }}
+          opts={{ loop: true }}
+          plugins={[Autoplay({ delay: 5000 })]}
         >
           <CarouselContent className="items-center">
             {recents?.map((review) => (

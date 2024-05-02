@@ -4,7 +4,7 @@ import prisma from '@/db/prisma/prisma';
 import { createServer } from '@/lib/supabase/server';
 import { reviewFormSchema } from '@/lib/types';
 import { Prisma } from '@prisma/client';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
@@ -45,6 +45,7 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
           userId: userData.user.id,
         },
       });
+      revalidateTag('reviews');
 
       return true;
     })

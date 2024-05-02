@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils';
 type reviewProps = {
   review: Review;
   vote: Vote[];
-  byCurrentUser?: boolean;
+  byCurrentUser: boolean;
   isAdmin?: boolean;
 };
 
@@ -106,7 +106,7 @@ const ReviewCard = ({
           </CardTitle>
           <CardDescription className="text-sm text-slate-400">
             ID{review.userIdNumber} • {review.modality} •{' '}
-            {review.createdAt.toLocaleDateString('en-US', {
+            {new Date(review.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
@@ -149,14 +149,14 @@ const ReviewCard = ({
           />
         </div>
         <div className="flex flex-row">
-          {
+          {!byCurrentUser && (
             <PopupReportForm reviewId={review.id}>
               <Button variant="ghost">
                 <TriangleAlert className="lg:mr-2" strokeWidth={1} />
                 {!isPhone && isMounted && 'Report'}
               </Button>
             </PopupReportForm>
-          }
+          )}
           {(byCurrentUser || isAdmin) && (
             <DeleteButton reviewId={review.id} isPhone={isPhone && isMounted} />
           )}

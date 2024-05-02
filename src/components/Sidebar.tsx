@@ -66,11 +66,15 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       title: 'Reviews',
       icon: Star,
     },
-    {
-      href: '/admin',
-      title: 'Admin',
-      icon: Cat,
-    },
+    ...(isAdmin
+      ? [
+          {
+            href: '/admin',
+            title: 'Admin',
+            icon: Cat,
+          },
+        ]
+      : []),
   ];
 
   const bottomLinks: link[] = [
@@ -253,7 +257,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
     </>
   );
 
-  if (!mounted) return null;
+  if (!mounted) return desktopNav;
 
   return <>{isPhone ? mobileNav : desktopNav}</>;
 };
