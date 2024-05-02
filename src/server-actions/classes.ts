@@ -5,14 +5,17 @@ import { Class, classArraySchema } from '@/lib/types';
 import { revalidateTag } from 'next/cache';
 
 const insertData = async (curr: Class) => {
+  let start, end;
   let profId: number | null = null;
-
   console.log(curr.professor);
+
   if (curr.professor) {
     let lastName = curr.professor.match(/.*(?=,)/)![0];
     let firstName = curr.professor.match(/((?<=,\s).+(?=\s\s)|(?<=,\s).+)/)![0];
 
     try {
+      start = performance.now();
+
       const prof = await prisma.professor.upsert({
         where: {
           fullName: {
@@ -37,6 +40,9 @@ const insertData = async (curr: Class) => {
           },
         },
       });
+
+      end = performance.now();
+      console.log(`Professor upsert: ${(end - start).toFixed(2)} ms`);
       profId = prof.id;
     } catch (error) {
       console.error('Last Professor logged:');
@@ -59,6 +65,26 @@ const insertData = async (curr: Class) => {
       ...(profId && { professorId: profId }),
       section: curr.section,
       remarks: curr.remarks,
+      schedules: {
+        connectOrCreate: [
+          ...curr.schedules.map((sched) => ({
+            where: {
+              scheduleParams: {
+                day: sched.day,
+                start: sched.start,
+                end: sched.end,
+                date: sched.date,
+              },
+            },
+            create: {
+              day: sched.day,
+              start: sched.start,
+              end: sched.end,
+              date: sched.date,
+            },
+          })),
+        ],
+      },
     },
     update: {
       cap: curr.enrollCap,
@@ -66,39 +92,28 @@ const insertData = async (curr: Class) => {
       restriction: curr.restriction,
       modality: curr.modality,
       remarks: curr.remarks,
+      schedules: {
+        connectOrCreate: [
+          ...curr.schedules.map((sched) => ({
+            where: {
+              scheduleParams: {
+                day: sched.day,
+                start: sched.start,
+                end: sched.end,
+                date: sched.date,
+              },
+            },
+            create: {
+              day: sched.day,
+              start: sched.start,
+              end: sched.end,
+              date: sched.date,
+            },
+          })),
+        ],
+      },
     },
   });
-
-  for (const sched of curr.schedules) {
-    await prisma.schedule.upsert({
-      where: {
-        scheduleParams: {
-          day: sched.day,
-          start: sched.start,
-          end: sched.end,
-          date: sched.date,
-        },
-      },
-      create: {
-        day: sched.day,
-        start: sched.start,
-        end: sched.end,
-        date: sched.date,
-        classes: {
-          connect: {
-            code: newClass.code,
-          },
-        },
-      },
-      update: {
-        classes: {
-          connect: {
-            code: newClass.code,
-          },
-        },
-      },
-    });
-  }
 };
 
 export const getClasses = async (idString: string, subject: string) => {
@@ -138,6 +153,7 @@ export const getClasses = async (idString: string, subject: string) => {
       for (const curr of classes) {
         await insertData(curr);
       }
+
       revalidateTag('courses');
       revalidateTag('professors');
       return true;
@@ -166,3 +182,83 @@ export async function checkClasses() {
     return false;
   }
 }
+
+// export async function insertScheds() {
+//   const times = [
+//     {
+//       start: 730,
+//       end: 900,
+//     },
+//     {
+//       start: 915,
+//       end: 1045,
+//     },
+//     {
+//       start: 1100,
+//       end: 1230,
+//     },
+//     {
+//       start: 1245,
+//       end: 1415,
+//     },
+//     {
+//       start: 1430,
+//       end: 1600,
+//     },
+//     {
+//       start: 1615,
+//       end: 1745,
+//     },
+//     {
+//       start: 1800,
+//       end: 1930,
+//     },
+//     {
+//       start: 800,
+//       end: 1000,
+//     },
+//     {
+//       start: 1000,
+//       end: 1200,
+//     },
+//     {
+//       start: 1300,
+//       end: 1500,
+//     },
+//     {
+//       start: 1530,
+//       end: 1730,
+//     },
+//     {
+//       start: 1800,
+//       end: 2000,
+//     },
+//   ];
+
+//   const days = ['M', 'T', 'W', 'H', 'F', 'S'] as const;
+
+//   let schedules = <
+//     {
+//       start: number;
+//       end: number;
+//       day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S';
+//       date: string;
+//     }[]
+//   >[];
+
+//   for (const time of times) {
+//     for (const day of days) {
+//       const newSched = {
+//         ...time,
+//         day: day,
+//         date: '',
+//       };
+//       schedules.push(newSched);
+//     }
+//   }
+
+//   const res = await prisma.schedule.createMany({
+//     data: schedules,
+//     skipDuplicates: true,
+//   });
+// }
