@@ -172,6 +172,14 @@ export const getRecentReviews = async () => {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        professor: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
     });
 
     return recents;

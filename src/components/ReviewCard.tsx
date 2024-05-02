@@ -20,7 +20,8 @@ import { Button, buttonVariants } from './ui/button';
 import ReviewRating from './ReviewRating';
 import { useMediaQuery } from 'usehooks-ts';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn, toProperCase } from '@/lib/utils';
+import { ReviewWithProfName } from '@/lib/types';
 
 type reviewProps = {
   review: Review;
@@ -29,7 +30,7 @@ type reviewProps = {
   isAdmin?: boolean;
 };
 
-const ReviewCardPreview = ({ review }: { review: Review }) => {
+const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
   const isPhone = useMediaQuery('(max-width: 1024px)');
   const [isMounted, setIsMounted] = useState(false);
 
@@ -67,11 +68,14 @@ const ReviewCardPreview = ({ review }: { review: Review }) => {
           />
         </div>
       </CardHeader>
-      <CardContent className="flex h-full min-h-0 flex-col pb-2 pt-2 lg:p-6 lg:pb-4 lg:pt-0">
+      <CardContent className="flex h-full min-h-0 flex-col p-4 pt-2 lg:p-6 lg:pb-4 lg:pt-0">
         <p className="hidden lg:line-clamp-3 lg:max-h-16 lg:w-full lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
           {review.comment}
         </p>
-        <div className="flex items-center justify-center gap-2 lg:mt-auto lg:items-end lg:justify-end">
+        <div className="flex flex-col items-center justify-center gap-2 lg:mt-auto lg:flex-row lg:items-end lg:justify-start">
+          <p className="mr-auto justify-self-start text-xs italic text-slate-500 lg:self-center lg:text-sm">
+            {`${toProperCase(review.professor.lastName)}, ${toProperCase(review.professor.firstName)}`}
+          </p>
           <Link
             href={`/professor/${review.professorId}`}
             className={cn(buttonVariants({ variant: 'outline' }))}

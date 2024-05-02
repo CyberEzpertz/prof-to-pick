@@ -1,5 +1,5 @@
 'use client';
-import { Course, Professor, Review } from '@prisma/client';
+import { Course, Professor } from '@prisma/client';
 import { Button } from './ui/button';
 import {
   Command,
@@ -29,12 +29,13 @@ import {
 } from './ui/carousel';
 import { ReviewCardPreview } from './ReviewCard';
 import Autoplay from 'embla-carousel-autoplay';
+import { ReviewWithProfName } from '@/lib/types';
 
 type Props = {
   courses: Course[] | null;
   profs: Professor[] | null;
   className?: string;
-  recents: Review[] | null;
+  recents: ReviewWithProfName[] | null;
 };
 
 const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
@@ -158,7 +159,7 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
 
       <div className="flex w-full min-w-0 flex-col items-center gap-4">
         <Carousel
-          className="h-96 w-56 lg:h-max lg:w-1/2"
+          className="h-max w-56 lg:w-1/2"
           opts={{ loop: true }}
           plugins={[Autoplay({ delay: 5000 })]}
         >

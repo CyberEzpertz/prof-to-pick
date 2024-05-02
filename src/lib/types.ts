@@ -18,6 +18,21 @@ export type ProfWithReviews = Prisma.ProfessorGetPayload<
   typeof profWithReviews
 >;
 
+const reviewWithProfName = Prisma.validator<Prisma.ReviewDefaultArgs>()({
+  include: {
+    professor: {
+      select: {
+        firstName: true,
+        lastName: true,
+      },
+    },
+  },
+});
+
+export type ReviewWithProfName = Prisma.ReviewGetPayload<
+  typeof reviewWithProfName
+>;
+
 const profWithReviewsCourses = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
   include: {
     reviews: true,
