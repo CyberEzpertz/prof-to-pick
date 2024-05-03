@@ -109,7 +109,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
       <AlertDialogTrigger asChild>
         <Button variant="default" className="mr-auto gap-2">
           <CirclePlus />
-          {!isPhone && isMounted ? 'Add Review' : ''}
+          {isPhone && isMounted ? '' : 'Add Review'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="h-max max-h-[90%] w-max max-w-[80%] overflow-y-scroll lg:max-w-[50rem]">

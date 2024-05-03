@@ -1,63 +1,18 @@
-import { cn, getStarsCount, getTier } from '@/lib/utils';
+import { cn, getTier } from '@/lib/utils';
 import React from 'react';
 import { Separator } from './ui/separator';
-import { Flame, LucideIcon, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import { ProfWithReviewsCourses as ProfWithReviewsCourseCodes } from '@/lib/types';
+import { ProfWithReviewsCourses } from '@/lib/types';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
+import AvgRating from './AvgRating';
+import RatingDist from './RatingDist';
 
 type Props = {
-  prof: ProfWithReviewsCourseCodes;
-};
-
-type ratingProps = {
-  name: string;
-  rating: number;
-  icon: LucideIcon;
-  hexColor: string;
-  twColor: string;
-};
-
-const AverageRating = (props: ratingProps) => {
-  return (
-    <div className="flex w-min flex-row">
-      <div
-        className={cn(
-          'mr-3 flex size-16 items-center justify-center rounded-lg font-display text-4xl',
-          props.twColor,
-        )}
-      >
-        {props.rating}
-      </div>
-      <div className="flex flex-col justify-center">
-        <span className="whitespace-nowrap font-bold">{props.name}</span>
-        <div className="flex flex-row">
-          {[
-            [...Array(5)].map((_, index) => (
-              <props.icon
-                key={index}
-                fill={
-                  Math.ceil(props.rating) > index ? props.hexColor : '#94a3b8'
-                }
-                fillOpacity={
-                  Math.floor(props.rating) > index
-                    ? 1
-                    : Math.ceil(props.rating) > index
-                      ? 0.2 + Number((props.rating % 1).toFixed(2))
-                      : 1
-                }
-                strokeWidth={0}
-                size={26}
-              />
-            )),
-          ]}
-        </div>
-      </div>
-    </div>
-  );
+  prof: ProfWithReviewsCourses;
 };
 
 const RatingProgress = ({
@@ -82,7 +37,6 @@ const RatingProgress = ({
 };
 
 export const ProfessorInfo = ({ prof }: Props) => {
-  const starsCount = getStarsCount(prof.reviews);
   const { tier, tierColor } = getTier(prof.avgRating, prof.reviews.length);
 
   return (
@@ -110,23 +64,15 @@ export const ProfessorInfo = ({ prof }: Props) => {
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col">
-          <span className="mb-2 font-medium text-slate-400">
+          <span className="mb-2 font-medium text-slate-500">
             Based on {prof.reviews.length} reviews
           </span>
           <div className="flex flex-col gap-x-20 gap-y-4 lg:flex-row">
-            <AverageRating
-              hexColor="#2dd4bf"
-              icon={Star}
-              name="AVG. RATING"
-              rating={prof.avgRating || 0}
-              twColor="bg-teal-500"
-            />
-            <AverageRating
-              hexColor="#f43f5e"
-              icon={Flame}
-              name="AVG. DIFFICULTY"
+            <AvgRating title="RATING" rating={prof.avgRating || 0} />
+            <AvgRating
+              title="DIFFICULTY"
               rating={prof.avgDifficulty || 0}
-              twColor="bg-rose-500"
+              isDifficulty
             />
           </div>
         </div>
@@ -177,23 +123,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
             </CardContent>
           </Card>
         </div>
-        <div className="flex flex-col">
-          <span className="mb-2 font-medium text-slate-400">
-            Rating Distribution
-          </span>
-          <Card className="flex flex-col gap-2 p-4">
-            {[...Array(5)].map((_, index) => (
-              <RatingProgress
-                progress={
-                  (starsCount[4 - index] / Math.max(...starsCount)) * 100
-                }
-                reviews={starsCount[4 - index]}
-                rating={5 - index}
-                key={index}
-              />
-            ))}
-          </Card>
-        </div>
+        <RatingDist reviews={prof.reviews} />
       </div>
     </>
   );

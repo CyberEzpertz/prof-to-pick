@@ -118,13 +118,21 @@ export async function getCurrUserId() {
   return userData.user.id;
 }
 
-export async function getProfessor(id: number) {
+export async function getProfReviewsCourses(id: number, reviewLimit?: number) {
   const prof = await prisma.professor.findUnique({
     where: {
       id: id,
     },
     include: {
-      reviews: true,
+      reviews:
+        reviewLimit === undefined
+          ? true
+          : {
+              take: reviewLimit,
+              orderBy: {
+                voteCount: 'desc',
+              },
+            },
       courses: {
         select: {
           code: true,

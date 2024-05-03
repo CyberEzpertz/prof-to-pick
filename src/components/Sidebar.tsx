@@ -5,6 +5,7 @@ import { Separator } from './ui/separator';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from './ui/button';
 import {
+  Blend,
   Bolt,
   Calendar,
   Cat,
@@ -12,7 +13,6 @@ import {
   LogOut,
   LucideIcon,
   Search,
-  SlashSquare,
   SquareSigma,
   Star,
 } from 'lucide-react';
@@ -54,7 +54,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
     {
       href: '/compare',
       title: 'Compare',
-      icon: SlashSquare,
+      icon: Blend,
     },
     {
       href: '/scheduler',
@@ -104,7 +104,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       <SheetTrigger>
         <div className="flex flex-row items-center whitespace-nowrap p-4 px-6 font-bold">
           <SquareSigma className="mr-3" color="#00e3c4" size={32} />
-          Vox et Ratio
+          voxetratio.
         </div>
         <Separator />
       </SheetTrigger>
@@ -187,8 +187,8 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       <nav className="flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5">
         <Link href="/">
           <span className="flex flex-row items-center pl-4 text-3xl font-extrabold">
-            <SquareSigma className="mr-3" color="#00e3c4" size={32} /> Vox et
-            Ratio
+            <SquareSigma className="mr-3" color="#00e3c4" size={32} />{' '}
+            voxetratio.
           </span>
         </Link>
 
@@ -206,7 +206,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                   variant: path === link.href ? 'default' : 'ghost',
                   size: 'default',
                 }),
-                'relative justify-start pl-4 pr-32 text-base font-normal',
+                'relative justify-start pl-4 pr-32 text-base font-normal text-slate-400',
                 active &&
                   'dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white',
                 active &&
@@ -236,9 +236,9 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                     variant: path === link.href ? 'default' : 'ghost',
                     size: 'default',
                   }),
-                  'relative justify-start pl-4 pr-32 text-base font-normal',
+                  'relative justify-start pl-4 pr-32 text-base font-normal text-slate-400',
                   active &&
-                    'dark:bg-muted dark:hover:bg-muted font-semibold  dark:text-white dark:hover:text-white',
+                    'dark:bg-muted dark:hover:bg-muted font-semibold dark:text-white dark:hover:text-white',
                   active &&
                     " before:absolute before:left-0 before:h-full before:w-1 before:bg-teal-400 before:p-0 before:content-['']",
                 )}

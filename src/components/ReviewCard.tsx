@@ -22,6 +22,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import Link from 'next/link';
 import { cn, toProperCase } from '@/lib/utils';
 import { ReviewWithProfName } from '@/lib/types';
+import AvgRating from './AvgRating';
 
 type reviewProps = {
   review: Review;
@@ -74,7 +75,8 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
         </p>
         <div className="flex flex-col items-center justify-center gap-2 lg:mt-auto lg:flex-row lg:items-end lg:justify-start">
           <p className="mr-auto justify-self-start text-xs italic text-slate-500 lg:self-center lg:text-sm">
-            {`${toProperCase(review.professor.lastName)}, ${toProperCase(review.professor.firstName)}`}
+            {`${toProperCase(review.professor.lastName)}, 
+              ${toProperCase(review.professor.firstName)}`}
           </p>
           <Link
             href={`/professor/${review.professorId}`}
@@ -83,6 +85,55 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
             Check this Review <ChevronRight />
           </Link>
         </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const ReviewCardCompare = ({ review }: { review: Review }) => {
+  const isPhone = useMediaQuery('(max-width: 1024px)');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return (
+    <Card className="flex h-max w-full select-none flex-col text-left">
+      <CardHeader className="flex flex-col gap-y-4 space-y-0 p-4 pb-0 lg:p-6">
+        <div className="flex flex-row gap-1">
+          <CardTitle className="flex w-full justify-between text-xs font-normal text-slate-400 lg:text-sm">
+            <span className="font-bold text-slate-50">{review.courseCode}</span>
+            <span>
+              ID{review.userIdNumber} • {review.modality} •{' '}
+              {new Date(review.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </span>
+          </CardTitle>
+        </div>
+        <div className="flex flex-col gap-x-8 gap-y-2 lg:flex-row">
+          <AvgRating
+            variant="xs"
+            title="RATING"
+            rating={review.rating}
+            noIcon
+          />
+          <AvgRating
+            variant="xs"
+            title="DIFFICULTY"
+            rating={review.difficulty}
+            isDifficulty
+            noIcon
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="flex h-full min-h-0 flex-col p-4 pt-2 lg:p-6 lg:pt-0">
+        <p className="lg:w-full lg:select-none lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
+          {review.comment}
+        </p>
       </CardContent>
     </Card>
   );
@@ -170,4 +221,4 @@ const ReviewCard = ({
   );
 };
 
-export { ReviewCard, ReviewCardPreview };
+export { ReviewCard, ReviewCardPreview, ReviewCardCompare };

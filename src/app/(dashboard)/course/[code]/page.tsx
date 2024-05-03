@@ -8,7 +8,7 @@ import React from 'react';
 import CourseProfessors from '@/components/CourseProfessors';
 import BackButton from '@/components/BackButton';
 
-const page = async ({
+const Course = async ({
   params,
   searchParams,
 }: {
@@ -44,4 +44,4 @@ const page = async ({
   );
 };
 
-export default page;
+export default Course;

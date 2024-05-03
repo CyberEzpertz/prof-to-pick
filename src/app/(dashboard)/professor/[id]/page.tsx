@@ -6,17 +6,15 @@ import ReviewForm from '@/components/ReviewForm';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
-import { createServer } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import {
   getCoursesCodes,
   getCurrUserId,
-  getProfessor,
+  getProfReviewsCourses,
   getReviewCourses,
 } from '@/lib/fetch';
 import BackButton from '@/components/BackButton';
-
-export const dynamic = 'force-dynamic';
+import { unstable_cache } from 'next/cache';
 
 const page = async ({
   params,
@@ -27,15 +25,13 @@ const page = async ({
 }) => {
   const profId = Number(params.id);
   const offset = 10;
+  const userId = await getCurrUserId();
 
   const getReviews = async (cursor: number) => {
     'use server';
     const course = searchParams['course'];
     const rating = searchParams['rating'];
     const sort = searchParams['sort'];
-    const supabase = createServer();
-    const { data, error } = await supabase.auth.getUser();
-    const user = data.user?.id as string;
 
     // When cursor === -1, that means it's the initial value (i.e. it hasn't searched for reviews yet)
     const reviews = await prisma.review.findMany({
@@ -69,7 +65,7 @@ const page = async ({
       include: {
         votes: {
           where: {
-            userId: user,
+            userId: userId,
           },
         },
       },
@@ -82,15 +78,21 @@ const page = async ({
     return { reviews, cursor };
   };
 
+  const cachedData = unstable_cache(
+    async () => {
+      return Promise.all([
+        getProfReviewsCourses(profId),
+        getCoursesCodes(),
+        getReviewCourses(profId),
+      ]);
+    },
+    [`professor-${profId}`],
+    { tags: [`professor-${profId}`, 'professors'] },
+  );
+
   // Parallel Data Fetching
-  const [prof, { reviews, cursor }, courses, reviewCourses, userId] =
-    await Promise.all([
-      getProfessor(profId),
-      getReviews(-1),
-      getCoursesCodes(),
-      getReviewCourses(profId),
-      getCurrUserId(),
-    ]);
+  const [[prof, courses, reviewCourses], { reviews, cursor }] =
+    await Promise.all([cachedData(), getReviews(-1)]);
 
   if (!prof) redirect('/not-found');
 

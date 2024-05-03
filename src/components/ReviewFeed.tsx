@@ -7,6 +7,7 @@ import { ReviewsWithVotes } from '@/lib/types';
 import { LoadingSpinner } from './ui/spinner';
 import ReviewCardSkeleton from './skeletons/ReviewCardSkeleton';
 import { motion } from 'framer-motion';
+import { CircleOff } from 'lucide-react';
 
 type Props = {
   initReviews: ReviewsWithVotes[];
@@ -94,11 +95,11 @@ const ReviewFeed = ({
               ))}
             </motion.ul>
           ) : (
-            <>
+            <div className="flex h-full w-full flex-col gap-6 overflow-scroll">
               <ReviewCardSkeleton />
               <ReviewCardSkeleton />
               <ReviewCardSkeleton />
-            </>
+            </div>
           )}
 
           {loaded.length % offset === 0 && (
@@ -111,8 +112,8 @@ const ReviewFeed = ({
           )}
         </>
       ) : (
-        <span className="self-center pb-8 text-slate-500">
-          No reviews found
+        <span className="mt-4 flex flex-col items-center gap-4 self-center pb-8 text-slate-500">
+          <CircleOff size={48} /> No reviews for this professor yet.
         </span>
       )}
     </div>
