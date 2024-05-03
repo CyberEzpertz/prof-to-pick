@@ -18,12 +18,12 @@ const ProfessorCard = ({ prof, noTier = false }: Props) => {
   return (
     <Link className="group size-max" href={`/professor/${prof.id}`}>
       <Card
-        className={`flex w-full flex-row gap-2 overflow-hidden rounded-2xl ${noTier ? 'p-2' : 'pr-4'} shadow-2xl transition-all group-hover:bg-slate-800/50 md:w-max`}
+        className={`flex w-full flex-row gap-2 rounded-3xl rounded-bl-none ${noTier ? 'p-2' : 'pr-4'} shadow-xl transition-all group-hover:-translate-y-1 group-hover:scale-105 group-hover:border-teal-500/50 group-hover:bg-slate-700/40 dark:bg-slate-900 md:w-max`}
       >
         {!noTier && (
           <div
             className={cn(
-              'flex w-16 flex-shrink-0 items-center justify-center font-display text-5xl',
+              'flex w-16 flex-shrink-0 items-center justify-center rounded-bl-none rounded-br-3xl rounded-tl-3xl font-display text-5xl',
               tier.tierColor,
             )}
           >
