@@ -133,7 +133,7 @@ const page = async ({
       </div>
       <Separator className="order-2 mx-auto h-[1px] w-[80%] lg:my-auto lg:h-[95%] lg:w-[1px]" />
       <div className="order-1 h-full flex-[4]  shrink-0 overflow-y-scroll p-8 lg:order-3 lg:flex lg:flex-col">
-        <div className="m-auto flex flex-col gap-4">
+        <div className="m-auto flex w-full flex-col gap-4">
           <ProfessorInfo prof={prof} />
         </div>
       </div>

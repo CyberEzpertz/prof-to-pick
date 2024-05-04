@@ -40,7 +40,9 @@ export function ComboBox({
   initVal: string | null;
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(initVal ?? '');
+  const [value, setValue] = useState(
+    items.find(({ value }) => value === initVal)?.label ?? '',
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -70,7 +70,7 @@ const ReviewFilter = ({ courses }: Props) => {
         noSearch
         initVal={
           searchParams.get('rating')
-            ? `${searchParams.get('rating')} Stars`
+            ? `${searchParams.get('rating')}`
             : 'Rating'
         }
         className="max-w-[150px]"
