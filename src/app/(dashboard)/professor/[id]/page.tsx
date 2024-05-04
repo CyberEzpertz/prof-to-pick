@@ -125,7 +125,7 @@ const page = async ({
             initCursor={cursor}
             offset={offset}
             userId={userId}
-            isAdmin={checkIsAdmin()}
+            isAdmin={await checkIsAdmin()}
           />
         </ScrollArea>
       </div>
