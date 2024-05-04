@@ -98,24 +98,26 @@ const page = async ({
   if (!prof) redirect('/not-found');
 
   return (
-    <div className="flex w-full flex-col lg:flex-row">
-      <div className="order-3 flex w-full flex-[7] flex-col lg:order-1">
+    <div className="flex w-full grow-0 flex-col lg:flex-row">
+      <div className="order-3 flex w-full flex-[7] shrink flex-col overflow-scroll lg:order-1">
         <div className="m-8 mb-0 flex flex-col gap-4 ">
           <BackButton text="Go Back" />
-          <div className="flex flex-row gap-4">
+          <div className="flex min-w-0 shrink flex-row gap-4">
             <ReviewForm
               profId={prof.id}
               profName={`${prof.firstName} ${prof.lastName}`}
               courses={courses}
             />
-            <ReviewFilter
-              courses={
-                reviewCourses?.map((course) => ({
-                  label: `${course.courseCode} (${course._count.id})`,
-                  value: course.courseCode,
-                })) ?? []
-              }
-            />
+            <div className="ml-auto overflow-scroll">
+              <ReviewFilter
+                courses={
+                  reviewCourses?.map((course) => ({
+                    label: `${course.courseCode} (${course._count.id})`,
+                    value: course.courseCode,
+                  })) ?? []
+                }
+              />
+            </div>
           </div>
         </div>
         <ScrollArea className="h-full w-full p-8 pb-0">
@@ -130,8 +132,10 @@ const page = async ({
         </ScrollArea>
       </div>
       <Separator className="order-2 mx-auto h-[1px] w-[80%] lg:my-auto lg:h-[95%] lg:w-[1px]" />
-      <div className="order-1 gap-6 p-8 lg:order-3 lg:flex lg:flex-[4] lg:flex-col lg:justify-center">
-        <ProfessorInfo prof={prof} />
+      <div className="order-1 h-full flex-[4]  shrink-0 overflow-y-scroll p-8 lg:order-3 lg:flex lg:flex-col">
+        <div className="m-auto flex flex-col gap-4">
+          <ProfessorInfo prof={prof} />
+        </div>
       </div>
     </div>
   );

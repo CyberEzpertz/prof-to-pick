@@ -34,7 +34,7 @@ const SelectFilter = ({
       defaultValue={defaultValue ?? ''}
       onValueChange={(val) => callback(val)}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[150px]">
         <SelectValue placeholder={placeholder ?? 'Select an item'} />
       </SelectTrigger>
       <SelectContent>

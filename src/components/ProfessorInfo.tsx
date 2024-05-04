@@ -60,14 +60,14 @@ export const ProfessorInfo = ({ prof }: Props) => {
         </div>
       </div>
 
-      <Separator className="my-2" />
+      <Separator className="" />
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col">
           <span className="mb-2 font-medium text-slate-500">
             Based on {prof.reviews.length} reviews
           </span>
-          <div className="flex flex-col gap-x-20 gap-y-4 lg:flex-row">
+          <div className="flex flex-col gap-x-8 gap-y-4 md:max-xl:flex-wrap lg:flex-row">
             <AvgRating title="RATING" rating={prof.avgRating || 0} />
             <AvgRating
               title="DIFFICULTY"

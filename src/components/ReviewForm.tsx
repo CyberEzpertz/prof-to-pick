@@ -107,7 +107,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="default" className="mr-auto gap-2">
+        <Button variant="default" className="gap-2">
           <CirclePlus />
           {isPhone && isMounted ? '' : 'Add Review'}
         </Button>

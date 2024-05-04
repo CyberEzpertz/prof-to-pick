@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from './ui/card';
 import { ChevronRight, TriangleAlert } from 'lucide-react';
-import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
 import DeleteButton from './DeleteButton';
@@ -70,7 +69,7 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
         </div>
       </CardHeader>
       <CardContent className="flex h-full min-h-0 flex-col p-4 pt-2 lg:p-6 lg:pb-4 lg:pt-0">
-        <p className="line-clamp-3 lg:max-h-16 lg:w-full lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
+        <p className="line-clamp-3 w-full lg:max-h-16 lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
           {review.comment}
         </p>
         <div className="mt-4 flex flex-col items-center justify-center gap-2 lg:flex-row lg:items-end lg:justify-start">
@@ -153,13 +152,13 @@ const ReviewCard = ({
   }, []);
 
   return (
-    <Card className="flex flex-col rounded-2xl border-0 p-2 dark:bg-slate-900 ">
+    <Card className="max-w-30 flex shrink flex-col rounded-2xl border-0 p-2 dark:bg-slate-900">
       <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
         <div className="flex flex-col gap-1">
           <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
           </CardTitle>
-          <CardDescription className="text-sm text-slate-400">
+          <CardDescription className="text-nowrap text-xs text-slate-400 lg:text-sm">
             ID{review.userIdNumber} • {review.modality} •{' '}
             {new Date(review.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -168,7 +167,7 @@ const ReviewCard = ({
             })}
           </CardDescription>
         </div>
-        <div className="flex flex-col gap-x-8 gap-y-4 lg:ml-auto lg:flex-row">
+        <div className="flex flex-col gap-x-6 gap-y-4 lg:ml-auto lg:flex-row">
           <ReviewRating name="RATING" rating={review.rating} />
           <ReviewRating
             name="DIFFICULTY"
@@ -178,9 +177,8 @@ const ReviewCard = ({
         </div>
       </CardHeader>
       <CardContent className="pb-4">
-        <p className="text-sm lg:text-base">{review.comment}</p>
-        <Separator className="my-4" />
-        <div className="flex flex-wrap gap-2">
+        <p className="mb-4 text-sm lg:text-base">{review.comment}</p>
+        <Card className="flex flex-wrap gap-2 p-4 dark:border-slate-800/80 dark:bg-slate-900">
           {review.tags.map((tag, index) => {
             return (
               <Badge
@@ -192,7 +190,7 @@ const ReviewCard = ({
               </Badge>
             );
           })}
-        </div>
+        </Card>
       </CardContent>
       <CardFooter className="flex flex-row flex-wrap justify-center gap-2 pt-2 text-slate-400 lg:justify-start">
         <div className="flex flex-row items-center lg:mr-auto">

@@ -9,6 +9,7 @@ type ratingProps = {
   isDifficulty?: boolean;
   variant?: 'default' | 'small' | 'xs';
   noIcon?: boolean;
+  className?: string;
 };
 
 const ratingVariants = cva(
@@ -17,7 +18,7 @@ const ratingVariants = cva(
     variants: {
       variant: {
         small: 'size-12 text-3xl',
-        default: 'size-16 text-4xl',
+        default: 'size-14 text-4xl',
         xs: 'size-10 text-2xl',
       },
     },
@@ -30,13 +31,16 @@ const AvgRating = ({
   isDifficulty = false,
   variant = 'default',
   noIcon = false,
+  className = '',
 }: ratingProps) => {
   const Icon = isDifficulty ? Flame : Star;
   const hexColor = isDifficulty ? '#f43f5e' : '#2dd4bf';
   const twColor = isDifficulty ? 'dark:bg-rose-500' : 'dark:bg-teal-500';
 
   return (
-    <div className={`flex ${noIcon ? 'w-full' : 'w-min'} flex-row`}>
+    <div
+      className={cn(`flex ${noIcon ? 'w-full' : 'w-max'} flex-row`, className)}
+    >
       <div className={cn(ratingVariants({ variant }), twColor)}>
         {rating ?? '?'}
       </div>
@@ -64,7 +68,7 @@ const AvgRating = ({
                         : 1
                   }
                   strokeWidth={0}
-                  size={26}
+                  size={20}
                 />
               )),
             ]}

@@ -55,7 +55,13 @@ export function ComboBox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={cn(`w-[200px] p-0`, width)} align="start">
+      <PopoverContent
+        className={cn(
+          `max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0`,
+          width,
+        )}
+        align="start"
+      >
         <Command className="border border-slate-800/50 shadow-md">
           {!noSearch && <CommandInput placeholder={label} />}
           <CommandList>

@@ -2,7 +2,6 @@
 import { useCallback } from 'react';
 import { ComboBox } from './ui/combobox';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { ScrollArea, ScrollBar } from './ui/scroll-area';
 import SelectFilter from './SelectFilter';
 
 type Props = {
@@ -33,6 +32,8 @@ const sorts = [
     value: 'popular',
   },
 ];
+
+// TODO: Refactor combobox to be responsive
 const ReviewFilter = ({ courses }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -50,39 +51,38 @@ const ReviewFilter = ({ courses }: Props) => {
   );
 
   return (
-    <ScrollArea>
-      <div className="flex gap-5">
-        <ComboBox
-          items={courses}
-          label="Course"
-          callback={(value) => {
-            router.replace(`${pathname}?${createQueryString('course', value)}`);
-          }}
-          initVal={searchParams.get('course')}
-        />
-        <ComboBox
-          items={ratings}
-          label="Rating"
-          callback={(value) => {
-            router.replace(`${pathname}?${createQueryString('rating', value)}`);
-          }}
-          noSearch
-          initVal={
-            searchParams.get('rating')
-              ? `${searchParams.get('rating')} Stars`
-              : 'Rating'
-          }
-        />
-        <SelectFilter
-          items={[{ groupItems: sorts }]}
-          callback={(value) => {
-            router.replace(`${pathname}?${createQueryString('sort', value)}`);
-          }}
-          defaultValue={searchParams.get('sort') ?? 'recent'}
-        />
-      </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+    <div className="flex min-w-max max-w-[500px] shrink gap-4">
+      <ComboBox
+        items={courses}
+        label="Course"
+        callback={(value) => {
+          router.replace(`${pathname}?${createQueryString('course', value)}`);
+        }}
+        initVal={searchParams.get('course')}
+        className="max-w-[150px]"
+      />
+      <ComboBox
+        items={ratings}
+        label="Rating"
+        callback={(value) => {
+          router.replace(`${pathname}?${createQueryString('rating', value)}`);
+        }}
+        noSearch
+        initVal={
+          searchParams.get('rating')
+            ? `${searchParams.get('rating')} Stars`
+            : 'Rating'
+        }
+        className="max-w-[150px]"
+      />
+      <SelectFilter
+        items={[{ groupItems: sorts }]}
+        callback={(value) => {
+          router.replace(`${pathname}?${createQueryString('sort', value)}`);
+        }}
+        defaultValue={searchParams.get('sort') ?? 'recent'}
+      />
+    </div>
   );
 };
 

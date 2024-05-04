@@ -69,7 +69,7 @@ const ReviewFeed = ({
   }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
       {initReviews.length ? (
         <>
           {loaded.length ? (
