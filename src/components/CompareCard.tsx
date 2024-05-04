@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { ProfWithReviewsCourses } from '@/lib/types';
@@ -9,6 +8,7 @@ import { Badge } from './ui/badge';
 import RatingDist from './RatingDist';
 import { ReviewCardCompare } from './ReviewCard';
 import { BarChartHorizontal, CircleOff, TrendingUp } from 'lucide-react';
+import RemoveCompare from './RemoveCompare';
 
 type Props = {
   prof: ProfWithReviewsCourses;
@@ -18,7 +18,8 @@ const CompareCard = ({ prof }: Props) => {
   const { tier, tierColor } = getTier(prof.avgRating, prof.reviews.length);
 
   return (
-    <Card className="max-h-[800px] w-[480px]">
+    <Card className="max-h-[800px] w-[500px] min-w-[400px]">
+      <RemoveCompare id={`${prof.id}`} />
       <CardHeader className="flex flex-row items-center pb-0">
         <div
           className={cn(
@@ -47,7 +48,7 @@ const CompareCard = ({ prof }: Props) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="stats" className="flex h-max flex-col gap-4">
-            <span className="font-base mb-2 text-sm text-slate-500">
+            <span className="font-base mt-2 text-sm text-slate-500">
               Based on {prof.reviews.length} reviews
             </span>
             <div className="flex flex-col gap-x-20 gap-y-4">

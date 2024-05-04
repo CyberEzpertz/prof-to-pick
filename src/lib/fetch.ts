@@ -1,6 +1,7 @@
 import 'server-only';
 import prisma from '@/db/prisma/prisma';
 import { createServer } from './supabase/server';
+import { unstable_cache } from 'next/cache';
 
 export const fetchAllCourses = async () => {
   try {
@@ -119,29 +120,37 @@ export async function getCurrUserId() {
 }
 
 export async function getProfReviewsCourses(id: number, reviewLimit?: number) {
-  const prof = await prisma.professor.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      reviews:
-        reviewLimit === undefined
-          ? true
-          : {
-              take: reviewLimit,
-              orderBy: {
-                voteCount: 'desc',
-              },
-            },
-      courses: {
-        select: {
-          code: true,
+  const getCachedProf = unstable_cache(
+    async () => {
+      const prof = await prisma.professor.findUnique({
+        where: {
+          id: id,
         },
-      },
-    },
-  });
+        include: {
+          reviews:
+            reviewLimit === undefined
+              ? true
+              : {
+                  take: reviewLimit,
+                  orderBy: {
+                    voteCount: 'desc',
+                  },
+                },
+          courses: {
+            select: {
+              code: true,
+            },
+          },
+        },
+      });
 
-  return prof;
+      return prof;
+    },
+    [`professor-${id}-${reviewLimit}`],
+    { tags: ['professors', `professor-${id}`] },
+  );
+
+  return getCachedProf();
 }
 
 export const getCoursesCodes = async () => {
@@ -231,3 +240,21 @@ export const getCurrentUserReviews = async (
     return null;
   }
 };
+
+export const getCachedCourses = unstable_cache(
+  async () => fetchAllCourses(),
+  ['all-courses'],
+  { tags: ['courses', 'searchBar'] },
+);
+
+export const getCachedProfs = unstable_cache(
+  async () => fetchAllProfs(),
+  ['all-profs'],
+  { tags: ['professors', 'searchBar'] },
+);
+
+export const getCachedRecents = unstable_cache(
+  async () => getRecentReviews(),
+  ['recent-reviews'],
+  { tags: ['reviews', 'searchBar'] },
+);
