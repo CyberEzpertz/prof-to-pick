@@ -15,7 +15,7 @@ const RemoveCompare = ({ id }: Props) => {
 
   return (
     <Button
-      className="flex w-full flex-row items-center text-slate-500"
+      className="flex w-full flex-row items-center text-slate-500 dark:hover:bg-rose-800"
       variant="ghost"
       onClick={() => {
         const params = new URLSearchParams(searchParams.toString());

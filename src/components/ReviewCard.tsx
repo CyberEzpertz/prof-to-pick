@@ -40,9 +40,9 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
   }, []);
 
   return (
-    <Card className="h-68 flex w-full select-none flex-col text-left lg:h-60">
-      <CardHeader className="flex flex-col gap-y-4 space-y-0 p-4 pb-0 lg:flex-row lg:p-6 lg:pb-6">
-        <div className="flex flex-col gap-1">
+    <Card className="max-h-76 flex w-full select-none flex-col text-left">
+      <CardHeader className="flex flex-col flex-wrap justify-between gap-y-4 space-y-0 p-4 pb-0 lg:flex-row lg:p-6 lg:pb-6">
+        <div className="flex w-full flex-row flex-wrap items-center justify-between gap-x-5 text-nowrap">
           <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
           </CardTitle>
@@ -55,7 +55,7 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
             })}
           </CardDescription>
         </div>
-        <div className="flex flex-col gap-x-8 gap-y-2 lg:ml-auto lg:flex-row">
+        <div className="flex flex-row flex-wrap gap-x-8 gap-y-2">
           <ReviewRating
             name="RATING"
             rating={review.rating}
@@ -70,10 +70,10 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
         </div>
       </CardHeader>
       <CardContent className="flex h-full min-h-0 flex-col p-4 pt-2 lg:p-6 lg:pb-4 lg:pt-0">
-        <p className="hidden lg:line-clamp-3 lg:max-h-16 lg:w-full lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
+        <p className="line-clamp-3 lg:max-h-16 lg:w-full lg:select-none lg:overflow-hidden lg:text-ellipsis lg:text-wrap lg:text-justify lg:text-sm">
           {review.comment}
         </p>
-        <div className="flex flex-col items-center justify-center gap-2 lg:mt-auto lg:flex-row lg:items-end lg:justify-start">
+        <div className="mt-4 flex flex-col items-center justify-center gap-2 lg:flex-row lg:items-end lg:justify-start">
           <p className="mr-auto justify-self-start text-xs italic text-slate-500 lg:self-center lg:text-sm">
             {`${toProperCase(review.professor.lastName)}, 
               ${toProperCase(review.professor.firstName)}`}

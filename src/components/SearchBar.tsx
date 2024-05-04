@@ -166,9 +166,9 @@ const SearchBar = ({ courses, profs, className = '', recents }: Props) => {
         </Button>
       </div>
 
-      <div className="flex w-full min-w-0 flex-col items-center gap-4">
+      <div className="mb-4 flex w-full min-w-0 flex-col items-center gap-4">
         <Carousel
-          className="h-max w-56 lg:w-1/2"
+          className="h-max w-4/5 max-w-[700px]"
           opts={{ loop: true }}
           plugins={[Autoplay({ delay: 4000 })]}
         >

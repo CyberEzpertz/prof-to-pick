@@ -15,6 +15,7 @@ import {
 } from '@/lib/fetch';
 import BackButton from '@/components/BackButton';
 import { unstable_cache } from 'next/cache';
+import { checkIsAdmin } from '@/server-actions/users';
 
 const page = async ({
   params,
@@ -124,6 +125,7 @@ const page = async ({
             initCursor={cursor}
             offset={offset}
             userId={userId}
+            isAdmin={checkIsAdmin()}
           />
         </ScrollArea>
       </div>

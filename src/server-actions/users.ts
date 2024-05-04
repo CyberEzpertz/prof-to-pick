@@ -26,7 +26,7 @@ export async function checkIsAdmin() {
   const supabase = createServer();
   const { data, error } = await supabase.auth.getUser();
 
-  if (error) return false;
+  if (data.user === null || error) return false;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -37,5 +37,5 @@ export async function checkIsAdmin() {
     },
   });
 
-  return user?.role === 'ADMIN';
+  return user!.role === 'ADMIN';
 }
