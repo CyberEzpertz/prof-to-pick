@@ -41,6 +41,20 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const [isOpen, setOpen] = useState(true);
   const PanelIcon = isOpen ? PanelLeftClose : PanelLeftOpen;
 
+  const variants = {
+    open: { opacity: 1, y: 0 },
+    closed: { opacity: 0, y: 50 },
+  };
+
+  const transition = {
+    duration: 0.4,
+    ease: 'easeOut',
+  };
+
+  const linkStyle = `relative h-full w-full justify-start p-3 mx-auto text-base font-normal text-slate-400`;
+
+  const activeStyle = `${!isOpen && 'before:opacity-0'} before:duration-500 before:transition-all dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white before:absolute before:left-0 before:h-full before:w-1 before:rounded-l-lg before:bg-teal-400 before:p-0 before:content-['']`;
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -110,23 +124,9 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
     },
   ];
 
-  const linkStyle = `relative h-full w-full justify-start p-3 mx-auto text-base font-normal text-slate-400`;
-
-  const activeStyle = `${!isOpen && 'before:opacity-0'} before:duration-500 before:transition-all dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white before:absolute before:left-0 before:h-full before:w-1 before:rounded-l-lg before:bg-teal-400 before:p-0 before:content-['']`;
-
   const createLink = (link: LinkDetails) => {
     const isButton = link.href === '#';
     const active = path === link.href;
-
-    const variants = {
-      open: { opacity: 1, y: 0 },
-      closed: { opacity: 0, y: 50 },
-    };
-
-    const transition = {
-      duration: 0.4,
-      ease: 'easeOut',
-    };
 
     if (isButton)
       return (
@@ -266,20 +266,21 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       <nav
         className={`flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5 ${isOpen ? 'w-80' : 'w-20'} overflow-hidden transition-all duration-500`}
       >
-        <Link href="/">
-          <span
-            className={`flex w-max flex-row items-center pl-2 ${isOpen && 'pr-4'} h-10 text-3xl font-extrabold`}
+        <Link
+          href="/"
+          className={`flex h-12 w-max flex-row items-center overflow-hidden px-2 py-1 text-3xl font-extrabold`}
+        >
+          <SquareSigma className="mr-3 shrink-0" color="#00e3c4" size={32} />
+          <motion.div
+            animate={isOpen ? 'open' : 'closed'}
+            variants={variants}
+            transition={transition}
           >
-            <SquareSigma
-              className={`${isOpen && 'mr-3'}`}
-              color="#00e3c4"
-              size={32}
-            />
-            {isOpen && 'voxetratio.'}
-          </span>
+            voxetratio
+          </motion.div>
         </Link>
 
-        <Separator className="my-3" />
+        <Separator className="my-1" />
 
         <div
           className={`flex flex-col ${isOpen ? 'items-stretch' : 'items-center'} gap-2`}
