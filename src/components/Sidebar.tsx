@@ -25,6 +25,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { TooltipContainer } from './ui/tooltip';
 
 type LinkDetails = {
   href: string;
@@ -53,7 +54,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
 
   const linkStyle = `relative h-full w-full justify-start p-3 mx-auto text-base font-normal text-slate-400`;
 
-  const activeStyle = `${!isOpen && 'before:opacity-0'} before:duration-500 before:transition-all dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white before:absolute before:left-0 before:h-full before:w-1 before:rounded-l-lg before:bg-teal-400 before:p-0 before:content-['']`;
+  const activeStyle = `${!isOpen && 'before:opacity-0'} before:duration-500 before:transition-all dark:bg-muted dark:hover:bg-muted  dark:text-white dark:hover:text-white before:absolute before:left-0 before:h-full before:w-[3px] before:rounded-l-lg before:bg-teal-400 before:p-0 before:content-['']`;
 
   useEffect(() => {
     setMounted(true);
@@ -127,9 +128,10 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const createLink = (link: LinkDetails) => {
     const isButton = link.href === '#';
     const active = path === link.href;
+    let Generated;
 
     if (isButton)
-      return (
+      Generated = (
         <Button
           {...(link.onClick && { onClick: link.onClick })}
           variant="ghost"
@@ -148,33 +150,44 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
           </motion.div>
         </Button>
       );
+    else
+      Generated = (
+        <Link
+          {...(link.onClick && { onClick: link.onClick })}
+          href={link.href}
+          className={cn(
+            'overflow-hidden',
+            buttonVariants({
+              variant: path === link.href ? 'default' : 'ghost',
+              size: 'default',
+            }),
+            linkStyle,
+            active && activeStyle,
+          )}
+        >
+          <link.icon
+            className={`mr-4 shrink-0`}
+            {...(active && { color: '#2dd4bf', strokeWidth: 2 })}
+          />
+          <motion.div
+            animate={isOpen ? 'open' : 'closed'}
+            variants={variants}
+            transition={transition}
+          >
+            {link.title}
+          </motion.div>
+        </Link>
+      );
 
     return (
-      <Link
-        {...(link.onClick && { onClick: link.onClick })}
-        href={link.href}
-        className={cn(
-          'overflow-hidden',
-          buttonVariants({
-            variant: path === link.href ? 'default' : 'ghost',
-            size: 'default',
-          }),
-          linkStyle,
-          active && activeStyle,
-        )}
+      <TooltipContainer
+        content={<p>{link.title}</p>}
+        delayDuration={300}
+        side="right"
+        className={isOpen ? 'hidden' : ''}
       >
-        <link.icon
-          className={`mr-4 shrink-0`}
-          {...(active && { color: '#2dd4bf', strokeWidth: 2 })}
-        />
-        <motion.div
-          animate={isOpen ? 'open' : 'closed'}
-          variants={variants}
-          transition={transition}
-        >
-          {link.title}
-        </motion.div>
-      </Link>
+        {Generated}
+      </TooltipContainer>
     );
   };
 
@@ -264,7 +277,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const desktopNav = (
     <>
       <nav
-        className={`flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5 ${isOpen ? 'w-80' : 'w-20'} overflow-hidden transition-all duration-500`}
+        className={`flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5 ${isOpen ? 'w-80' : 'w-[80px]'} min-w-[80px] overflow-hidden transition-all duration-500`}
       >
         <Link
           href="/"

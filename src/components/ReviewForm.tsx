@@ -50,6 +50,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CirclePlus } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
+import MultiSelectFormField from './ui/multibox';
 
 type Props = {
   profId: number;
@@ -77,6 +78,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
       tags: [],
       modality: 'HYBRID',
       professorId: profId,
+      subCourses: [],
     },
     reValidateMode: 'onBlur',
   });
@@ -124,6 +126,34 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
+            <FormField
+              control={form.control}
+              name="subCourses"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sub-courses</FormLabel>
+
+                  <MultiSelectFormField
+                    options={courses.map((course) => ({
+                      value: course,
+                      label: course,
+                    }))}
+                    defaultValue={field.value}
+                    placeholder="Select Courses"
+                    onValueChange={field.onChange}
+                  />
+                  <FormDescription className="flex flex-col text-balance">
+                    Select courses that you would like to include with this
+                    review.{' '}
+                    <span className="italic">
+                      (If your rating for the course differs, please make a
+                      separate review)
+                    </span>
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex flex-row flex-wrap gap-x-8 gap-y-4 lg:grid lg:grid-cols-2 lg:grid-rows-2">
               <FormField
                 control={form.control}

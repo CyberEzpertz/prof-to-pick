@@ -28,6 +28,12 @@ const config = {
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],
       },
+      width: {
+        popover: 'var(--radix-popover-trigger-width)',
+      },
+      maxHeight: {
+        popover: 'var(--radix-popover-content-available-height)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },

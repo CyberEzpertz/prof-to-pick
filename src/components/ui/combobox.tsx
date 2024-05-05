@@ -58,10 +58,7 @@ export function ComboBox({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className={cn(
-          `max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0`,
-          width,
-        )}
+        className={cn(`w-popover max-h-popover p-0`, width)}
         align="start"
       >
         <Command className="border border-slate-800/50 shadow-md">

@@ -54,21 +54,24 @@ model Review {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
-  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String?   @map("user_id")
-  userIdNumber Int       @map("user_id_number") @db.SmallInt
-  tags         Tag[]
-  rating       Int
-  difficulty   Int
-  comment      String
-  modality     Modality
-  course       Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
-  professor    Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
-  professorId  Int       @map("professor_id")
   courseCode   String
-  votes        Vote[]
+  userId       String?   @map("user_id")
+  userIdNumber Int?      @map("user_id_number") @db.SmallInt
+  professorId  Int       @map("professor_id")
+  mainReviewId Int?      @map("main_review_id")
+  rating       Int?
+  difficulty   Int?
+  comment      String?
   voteCount    Int       @default(0) @map("vote_count")
+  modality     Modality?
+  course       Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professor    Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  mainReview   Review?   @relation(name: "sub_reviews", fields: [mainReviewId], references: [id], onDelete: Cascade)
+  tags         Tag[]
   Report       Report[]
+  subReviews   Review[]  @relation(name: "sub_reviews")
+  votes        Vote[]
 
   @@unique([professorId, courseCode, userId])
   @@map("reviews")

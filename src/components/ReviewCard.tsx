@@ -177,7 +177,7 @@ const ReviewCard = ({
         </div>
       </CardHeader>
       <CardContent className="pb-4">
-        <p className="mb-4 text-sm lg:text-base">{review.comment}</p>
+        <p className="mb-4 text-justify text-[15px]">{review.comment}</p>
         <Card className="flex flex-wrap gap-2 p-4 dark:border-slate-800/80 dark:bg-slate-900">
           {review.tags.map((tag, index) => {
             return (

@@ -100,6 +100,7 @@ export const reviewFormSchema = z.object({
   courseCode: z.string({
     required_error: 'Please select a course.',
   }),
+  subCourses: z.array(z.string()),
 });
 
 export const reportFormSchema = z.object({
