@@ -66,11 +66,13 @@ export default async function Compare({
       <Separator />
 
       {profs.length ? (
-        <div className="py-auto flex h-full flex-row items-start gap-4 overflow-scroll p-12">
-          {profs.map((prof) => {
-            if (prof === null) return null;
-            return <CompareCard key={prof.id} prof={prof} />;
-          })}
+        <div className="h-full w-full overflow-scroll">
+          <div className="py-auto mx-auto flex w-max flex-row items-start gap-6 p-12">
+            {profs.map((prof) => {
+              if (prof === null) return null;
+              return <CompareCard key={prof.id} prof={prof} />;
+            })}
+          </div>
         </div>
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-slate-600">

@@ -61,6 +61,7 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
     })
     .finally(() => {
       revalidateTag('reviews');
+      revalidateTag(`professor-${data.professorId}`);
       revalidatePath(`/professor`);
     });
 
@@ -86,6 +87,7 @@ export const deleteReview = async (reviewId: number) => {
         userId: userData.user.id,
       },
     });
+    revalidateTag(`professor-${review.professorId}`);
 
     return true;
   } catch (error) {

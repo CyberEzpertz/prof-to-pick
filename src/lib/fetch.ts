@@ -188,11 +188,27 @@ export const getReviewCourses = async (profId: number) => {
 
 export const getRecentReviews = async () => {
   try {
+    // const recents = await prisma.review.findMany({
+    //   take: 5,
+    //   orderBy: {
+    //     createdAt: 'desc',
+    //   },
+    //   include: {
+    //     professor: {
+    //       select: {
+    //         firstName: true,
+    //         lastName: true,
+    //       },
+    //     },
+    //   },
+    // });
+
     const recents = await prisma.review.findMany({
-      take: 5,
+      distinct: ['userId', 'professorId'],
       orderBy: {
         createdAt: 'desc',
       },
+      take: 5,
       include: {
         professor: {
           select: {
