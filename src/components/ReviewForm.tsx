@@ -1,13 +1,13 @@
 'use client';
 
-import { reviewFormSchema } from '@/lib/types';
+import { ReviewWithSubs, reviewFormSchema } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { createReview } from '@/server-actions/reviews';
+import { createReview, updateReview } from '@/server-actions/reviews';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Modality, Tag } from '@prisma/client';
 import { CommandGroup } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from './ui/button';
@@ -43,48 +43,62 @@ import {
   AlertDialogCancel,
   AlertDialogFooter,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { CirclePlus } from 'lucide-react';
-import { useMediaQuery } from 'usehooks-ts';
 import MultiSelectFormField from './ui/multibox';
 
 type Props = {
   profId: number;
-  profName: string;
   courses: string[];
+  children: ReactNode;
+  review?: ReviewWithSubs;
 };
 
 const tagsEnum = Object.values(Tag);
 const modalityEnum = Object.values(Modality);
 
-const ReviewForm = ({ profId, profName, courses }: Props) => {
+const ReviewForm = ({ profId, courses, children, review }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [isMounted, setMounted] = useState<boolean>(false);
-  const isPhone = useMediaQuery('(max-width: 1024px)');
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const form = useForm<z.infer<typeof reviewFormSchema>>({
-    resolver: zodResolver(reviewFormSchema),
-    defaultValues: {
-      rating: 1,
-      difficulty: 1,
-      tags: [],
-      modality: 'HYBRID',
-      professorId: profId,
-      subCourses: [],
-    },
     reValidateMode: 'onBlur',
+    resolver: zodResolver(reviewFormSchema),
+    ...(review
+      ? {
+          defaultValues: {
+            rating: review.rating as number,
+            comment: review.comment as string,
+            courseCode: review.courseCode as string,
+            difficulty: review.difficulty as number,
+            modality: review.modality as Modality,
+            tags: review.tags,
+            subCourses: review.subReviews.map((review) => review.courseCode),
+            professorId: review.professorId,
+          },
+        }
+      : {
+          defaultValues: {
+            rating: 1,
+            difficulty: 1,
+            tags: [],
+            modality: 'HYBRID',
+            professorId: profId,
+            subCourses: [],
+          },
+        }),
   });
 
   const handleSubmit = async (data: z.infer<typeof reviewFormSchema>) => {
-    const success = await createReview(data);
+    let success;
+    console.log('Review: ' + !!review);
+    if (review) {
+      success = await updateReview(data, review.id);
+    } else {
+      success = await createReview(data);
+    }
+
     setOpen(false);
 
     if (success === 'P2002') {
@@ -109,18 +123,12 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="default" className="gap-2">
-          <CirclePlus />
-          {isPhone && isMounted ? '' : 'Add Review'}
-        </Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="h-max max-h-[90%] w-max max-w-[80%] overflow-y-scroll lg:max-w-[50rem]">
         <AlertDialogHeader>
-          <AlertDialogTitle>Writing a Review</AlertDialogTitle>
-          <AlertDialogDescription>
-            {`You're now writing a review for ${profName}`}
-          </AlertDialogDescription>
+          <AlertDialogTitle>
+            {review ? 'Editing' : 'Writing'} a Review
+          </AlertDialogTitle>
         </AlertDialogHeader>
         <Form {...form}>
           <form

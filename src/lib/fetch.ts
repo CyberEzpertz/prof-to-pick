@@ -167,7 +167,7 @@ export async function getProfReviewsCourses(id: number, reviewLimit?: number) {
   return getCachedProf();
 }
 
-export const getCoursesCodes = async (userId?: string) => {
+export const getCourseCodes = async (userId?: string, profId?: number) => {
   const courses = await prisma.course.findMany({
     select: {
       code: true,
@@ -175,15 +175,17 @@ export const getCoursesCodes = async (userId?: string) => {
     orderBy: {
       code: 'asc',
     },
-    ...(userId !== undefined && {
-      where: {
-        reviews: {
-          none: {
-            userId: userId,
+    ...(userId !== undefined &&
+      profId !== undefined && {
+        where: {
+          reviews: {
+            none: {
+              userId: userId,
+              professorId: profId,
+            },
           },
         },
-      },
-    }),
+      }),
   });
 
   return courses.map((course) => course.code);

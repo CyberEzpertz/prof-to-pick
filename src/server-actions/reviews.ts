@@ -109,3 +109,68 @@ export const deleteReview = async (reviewId: number) => {
     revalidatePath('/professor');
   }
 };
+
+export const updateReview = async (
+  data: z.infer<typeof reviewFormSchema>,
+  reviewId: number,
+) => {
+  const supabase = createServer();
+
+  const { data: userData, error } = await supabase.auth.getUser();
+
+  if (error) return undefined;
+
+  const success = await prisma.review
+    .update({
+      where: {
+        id: reviewId,
+        userId: userData.user.id,
+      },
+      data: {
+        comment: data.comment,
+        difficulty: data.difficulty,
+        rating: data.rating,
+        modality: data.modality,
+        tags: data.tags,
+      },
+    })
+    .then(async (review) => {
+      await prisma.review.deleteMany({
+        where: {
+          mainReviewId: review.id,
+        },
+      });
+
+      if (data.subCourses.length > 0) {
+        await prisma.review.createMany({
+          data: data.subCourses.map((course) => ({
+            courseCode: course,
+            professorId: data.professorId,
+            userId: userData.user.id,
+            mainReviewId: review.id,
+          })),
+        });
+      }
+
+      revalidateTag('reviews');
+
+      return true;
+    })
+    .catch((error) => {
+      console.error('Something happened during submission of review.');
+      console.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          return 'P2002';
+        }
+      }
+      return false;
+    })
+    .finally(() => {
+      revalidateTag('reviews');
+      revalidateTag(`professor-${data.professorId}`);
+      revalidatePath(`/professor`);
+    });
+
+  return success;
+};

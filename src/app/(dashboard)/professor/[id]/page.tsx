@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import prisma from '@/db/prisma/prisma';
 import { redirect } from 'next/navigation';
 import {
-  getCoursesCodes,
+  getCourseCodes,
   getCurrUserId,
   getProfReviewsCourses,
   getReviewCourses,
@@ -16,6 +16,8 @@ import {
 import BackButton from '@/components/BackButton';
 import { unstable_cache } from 'next/cache';
 import { checkIsAdmin } from '@/server-actions/users';
+import { Button } from '@/components/ui/button';
+import { CirclePlus } from 'lucide-react';
 
 const page = async ({
   params,
@@ -90,6 +92,7 @@ const page = async ({
       return Promise.all([
         getProfReviewsCourses(profId),
         getReviewCourses(profId),
+        getCourseCodes(),
       ]);
     },
     [`professor-${profId}`],
@@ -97,12 +100,15 @@ const page = async ({
   );
 
   // Parallel Data Fetching
-  const [[prof, reviewCourses], { reviews, cursor }, unreviewedCourses] =
-    await Promise.all([
-      cachedProfessorData(),
-      getReviews(-1),
-      getCoursesCodes(userId),
-    ]);
+  const [
+    [prof, reviewCourses, courses],
+    { reviews, cursor },
+    unreviewedCourses,
+  ] = await Promise.all([
+    cachedProfessorData(),
+    getReviews(-1),
+    getCourseCodes(userId),
+  ]);
 
   if (!prof) redirect('/not-found');
 
@@ -112,11 +118,12 @@ const page = async ({
         <div className="m-8 mb-0 flex flex-col gap-4 ">
           <BackButton text="Go Back" />
           <div className="flex min-w-0 shrink flex-row gap-4">
-            <ReviewForm
-              profId={prof.id}
-              profName={`${prof.firstName} ${prof.lastName}`}
-              courses={unreviewedCourses}
-            />
+            <ReviewForm profId={prof.id} courses={unreviewedCourses}>
+              <Button variant="default" className="gap-2">
+                <CirclePlus />
+                Add Review
+              </Button>
+            </ReviewForm>
             <div className="ml-auto overflow-scroll">
               <ReviewFilter
                 courses={
@@ -137,6 +144,7 @@ const page = async ({
             offset={offset}
             userId={userId}
             isAdmin={await checkIsAdmin()}
+            courses={courses}
           />
         </ScrollArea>
       </div>

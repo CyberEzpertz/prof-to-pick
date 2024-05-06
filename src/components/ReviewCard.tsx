@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { ChevronRight, TriangleAlert } from 'lucide-react';
+import { ChevronRight, Edit, TriangleAlert } from 'lucide-react';
 import { Badge } from './ui/badge';
 import VoteButtons from './VoteButtons';
 import DeleteButton from './DeleteButton';
@@ -25,12 +25,14 @@ import AvgRating from './AvgRating';
 import { Popover } from '@radix-ui/react-popover';
 import { PopoverContent, PopoverTrigger } from './ui/popover';
 import { TooltipContainer } from './ui/tooltip';
+import ReviewForm from './ReviewForm';
 
 type reviewProps = {
   review: ReviewWithSubs;
   vote: Vote[];
   byCurrentUser: boolean;
   isAdmin?: boolean;
+  courses: string[];
 };
 
 const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
@@ -146,6 +148,7 @@ const ReviewCard = ({
   vote,
   byCurrentUser,
   isAdmin = false,
+  courses,
 }: reviewProps) => {
   const isPhone = useMediaQuery('(max-width: 1024px)');
   const [isMounted, setIsMounted] = useState(false);
@@ -250,7 +253,22 @@ const ReviewCard = ({
             </PopupReportForm>
           )}
           {(byCurrentUser || isAdmin) && (
-            <DeleteButton reviewId={review.id} isPhone={isPhone && isMounted} />
+            <>
+              <ReviewForm
+                courses={courses}
+                profId={review.professorId}
+                review={review}
+              >
+                <Button variant="ghost">
+                  <Edit strokeWidth={1} className="mr-2" />
+                  Edit
+                </Button>
+              </ReviewForm>
+              <DeleteButton
+                reviewId={review.id}
+                isPhone={isPhone && isMounted}
+              />
+            </>
           )}
         </div>
       </CardFooter>

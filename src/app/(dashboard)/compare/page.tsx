@@ -20,9 +20,6 @@ export default async function Compare({
         ? [searchParams['profs']]
         : searchParams['profs'];
 
-  // const prof = await getProfReviewsCourses(9, 5);
-  // const prof2 = await getProfReviewsCourses(1, 5);
-  // const prof3 = await getProfReviewsCourses(2, 5);
   const promises = [];
 
   for (let i = 0; i < profParams.length; i++) {

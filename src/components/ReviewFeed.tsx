@@ -18,6 +18,7 @@ type Props = {
   offset: number;
   userId: string;
   isAdmin?: boolean;
+  courses: string[];
 };
 
 const container = {
@@ -47,6 +48,7 @@ const ReviewFeed = ({
   offset,
   userId,
   isAdmin = false,
+  courses,
 }: Props) => {
   const [loaded, setLoaded] = useState<ReviewWithVotes[]>([]);
   const { ref, inView } = useInView();
@@ -90,6 +92,7 @@ const ReviewFeed = ({
                     vote={review.votes}
                     byCurrentUser={userId === review.userId}
                     isAdmin={isAdmin}
+                    courses={courses}
                   />
                 </motion.li>
               ))}

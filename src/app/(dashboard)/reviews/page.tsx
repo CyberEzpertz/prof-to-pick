@@ -10,7 +10,11 @@ import {
 } from '@/components/ui/pagination';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { getCurrUserId, getCurrentUserReviews } from '@/lib/fetch';
+import {
+  getCourseCodes,
+  getCurrUserId,
+  getCurrentUserReviews,
+} from '@/lib/fetch';
 import { unstable_cache } from 'next/cache';
 
 export default async function Reviews({
@@ -31,6 +35,7 @@ export default async function Reviews({
   );
 
   const reviews = await getCachedReviews(userId, (page - 1) * offset, offset);
+  const courses = await getCourseCodes();
   const numPages = reviews ? Math.ceil(reviews.length / offset) : 0;
 
   return (
@@ -100,6 +105,7 @@ export default async function Reviews({
           <div className="flex flex-col gap-6">
             {reviews?.map((review) => (
               <ReviewCard
+                courses={courses}
                 key={review.id}
                 review={review}
                 vote={review.votes}
