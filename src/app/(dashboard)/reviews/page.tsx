@@ -11,7 +11,6 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { getCurrUserId, getCurrentUserReviews } from '@/lib/fetch';
-import { Review } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 
 export default async function Reviews({
@@ -102,7 +101,7 @@ export default async function Reviews({
             {reviews?.map((review) => (
               <ReviewCard
                 key={review.id}
-                review={review as Review}
+                review={review}
                 vote={review.votes}
                 byCurrentUser={true}
               />

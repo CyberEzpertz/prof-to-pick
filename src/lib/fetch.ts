@@ -246,11 +246,17 @@ export const getCurrentUserReviews = async (
       ...(take && { take: take }),
       where: {
         userId: userId,
+        mainReviewId: null,
       },
       include: {
         votes: {
           where: {
             userId: userId,
+          },
+        },
+        subReviews: {
+          select: {
+            courseCode: true,
           },
         },
       },
