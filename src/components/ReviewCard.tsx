@@ -22,6 +22,9 @@ import Link from 'next/link';
 import { cn, toProperCase } from '@/lib/utils';
 import { ReviewWithProfName, ReviewWithSubs } from '@/lib/types';
 import AvgRating from './AvgRating';
+import { Popover } from '@radix-ui/react-popover';
+import { PopoverContent, PopoverTrigger } from './ui/popover';
+import { TooltipContainer } from './ui/tooltip';
 
 type reviewProps = {
   review: ReviewWithSubs;
@@ -155,8 +158,42 @@ const ReviewCard = ({
     <Card className="max-w-30 flex shrink flex-col rounded-2xl border-0 p-2 dark:bg-slate-900">
       <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
         <div className="flex flex-col gap-1">
-          <CardTitle className="text-lg font-bold text-slate-200 lg:text-3xl">
+          <CardTitle className="flex flex-row items-center gap-2 text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
+            {review.subReviews.length !== 0 && (
+              <Popover>
+                <TooltipContainer
+                  content={
+                    <span className="font-normal">Show Sub-Courses</span>
+                  }
+                  delayDuration={300}
+                  side="right"
+                >
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="size-8 p-1">
+                      <ChevronRight size={16} />
+                    </Button>
+                  </PopoverTrigger>
+                </TooltipContainer>
+                <PopoverContent
+                  className="flex w-32 flex-col items-center justify-center gap-2"
+                  side="right"
+                >
+                  <span className="mb-1 text-xs font-extrabold">
+                    Sub-Courses
+                  </span>
+                  {review.subReviews.map((course) => (
+                    <Badge
+                      key={`${review.id}${course.courseCode}`}
+                      className="flex w-full items-center justify-center p-1 dark:text-slate-400"
+                      variant="secondary"
+                    >
+                      {course.courseCode}
+                    </Badge>
+                  ))}
+                </PopoverContent>
+              </Popover>
+            )}
           </CardTitle>
           <CardDescription className="text-nowrap text-xs text-slate-400 lg:text-sm">
             ID{review.userIdNumber} • {review.modality} •{' '}
