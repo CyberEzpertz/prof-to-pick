@@ -107,7 +107,7 @@ const page = async ({
   ] = await Promise.all([
     cachedProfessorData(),
     getReviews(-1),
-    getCourseCodes(userId),
+    getCourseCodes(userId, profId),
   ]);
 
   if (!prof) redirect('/not-found');

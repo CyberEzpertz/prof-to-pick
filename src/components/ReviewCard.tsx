@@ -173,7 +173,10 @@ const ReviewCard = ({
                   side="right"
                 >
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="size-8 p-1">
+                    <Button
+                      variant="outline"
+                      className="size-8 p-1 dark:bg-slate-900"
+                    >
                       <ChevronRight size={16} />
                     </Button>
                   </PopoverTrigger>
@@ -182,9 +185,7 @@ const ReviewCard = ({
                   className="flex w-32 flex-col items-center justify-center gap-2"
                   side="right"
                 >
-                  <span className="mb-1 text-xs font-extrabold">
-                    Sub-Courses
-                  </span>
+                  <span className="mb-1 text-xs font-bold">SUB-COURSES</span>
                   {review.subReviews.map((course) => (
                     <Badge
                       key={`${review.id}${course.courseCode}`}
@@ -207,7 +208,7 @@ const ReviewCard = ({
             })}
           </CardDescription>
         </div>
-        <div className="flex flex-col gap-x-6 gap-y-4 lg:ml-auto lg:flex-row">
+        <div className="flex flex-row flex-wrap gap-x-6 gap-y-4 lg:ml-auto">
           <ReviewRating name="RATING" rating={review.rating} />
           <ReviewRating
             name="DIFFICULTY"

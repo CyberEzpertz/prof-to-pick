@@ -215,6 +215,9 @@ export const getRecentReviews = async () => {
   try {
     const recents = await prisma.review.findMany({
       distinct: ['userId', 'professorId'],
+      where: {
+        mainReviewId: null,
+      },
       orderBy: {
         createdAt: 'desc',
       },
