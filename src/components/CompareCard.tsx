@@ -18,9 +18,9 @@ const CompareCard = ({ prof }: Props) => {
   const { tier, tierColor } = getTier(prof.avgRating, prof.reviews.length);
 
   return (
-    <Card className="max-h-[800px] w-[500px] min-w-[400px]">
+    <Card className="flex max-h-[800px] w-[500px] min-w-[400px] flex-col">
       <RemoveCompare id={`${prof.id}`} />
-      <CardHeader className="flex flex-row items-center pb-0">
+      <CardHeader className="flex flex-row items-center pb-0 pt-2">
         <div
           className={cn(
             'mr-6 flex size-12 items-center justify-center rounded-lg font-display text-4xl lg:size-16 lg:text-5xl',
@@ -34,10 +34,10 @@ const CompareCard = ({ prof }: Props) => {
           <span>{prof.firstName}</span>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex min-h-0 shrink flex-col">
         <Separator orientation="horizontal" className="my-3" />
 
-        <Tabs defaultValue="stats">
+        <Tabs defaultValue="stats" className="flex min-h-0 flex-col">
           <TabsList className="w-full">
             <TabsTrigger value="stats" className="w-full rounded-md">
               <BarChartHorizontal className="mr-2" size={16} />
@@ -96,7 +96,7 @@ const CompareCard = ({ prof }: Props) => {
           </TabsContent>
           <TabsContent
             value="reviews"
-            className="flex flex-col gap-4 overflow-scroll"
+            className="flex min-h-0 flex-col gap-6 overflow-scroll"
           >
             {prof.reviews.length !== 0 ? (
               prof.reviews.map((review) => (
