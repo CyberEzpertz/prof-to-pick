@@ -35,16 +35,26 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
         userId: userData.user.id,
         userIdNumber: idNumber?.idNumber ?? 122,
         tags: data.tags,
+        votes: {
+          create: {
+            isLike: true,
+            userId: userData.user.id,
+          },
+        },
       },
     })
     .then(async (review) => {
-      const vote = await prisma.vote.create({
-        data: {
-          isLike: true,
-          reviewId: review.id,
-          userId: userData.user.id,
-        },
-      });
+      console.log(data.subCourses);
+      if (data.subCourses.length > 0) {
+        const subReviews = await prisma.review.createMany({
+          data: data.subCourses.map((course) => ({
+            courseCode: course,
+            professorId: data.professorId,
+            userId: userData.user.id,
+            mainReviewId: review.id,
+          })),
+        });
+      }
       revalidateTag('reviews');
 
       return true;

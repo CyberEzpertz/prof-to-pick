@@ -35,7 +35,20 @@ export type ReviewWithProfName = Prisma.ReviewGetPayload<
 
 const profWithReviewsCourses = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
   include: {
-    reviews: true,
+    _count: {
+      select: {
+        reviews: true,
+      },
+    },
+    reviews: {
+      include: {
+        subReviews: {
+          select: {
+            courseCode: true,
+          },
+        },
+      },
+    },
     courses: {
       select: {
         code: true,
@@ -44,9 +57,24 @@ const profWithReviewsCourses = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
   },
 });
 
+const reviewWithSubs = Prisma.validator<Prisma.ReviewDefaultArgs>()({
+  include: {
+    subReviews: {
+      where: {
+        NOT: { mainReviewId: null },
+      },
+      select: {
+        courseCode: true,
+      },
+    },
+  },
+});
+
 export type ProfWithReviewsCourses = Prisma.ProfessorGetPayload<
   typeof profWithReviewsCourses
 >;
+
+export type ReviewWithSubs = Prisma.ReviewGetPayload<typeof reviewWithSubs>;
 
 const profWithReviewCount = Prisma.validator<Prisma.ProfessorDefaultArgs>()({
   include: {
@@ -62,12 +90,17 @@ export type ProfWithReviewCount = Prisma.ProfessorGetPayload<
   typeof profWithReviewCount
 >;
 
-const reviewsWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
+const reviewWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
   include: {
     votes: true,
+    subReviews: {
+      select: {
+        courseCode: true,
+      },
+    },
   },
 });
-export type ReviewsWithVotes = Prisma.ReviewGetPayload<typeof reviewsWithVotes>;
+export type ReviewWithVotes = Prisma.ReviewGetPayload<typeof reviewWithVotes>;
 
 export const scheduleSchema = z.object({
   day: z.nativeEnum(Day),
@@ -100,7 +133,9 @@ export const reviewFormSchema = z.object({
   courseCode: z.string({
     required_error: 'Please select a course.',
   }),
-  subCourses: z.array(z.string()),
+  subCourses: z
+    .array(z.string())
+    .max(4, 'Only up to 4 sub-courses can be selected.'),
 });
 
 export const reportFormSchema = z.object({

@@ -181,6 +181,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
 
     return (
       <TooltipContainer
+        key={link.title}
         content={<p>{link.title}</p>}
         delayDuration={300}
         side="right"

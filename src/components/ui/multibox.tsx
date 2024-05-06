@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/command';
 
 const multiSelectVariants = cva(
-  'm-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300',
+  'm-1 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300',
   {
     variants: {
       variant: {
@@ -127,7 +127,7 @@ const MultiSelectFormField = React.forwardRef<
             ref={ref}
             {...props}
             variant="outline"
-            className="flex h-auto min-h-10 w-full items-center justify-between rounded-md hover:bg-slate-900"
+            className="flex h-auto min-h-10 w-full items-center justify-between rounded-md dark:hover:bg-slate-900"
           >
             {selectedValues.length > 0 ? (
               <div className="flex w-full items-center justify-between">
@@ -152,7 +152,7 @@ const MultiSelectFormField = React.forwardRef<
                         )}
                         {option?.label}
                         <XCircle
-                          className="ml-2 h-4 w-4 cursor-pointer"
+                          className="ml-2 h-4 w-4 cursor-pointer text-slate-500 transition-all duration-300 hover:text-rose-500"
                           onClick={(event) => {
                             event.stopPropagation();
                             toggleOption(value);
@@ -164,7 +164,7 @@ const MultiSelectFormField = React.forwardRef<
                 </div>
                 <div className="flex items-center justify-between">
                   <XIcon
-                    className="text-muted-foreground mx-2 h-4 cursor-pointer"
+                    className="mx-2 h-4 cursor-pointer text-slate-500 transition-all duration-300 hover:text-rose-500"
                     onClick={(event) => {
                       setSelectedValues([]);
                       selectedValuesSet.current.clear();
@@ -176,19 +176,19 @@ const MultiSelectFormField = React.forwardRef<
                     orientation="vertical"
                     className="flex h-full min-h-6"
                   />
-                  <ChevronDown className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+                  <ChevronDown className="ml-2 h-4 cursor-pointer text-slate-500" />
                 </div>
               </div>
             ) : (
               <div className="mx-auto flex w-full items-center justify-between">
                 <span className="text-sm text-slate-500">{placeholder}</span>
-                <ChevronDown className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+                <ChevronDown className="mx-2 h-4 cursor-pointer text-slate-500" />
               </div>
             )}
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-popover max-h-popover p-0 drop-shadow-sm"
+          className="max-h-popover w-popover p-0 drop-shadow-sm"
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
@@ -235,7 +235,7 @@ const MultiSelectFormField = React.forwardRef<
           <WandSparkles
             className={cn(
               'text-foreground bg-background my-2 h-3 w-3 cursor-pointer',
-              isAnimating ? '' : 'text-muted-foreground',
+              isAnimating ? '' : 'text-slate-500',
             )}
             onClick={() => setIsAnimating(!isAnimating)}
           />

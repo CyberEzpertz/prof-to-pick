@@ -127,15 +127,29 @@ export async function getProfReviewsCourses(id: number, reviewLimit?: number) {
           id: id,
         },
         include: {
-          reviews:
-            reviewLimit === undefined
-              ? true
-              : {
-                  take: reviewLimit,
-                  orderBy: {
-                    voteCount: 'desc',
-                  },
+          _count: {
+            select: {
+              reviews: true,
+            },
+          },
+          reviews: {
+            where: {
+              mainReviewId: null,
+            },
+            include: {
+              subReviews: {
+                select: {
+                  courseCode: true,
                 },
+              },
+            },
+            ...(reviewLimit !== null && {
+              take: reviewLimit,
+              orderBy: {
+                voteCount: 'desc',
+              },
+            }),
+          },
           courses: {
             select: {
               code: true,
@@ -153,7 +167,7 @@ export async function getProfReviewsCourses(id: number, reviewLimit?: number) {
   return getCachedProf();
 }
 
-export const getCoursesCodes = async () => {
+export const getCoursesCodes = async (userId?: string) => {
   const courses = await prisma.course.findMany({
     select: {
       code: true,
@@ -161,6 +175,15 @@ export const getCoursesCodes = async () => {
     orderBy: {
       code: 'asc',
     },
+    ...(userId !== undefined && {
+      where: {
+        reviews: {
+          none: {
+            userId: userId,
+          },
+        },
+      },
+    }),
   });
 
   return courses.map((course) => course.code);
@@ -188,21 +211,6 @@ export const getReviewCourses = async (profId: number) => {
 
 export const getRecentReviews = async () => {
   try {
-    // const recents = await prisma.review.findMany({
-    //   take: 5,
-    //   orderBy: {
-    //     createdAt: 'desc',
-    //   },
-    //   include: {
-    //     professor: {
-    //       select: {
-    //         firstName: true,
-    //         lastName: true,
-    //       },
-    //     },
-    //   },
-    // });
-
     const recents = await prisma.review.findMany({
       distinct: ['userId', 'professorId'],
       orderBy: {

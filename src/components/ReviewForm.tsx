@@ -93,11 +93,12 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
         description:
           'You already have a review for that subject. Only 1 review per subject per professor is allowed.',
       });
-    } else if (success)
+    } else if (success) {
       toast({
         description: 'Your review has been successfully submitted.',
       });
-    else
+      form.reset();
+    } else
       toast({
         variant: 'destructive',
         description: "Your review didn't get submitted. Please try again.",
@@ -126,35 +127,7 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
-            <FormField
-              control={form.control}
-              name="subCourses"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sub-courses</FormLabel>
-
-                  <MultiSelectFormField
-                    options={courses.map((course) => ({
-                      value: course,
-                      label: course,
-                    }))}
-                    defaultValue={field.value}
-                    placeholder="Select Courses"
-                    onValueChange={field.onChange}
-                  />
-                  <FormDescription className="flex flex-col text-balance">
-                    Select courses that you would like to include with this
-                    review.{' '}
-                    <span className="italic">
-                      (If your rating for the course differs, please make a
-                      separate review)
-                    </span>
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex flex-row flex-wrap gap-x-8 gap-y-4 lg:grid lg:grid-cols-2 lg:grid-rows-2">
+            <div className="flex flex-row flex-wrap gap-x-8 gap-y-4 lg:grid lg:auto-rows-auto lg:grid-cols-2">
               <FormField
                 control={form.control}
                 name="courseCode"
@@ -190,6 +163,11 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                                   value={course}
                                   key={course}
                                   onSelect={() => {
+                                    const subCourses = form
+                                      .getValues('subCourses')
+                                      .filter((item) => item !== course);
+
+                                    form.setValue('subCourses', subCourses);
                                     form.setValue('courseCode', course);
                                     form.clearErrors('courseCode');
                                     setCoursesOpen(false);
@@ -246,6 +224,41 @@ const ReviewForm = ({ profId, profName, courses }: Props) => {
                     </Select>
                     <FormDescription className="text-balance">
                       What modality did you take this professor under?
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="subCourses"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Sub-courses</FormLabel>
+
+                    <MultiSelectFormField
+                      options={courses.reduce<
+                        Record<'value' | 'label', string>[]
+                      >((acc, course) => {
+                        if (course !== form.getValues('courseCode'))
+                          acc.push({
+                            value: course,
+                            label: course,
+                          });
+                        return acc;
+                      }, [])}
+                      defaultValue={field.value}
+                      placeholder="Select Courses"
+                      onValueChange={field.onChange}
+                      className="h-8"
+                    />
+                    <FormDescription className="flex flex-col text-balance">
+                      Select courses that you would like to include with this
+                      review.{' '}
+                      <span className="italic">
+                        (If your rating for the course differs, please make a
+                        separate review)
+                      </span>
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -55,7 +55,7 @@ model Review {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   courseCode   String
-  userId       String?   @map("user_id")
+  userId       String    @map("user_id")
   userIdNumber Int?      @map("user_id_number") @db.SmallInt
   professorId  Int       @map("professor_id")
   mainReviewId Int?      @map("main_review_id")

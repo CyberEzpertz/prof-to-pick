@@ -1,5 +1,5 @@
 'use client';
-import { Review, Vote } from '@prisma/client';
+import { Vote } from '@prisma/client';
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -20,11 +20,11 @@ import ReviewRating from './ReviewRating';
 import { useMediaQuery } from 'usehooks-ts';
 import Link from 'next/link';
 import { cn, toProperCase } from '@/lib/utils';
-import { ReviewWithProfName } from '@/lib/types';
+import { ReviewWithProfName, ReviewWithSubs } from '@/lib/types';
 import AvgRating from './AvgRating';
 
 type reviewProps = {
-  review: Review;
+  review: ReviewWithSubs;
   vote: Vote[];
   byCurrentUser: boolean;
   isAdmin?: boolean;
@@ -89,7 +89,7 @@ const ReviewCardPreview = ({ review }: { review: ReviewWithProfName }) => {
   );
 };
 
-const ReviewCardCompare = ({ review }: { review: Review }) => {
+const ReviewCardCompare = ({ review }: { review: ReviewWithSubs }) => {
   const isPhone = useMediaQuery('(max-width: 1024px)');
   const [isMounted, setIsMounted] = useState(false);
 
@@ -176,21 +176,23 @@ const ReviewCard = ({
           />
         </div>
       </CardHeader>
-      <CardContent className="pb-4">
-        <p className="mb-4 text-justify text-[15px]">{review.comment}</p>
-        <Card className="flex flex-wrap gap-2 p-4 dark:border-slate-800/80 dark:bg-slate-900">
-          {review.tags.map((tag, index) => {
-            return (
-              <Badge
-                className="h-6 text-xs lg:h-8 lg:text-sm "
-                variant="default"
-                key={index}
-              >
-                {tag.replaceAll('_', ' ')}
-              </Badge>
-            );
-          })}
-        </Card>
+      <CardContent className="flex flex-col gap-4 pb-4">
+        <p className="text-justify text-[15px]">{review.comment}</p>
+        {review.tags.length !== 0 && (
+          <Card className="flex flex-wrap gap-2 p-4 dark:border-slate-800/80 dark:bg-slate-900">
+            {review.tags.map((tag, index) => {
+              return (
+                <Badge
+                  className="h-6 text-xs lg:h-8 lg:text-sm "
+                  variant="default"
+                  key={index}
+                >
+                  {tag.replaceAll('_', ' ')}
+                </Badge>
+              );
+            })}
+          </Card>
+        )}
       </CardContent>
       <CardFooter className="flex flex-row flex-wrap justify-center gap-2 pt-2 text-slate-400 lg:justify-start">
         <div className="flex flex-row items-center lg:mr-auto">

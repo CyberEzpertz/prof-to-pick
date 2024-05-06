@@ -40,7 +40,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
   const { tier, tierColor } = getTier(prof.avgRating, prof.reviews.length);
 
   return (
-    <>
+    <div className="m-auto flex w-full shrink flex-col gap-4">
       <div className="flex flex-row items-center">
         <div
           className={cn(
@@ -62,10 +62,10 @@ export const ProfessorInfo = ({ prof }: Props) => {
 
       <Separator className="" />
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 2xl:gap-6">
         <div className="flex flex-col">
           <span className="mb-2 font-medium text-slate-500">
-            Based on {prof.reviews.length} reviews
+            Based on {prof._count.reviews} reviews
           </span>
           <div className="flex flex-col gap-x-8 gap-y-4 md:max-xl:flex-wrap lg:flex-row">
             <AvgRating title="RATING" rating={prof.avgRating || 0} />
@@ -125,7 +125,7 @@ export const ProfessorInfo = ({ prof }: Props) => {
         </div>
         <RatingDist reviews={prof.reviews} />
       </div>
-    </>
+    </div>
   );
 };
 

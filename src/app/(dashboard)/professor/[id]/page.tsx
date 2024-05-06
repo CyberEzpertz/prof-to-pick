@@ -44,6 +44,7 @@ const page = async ({
         },
       }),
       where: {
+        mainReviewId: null,
         professorId: profId,
         ...(course && {
           courseCode: course as string,
@@ -69,6 +70,11 @@ const page = async ({
             userId: userId,
           },
         },
+        subReviews: {
+          select: {
+            courseCode: true,
+          },
+        },
       },
     });
 
@@ -79,11 +85,10 @@ const page = async ({
     return { reviews, cursor };
   };
 
-  const cachedData = unstable_cache(
+  const cachedProfessorData = unstable_cache(
     async () => {
       return Promise.all([
         getProfReviewsCourses(profId),
-        getCoursesCodes(),
         getReviewCourses(profId),
       ]);
     },
@@ -92,8 +97,12 @@ const page = async ({
   );
 
   // Parallel Data Fetching
-  const [[prof, courses, reviewCourses], { reviews, cursor }] =
-    await Promise.all([cachedData(), getReviews(-1)]);
+  const [[prof, reviewCourses], { reviews, cursor }, unreviewedCourses] =
+    await Promise.all([
+      cachedProfessorData(),
+      getReviews(-1),
+      getCoursesCodes(userId),
+    ]);
 
   if (!prof) redirect('/not-found');
 
@@ -106,7 +115,7 @@ const page = async ({
             <ReviewForm
               profId={prof.id}
               profName={`${prof.firstName} ${prof.lastName}`}
-              courses={courses}
+              courses={unreviewedCourses}
             />
             <div className="ml-auto overflow-scroll">
               <ReviewFilter
@@ -132,10 +141,8 @@ const page = async ({
         </ScrollArea>
       </div>
       <Separator className="order-2 mx-auto h-[1px] w-[80%] lg:my-auto lg:h-[95%] lg:w-[1px]" />
-      <div className="order-1 h-max shrink-0 overflow-y-scroll p-8 lg:order-3 lg:flex lg:h-full lg:flex-[4] lg:flex-col">
-        <div className="m-auto flex w-full shrink flex-col gap-4">
-          <ProfessorInfo prof={prof} />
-        </div>
+      <div className="order-1 h-max shrink-0 overflow-y-scroll p-8 lg:order-3 lg:flex lg:h-full lg:max-w-[550px] lg:flex-[4] lg:flex-col">
+        <ProfessorInfo prof={prof} />
       </div>
     </div>
   );

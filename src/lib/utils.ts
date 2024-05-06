@@ -1,6 +1,6 @@
-import { Review } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { ReviewWithSubs } from './types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,12 +13,12 @@ export function toProperCase(val: string) {
     .replace(/((?<=( |-)|^).)/g, (s) => s.toUpperCase());
 }
 
-export function getStarsCount(
-  reviews: Review[] | { rating: number; difficulty: number }[],
-) {
+export function getStarsCount(reviews: ReviewWithSubs[]) {
   const ratings = reviews.reduce(
     (acc, review) => {
-      acc[review.rating - 1] += 1;
+      acc[review.rating! - 1] += 1;
+      acc[review.rating! - 1] += 1 * review.subReviews.length;
+
       return acc;
     },
     [0, 0, 0, 0, 0],

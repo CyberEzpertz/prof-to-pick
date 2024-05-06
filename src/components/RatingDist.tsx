@@ -2,7 +2,7 @@ import { Star } from 'lucide-react';
 import { Progress } from './ui/progress';
 import { Card } from './ui/card';
 import { getStarsCount } from '@/lib/utils';
-import { Review } from '@prisma/client';
+import { ReviewWithSubs } from '@/lib/types';
 
 type Props = {};
 
@@ -31,7 +31,7 @@ const RatingProgress = ({
   );
 };
 
-const RatingDist = ({ reviews }: { reviews: Review[] }) => {
+const RatingDist = ({ reviews }: { reviews: ReviewWithSubs[] }) => {
   const starsCount = getStarsCount(reviews);
 
   return (

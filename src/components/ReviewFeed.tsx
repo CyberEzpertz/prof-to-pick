@@ -3,17 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { ReviewCard } from './ReviewCard';
 import { useInView } from 'react-intersection-observer';
-import { ReviewsWithVotes } from '@/lib/types';
+import { ReviewWithVotes } from '@/lib/types';
 import { LoadingSpinner } from './ui/spinner';
 import ReviewCardSkeleton from './skeletons/ReviewCardSkeleton';
 import { motion } from 'framer-motion';
 import { CircleOff } from 'lucide-react';
 
 type Props = {
-  initReviews: ReviewsWithVotes[];
+  initReviews: ReviewWithVotes[];
   getReviews: (
     cursor: number,
-  ) => Promise<{ reviews: ReviewsWithVotes[]; cursor: number }>;
+  ) => Promise<{ reviews: ReviewWithVotes[]; cursor: number }>;
   initCursor: number;
   offset: number;
   userId: string;
@@ -48,7 +48,7 @@ const ReviewFeed = ({
   userId,
   isAdmin = false,
 }: Props) => {
-  const [loaded, setLoaded] = useState<ReviewsWithVotes[]>([]);
+  const [loaded, setLoaded] = useState<ReviewWithVotes[]>([]);
   const { ref, inView } = useInView();
 
   useEffect(() => {
