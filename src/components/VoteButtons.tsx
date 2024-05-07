@@ -6,6 +6,7 @@ import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React, { useOptimistic } from 'react';
 import { toast } from './ui/use-toast';
+import { AnimationScope, useAnimate } from 'framer-motion';
 
 type Props = {
   voteCount: number;
@@ -21,16 +22,33 @@ type voteState = {
 
 const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
   const pathname = usePathname();
+  const [likeRef, animateLike] = useAnimate();
+  const [dislikeRef, animateDislike] = useAnimate();
 
   const handleSubmit = async (
     type: 'LIKE' | 'DISLIKE',
     oldVote: boolean | undefined,
+    ref: AnimationScope<any>,
   ) => {
     let newVote;
 
-    if ((type === 'LIKE') === oldVote) newVote = undefined;
-    else newVote = type === 'LIKE';
+    await animateLike(
+      ref.current,
+      { scale: 1.5, rotate: -10 },
+      { duration: 0.1, ease: 'easeOut' },
+    );
+    await animateLike(
+      ref.current,
+      { scale: 1, rotate: 0 },
+      { delay: 0.2, duration: 0, ease: 'easeIn' },
+    );
+
+    if ((type === 'LIKE') === oldVote) {
+      newVote = undefined;
+    } else newVote = type === 'LIKE';
+
     setVoteState(newVote);
+
     const vote = await handleVote(type, oldVote, reviewId, pathname);
     if (vote === undefined) {
       toast({
@@ -75,7 +93,8 @@ const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
     <>
       <div className="flex flex-row gap-2">
         <ThumbsUp
-          onClick={() => handleSubmit('LIKE', voteState.isLike)}
+          ref={likeRef}
+          onClick={() => handleSubmit('LIKE', voteState.isLike, likeRef)}
           strokeWidth={voteState.isLike === true ? 0 : 1}
           fill="#10b981"
           fillOpacity={voteState.isLike === true ? 100 : 0}
@@ -85,7 +104,8 @@ const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
           <span className={`mx-2 font-medium`}>{voteState.voteCount}</span>
         )}
         <ThumbsDown
-          onClick={() => handleSubmit('DISLIKE', voteState.isLike)}
+          ref={dislikeRef}
+          onClick={() => handleSubmit('DISLIKE', voteState.isLike, dislikeRef)}
           strokeWidth={voteState.isLike === false ? 0 : 1}
           fill="#f43f5e"
           fillOpacity={voteState.isLike === false ? 100 : 0}
