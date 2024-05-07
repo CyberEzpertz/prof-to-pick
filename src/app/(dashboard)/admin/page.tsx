@@ -5,6 +5,7 @@ import { fetchAllCourses } from '@/lib/fetch';
 import { checkIsAdmin } from '@/server-actions/users';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
+import TestButton from './TestButton';
 
 const getCachedCourses = unstable_cache(
   async () => fetchAllCourses(),
@@ -36,6 +37,7 @@ const AdminPage = async () => {
           <CourseDelete courses={courses ?? []} />
         </CardContent>
       </Card>
+      <TestButton />
     </div>
   );
 };

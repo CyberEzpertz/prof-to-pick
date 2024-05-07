@@ -253,13 +253,65 @@ export const generateSchedules = async () => {
     return generated;
   };
 
+  const generateIterativeCombination = () => {
+    let memo: classCodeSched[][] = [[]];
+
+    // Iterate throughout all of the courses here.
+    for (const course of courses) {
+      // We'll be storing the new combinations here for the current course.
+      const newCombinations: classCodeSched[][] = [];
+
+      // Iterate through all of currently generated schedules.
+      for (const currCombo of memo) {
+        // Iterate throughout all of the classes of the course
+        let classExists = false;
+        for (const courseClass of course.classes) {
+          let overlap = false;
+
+          // Here check for any overlap with the current combination's classes' schedules.
+          for (const sched of courseClass.schedules) {
+            if (
+              currCombo.some((currClass) =>
+                currClass.schedules.some(
+                  (currSched) => currSched.id === sched.id,
+                ),
+              )
+            ) {
+              overlap = true;
+              break;
+            }
+          }
+
+          // If there is overlap, just skip over it.
+          if (overlap) continue;
+
+          classExists = true;
+          // Make a new combination schedule using the schedule
+          const newCombo = [...currCombo, courseClass];
+          newCombinations.push(newCombo);
+        }
+        if (!classExists) return [];
+      }
+
+      // Reassign memo to the new combinations
+      memo = newCombinations;
+    }
+
+    return memo;
+  };
+
+  const start = performance.now();
   const generations = courses[0].classes.flatMap((courseClass) =>
     generateCombination(
       [courseClass],
       courseClass.schedules.map((sched) => sched.id),
-      0,
+      1,
     ),
   );
+
+  // const generations = generateIterativeCombination();
+  const end = performance.now();
+  console.log((end - start).toFixed(4));
 
   return generations;
 };
