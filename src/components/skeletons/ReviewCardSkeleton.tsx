@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from '../ui/card';
+import { Card, CardHeader, CardContent, CardFooter } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
-import { Separator } from '../ui/separator';
 
 type Props = {};
 
@@ -35,21 +29,20 @@ const ReviewCardSkeleton = () => {
           <ReviewRatingSkeleton />
         </div>
       </CardHeader>
-      <CardContent className="pb-4 ">
+      <CardContent className="pb-4">
         <div className="space-y-2">
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-[40%]" />
         </div>
-        <Separator className="my-4" />
-        <div className="flex flex-row gap-2">
+        <div className="mt-4 flex flex-row gap-2">
           <Skeleton className="h-7 w-32" />
           <Skeleton className="h-7 w-32" />
           <Skeleton className="h-7 w-32" />
         </div>
       </CardContent>
       <CardFooter className="justify-start text-slate-400">
-        <Skeleton className=" h-7 w-64" />
+        <Skeleton className=" h-7 w-full" />
       </CardFooter>
     </Card>
   );

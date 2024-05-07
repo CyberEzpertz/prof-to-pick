@@ -31,7 +31,7 @@ export default function Loading() {
         </div>
       </div>
       <Separator orientation="vertical" className="my-auto h-[95%]" />
-      <div className="flex flex-[4] flex-col justify-center p-8">
+      <div className="flex max-w-[550px] flex-[4] flex-col justify-center p-8">
         <div className="flex flex-row">
           <Skeleton className="mr-6 size-20" />
 
