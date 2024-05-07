@@ -19,7 +19,7 @@ export default async function Settings() {
   if (user === null) redirect('/not-found');
 
   return (
-    <div className="flex h-full w-full flex-row items-center justify-center gap-2">
+    <div className="my-auto flex h-max w-full flex-row items-start justify-center gap-2">
       <Card>
         {user.invites > 0 ? (
           <>

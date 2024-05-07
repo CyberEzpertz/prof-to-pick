@@ -1,17 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { FaGoogle } from 'react-icons/fa';
-import { signIn, validateCode } from '@/server-actions/auth';
+import { signIn } from '@/server-actions/auth';
 
 const LoginForm = ({ isDev = false }: { isDev?: boolean }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -19,48 +11,48 @@ const LoginForm = ({ isDev = false }: { isDev?: boolean }) => {
   const [validated, setValidated] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
 
-  const handleSubmit = async (code: string) => {
-    setLoading(true);
-    const success = await validateCode(code);
-    setLoading(false);
+  // const handleSubmit = async (code: string) => {
+  //   setLoading(true);
+  //   const success = await validateCode(code);
+  //   setLoading(false);
 
-    if (success) {
-      setValidated(true);
-    }
-  };
+  //   if (success) {
+  //     setValidated(true);
+  //   }
+  // };
 
-  useEffect(() => {
-    setOpen(true);
-  }, []);
-  if (!(validated || isDev))
-    return (
-      <div className="flex items-center justify-center">
-        <AlertDialog open={open} onOpenChange={setOpen}>
-          <AlertDialogContent
-            className="w-96"
-            onEscapeKeyDown={(e) => e.preventDefault()}
-          >
-            <AlertDialogHeader>
-              <AlertDialogTitle>Code Verification</AlertDialogTitle>
-              <AlertDialogDescription>
-                Enter the code you received here.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <Input
-              placeholder="Code"
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <Button
-              variant="outline"
-              disabled={loading || code.length <= 15}
-              onClick={() => handleSubmit(code)}
-            >
-              Submit
-            </Button>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
-    );
+  // useEffect(() => {
+  //   setOpen(true);
+  // }, []);
+  // if (!(validated || isDev))
+  //   return (
+  //     <div className="flex items-center justify-center">
+  //       <AlertDialog open={open} onOpenChange={setOpen}>
+  //         <AlertDialogContent
+  //           className="w-96"
+  //           onEscapeKeyDown={(e) => e.preventDefault()}
+  //         >
+  //           <AlertDialogHeader>
+  //             <AlertDialogTitle>Code Verification</AlertDialogTitle>
+  //             <AlertDialogDescription>
+  //               Enter the code you received here.
+  //             </AlertDialogDescription>
+  //           </AlertDialogHeader>
+  //           <Input
+  //             placeholder="Code"
+  //             onChange={(e) => setCode(e.target.value)}
+  //           />
+  //           <Button
+  //             variant="outline"
+  //             disabled={loading || code.length <= 15}
+  //             onClick={() => handleSubmit(code)}
+  //           >
+  //             Submit
+  //           </Button>
+  //         </AlertDialogContent>
+  //       </AlertDialog>
+  //     </div>
+  //   );
 
   return (
     <form
