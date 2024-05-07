@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import { Button, buttonVariants } from './ui/button';
 import {
   Blend,
-  Bolt,
   Calendar,
   Cat,
   HelpCircle,
@@ -15,6 +14,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  Send,
   SquareSigma,
   Star,
 } from 'lucide-react';
@@ -110,9 +110,9 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       icon: HelpCircle,
     },
     {
-      href: '/settings',
-      title: 'Settings',
-      icon: Bolt,
+      href: '/invite',
+      title: 'Invite',
+      icon: Send,
     },
     {
       href: '/login',

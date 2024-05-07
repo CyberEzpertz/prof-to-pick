@@ -12,7 +12,7 @@ import { getCurrUserId, getUserInvites } from '@/lib/fetch';
 import { CircleSlash } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
-export default async function Settings() {
+export default async function Invite() {
   const userId = await getCurrUserId();
   const user = await getUserInvites(userId);
 
