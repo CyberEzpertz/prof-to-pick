@@ -49,7 +49,18 @@ const page = async ({
         mainReviewId: null,
         professorId: profId,
         ...(course && {
-          courseCode: course as string,
+          OR: [
+            {
+              courseCode: course as string,
+            },
+            {
+              subReviews: {
+                some: {
+                  courseCode: course as string,
+                },
+              },
+            },
+          ],
         }),
         ...(rating && {
           rating: Number(rating),
