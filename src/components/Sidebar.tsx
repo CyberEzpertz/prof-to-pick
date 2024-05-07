@@ -303,6 +303,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
         </div>
 
         <div className="mt-auto flex flex-col gap-2">
+          <Separator orientation="horizontal" className="mb-2" />
           {bottomLinks.map(createLink)}
         </div>
       </nav>

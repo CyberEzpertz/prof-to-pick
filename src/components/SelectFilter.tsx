@@ -13,10 +13,7 @@ import {
 type Props = {
   items: {
     name?: string;
-    groupItems: {
-      label: string;
-      value: string;
-    }[];
+    groupItems: Record<'label' | 'value', string>[];
   }[];
   defaultValue?: string;
   placeholder?: ReactNode;

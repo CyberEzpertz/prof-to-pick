@@ -1,11 +1,11 @@
 'use client';
 import { useCallback } from 'react';
-import { ComboBox } from './ui/combobox';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from './ui/scroll-area';
 import { Tag } from '@prisma/client';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 import { Toggle } from './ui/toggle';
+import SelectFilter from './SelectFilter';
 
 const tiers = [
   {
@@ -101,19 +101,18 @@ const CourseFilters = () => {
           ))}
         </ToggleGroup>
         <p className="text-sm text-slate-400">Sort By</p>
-        <ComboBox
-          items={sorts}
-          label="Sort by"
+        <SelectFilter
+          items={[{ groupItems: sorts }]}
           callback={(value) => {
             {
               router.replace(`${pathname}?${createQueryString('sort', value)}`);
             }
           }}
-          noSearch
-          initVal={
+          defaultValue={
             sorts.find((sort) => sort.value === searchParams.get('sort'))
-              ?.label ?? 'Name'
+              ?.label ?? 'name'
           }
+          placeholder="Name"
         />
       </div>
       <ScrollBar orientation="horizontal" />
