@@ -1,10 +1,9 @@
 import { cn, getTier } from '@/lib/utils';
 import React from 'react';
 import { Separator } from './ui/separator';
-import { Star } from 'lucide-react';
+import { Blend } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
 import { ProfWithReviewsCourses } from '@/lib/types';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
@@ -13,27 +12,6 @@ import RatingDist from './RatingDist';
 
 type Props = {
   prof: ProfWithReviewsCourses;
-};
-
-const RatingProgress = ({
-  rating,
-  progress,
-  reviews,
-}: {
-  rating: number;
-  progress: number;
-  reviews: number;
-}) => {
-  return (
-    <div className="flex flex-row items-center gap-2">
-      <div className="-mr-1 flex w-4 flex-row items-center gap-1 text-center">
-        {rating}
-      </div>
-      <Star size={16} strokeWidth={0} fill="#94a3b8" />
-      <Progress value={progress} color="dark:bg-teal-500" className="mx-2" />
-      <span className="font-bold">{reviews}</span>
-    </div>
-  );
 };
 
 export const ProfessorInfo = ({ prof }: Props) => {
@@ -63,6 +41,12 @@ export const ProfessorInfo = ({ prof }: Props) => {
       <Separator className="" />
 
       <div className="flex flex-col gap-4 2xl:gap-6">
+        <Link
+          className={buttonVariants({ variant: 'outline' })}
+          href={`/compare?profs=${prof.id}`}
+        >
+          <Blend className="mr-2" /> Compare Professor
+        </Link>
         <div className="flex flex-col">
           <span className="mb-2 font-medium text-slate-500">
             Based on {prof._count.reviews} reviews

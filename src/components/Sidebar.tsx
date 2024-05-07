@@ -197,7 +197,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       <SheetTrigger>
         <div className="flex flex-row items-center whitespace-nowrap p-4 px-6 font-bold">
           <SquareSigma className="mr-3" color="#00e3c4" size={32} />
-          voxetratio.
+          voxetratio
         </div>
         <Separator />
       </SheetTrigger>
@@ -205,8 +205,8 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
         <nav className="flex h-full flex-col gap-3">
           <Link href="/">
             <span className="flex flex-row items-center pl-4 text-3xl font-extrabold">
-              <SquareSigma className="mr-3" color="#00e3c4" size={32} /> Vox et
-              Ratio
+              <SquareSigma className="mr-3" color="#00e3c4" size={32} />{' '}
+              voxetratio
             </span>
           </Link>
 

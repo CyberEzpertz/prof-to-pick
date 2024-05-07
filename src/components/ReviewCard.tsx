@@ -159,7 +159,7 @@ const ReviewCard = ({
 
   return (
     <Card className="max-w-30 flex shrink flex-col rounded-2xl border-0 p-2 dark:bg-slate-900">
-      <CardHeader className="flex flex-col gap-y-4 space-y-0 lg:flex-row">
+      <CardHeader className="flex flex-col gap-y-4 space-y-0 xl:flex-row">
         <div className="flex flex-col gap-1">
           <CardTitle className="flex flex-row items-center gap-2 text-lg font-bold text-slate-200 lg:text-3xl">
             {review.courseCode}
@@ -208,7 +208,7 @@ const ReviewCard = ({
             })}
           </CardDescription>
         </div>
-        <div className="flex flex-row flex-wrap gap-x-6 gap-y-4 lg:ml-auto">
+        <div className="flex flex-row flex-wrap gap-x-6 gap-y-4 xl:ml-auto">
           <ReviewRating name="RATING" rating={review.rating} />
           <ReviewRating
             name="DIFFICULTY"
@@ -236,8 +236,8 @@ const ReviewCard = ({
         )}
       </CardContent>
       <CardFooter className="w-full pt-2 text-slate-400">
-        <div className="flex w-full flex-row flex-wrap items-center justify-between gap-2 rounded-xl p-2 px-4 dark:bg-slate-950/40">
-          <div className="flex flex-row items-center px-2 lg:mr-auto">
+        <div className="flex w-full flex-row items-center justify-between gap-2 rounded-xl p-2 px-4 dark:bg-slate-950/40">
+          <div className="flex flex-row items-center px-2 py-2 lg:mr-auto">
             <VoteButtons
               voteCount={review.voteCount}
               vote={vote[0] || undefined}
@@ -249,8 +249,12 @@ const ReviewCard = ({
             {!byCurrentUser && (
               <PopupReportForm reviewId={review.id}>
                 <Button variant="ghost">
-                  <TriangleAlert className="lg:mr-2" strokeWidth={1} />
-                  {!isPhone && isMounted && 'Report'}
+                  <TriangleAlert
+                    className="xl:mr-2"
+                    strokeWidth={2}
+                    size={20}
+                  />
+                  <span className="hidden xl:block">Report</span>
                 </Button>
               </PopupReportForm>
             )}
@@ -261,17 +265,14 @@ const ReviewCard = ({
                 review={review}
               >
                 <Button variant="ghost">
-                  <Edit strokeWidth={1} className="mr-2" />
-                  Edit
+                  <Edit strokeWidth={2} size={20} className="xl:mr-2" />
+                  <span className="hidden xl:block">Edit</span>
                 </Button>
               </ReviewForm>
             )}
             {(byCurrentUser || isAdmin) && (
               <>
-                <DeleteButton
-                  reviewId={review.id}
-                  isPhone={isPhone && isMounted}
-                />
+                <DeleteButton reviewId={review.id} />
               </>
             )}
           </div>

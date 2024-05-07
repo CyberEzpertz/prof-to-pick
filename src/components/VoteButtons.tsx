@@ -81,17 +81,21 @@ const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
           fillOpacity={voteState.isLike === true ? 100 : 0}
           className="inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
         />
-        {isPhone && voteState.voteCount}
+        {isPhone && (
+          <span className={`mx-2 font-medium`}>{voteState.voteCount}</span>
+        )}
         <ThumbsDown
           onClick={() => handleSubmit('DISLIKE', voteState.isLike)}
           strokeWidth={voteState.isLike === false ? 0 : 1}
           fill="#f43f5e"
           fillOpacity={voteState.isLike === false ? 100 : 0}
-          className="mr-4 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
+          className="inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200 lg:mr-4"
         />
       </div>
-      {!isPhone &&
-        `${voteState.voteCount} ${voteState.voteCount === 1 ? 'person' : 'people'} found this helpful`}
+      <span className="font-medium">
+        {!isPhone &&
+          `${voteState.voteCount} ${voteState.voteCount === 1 ? 'person' : 'people'} found this helpful`}
+      </span>
     </>
   );
 };
