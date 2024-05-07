@@ -183,82 +183,83 @@ export async function checkClasses() {
   }
 }
 
-// export async function insertScheds() {
-//   const times = [
-//     {
-//       start: 730,
-//       end: 900,
-//     },
-//     {
-//       start: 915,
-//       end: 1045,
-//     },
-//     {
-//       start: 1100,
-//       end: 1230,
-//     },
-//     {
-//       start: 1245,
-//       end: 1415,
-//     },
-//     {
-//       start: 1430,
-//       end: 1600,
-//     },
-//     {
-//       start: 1615,
-//       end: 1745,
-//     },
-//     {
-//       start: 1800,
-//       end: 1930,
-//     },
-//     {
-//       start: 800,
-//       end: 1000,
-//     },
-//     {
-//       start: 1000,
-//       end: 1200,
-//     },
-//     {
-//       start: 1300,
-//       end: 1500,
-//     },
-//     {
-//       start: 1530,
-//       end: 1730,
-//     },
-//     {
-//       start: 1800,
-//       end: 2000,
-//     },
-//   ];
+export const generateSchedules = async () => {
+  type classCodeSched = {
+    code: number;
+    schedules: {
+      id: number;
+      day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S' | 'U';
+      start: number;
+      end: number;
+    }[];
+  };
 
-//   const days = ['M', 'T', 'W', 'H', 'F', 'S'] as const;
+  const courses = await prisma.course.findMany({
+    where: {
+      OR: [
+        {
+          code: 'CCAPDEV',
+        },
+        {
+          code: 'CSSWENG',
+        },
+        {
+          code: 'CCDSTRU',
+        },
+      ],
+    },
+    select: {
+      code: true,
+      classes: {
+        select: {
+          code: true,
+          schedules: true,
+        },
+      },
+    },
+  });
 
-//   let schedules = <
-//     {
-//       start: number;
-//       end: number;
-//       day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S';
-//       date: string;
-//     }[]
-//   >[];
+  const generateCombination = (
+    currCombination: classCodeSched[],
+    usedScheds: number[],
+    courseIndex: number,
+  ): classCodeSched[][] => {
+    if (courseIndex === courses.length) {
+      return [[...currCombination]];
+    }
 
-//   for (const time of times) {
-//     for (const day of days) {
-//       const newSched = {
-//         ...time,
-//         day: day,
-//         date: '',
-//       };
-//       schedules.push(newSched);
-//     }
-//   }
+    const generated: classCodeSched[][] = [];
+    for (const classSched of courses[courseIndex].classes) {
+      let overlap = false;
+      // Check for overlapping schedules
+      for (const sched of classSched.schedules) {
+        if (usedScheds.includes(sched.id)) {
+          overlap = true;
+          break;
+        }
+      }
 
-//   const res = await prisma.schedule.createMany({
-//     data: schedules,
-//     skipDuplicates: true,
-//   });
-// }
+      if (overlap) continue;
+
+      const subGenerations = generateCombination(
+        [...currCombination, classSched],
+        [...usedScheds, ...classSched.schedules.map((sched) => sched.id)],
+        courseIndex + 1,
+      );
+
+      generated.push(...subGenerations);
+    }
+
+    return generated;
+  };
+
+  const generations = courses[0].classes.flatMap((courseClass) =>
+    generateCombination(
+      [courseClass],
+      courseClass.schedules.map((sched) => sched.id),
+      0,
+    ),
+  );
+
+  return generations;
+};
