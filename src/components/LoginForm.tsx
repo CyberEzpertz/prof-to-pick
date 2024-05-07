@@ -1,16 +1,10 @@
 'use client';
-import { useState } from 'react';
 
 import { Button } from './ui/button';
 import { FaGoogle } from 'react-icons/fa';
 import { signIn } from '@/server-actions/auth';
 
 const LoginForm = ({ isDev = false }: { isDev?: boolean }) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [validated, setValidated] = useState<boolean>(false);
-  const [code, setCode] = useState<string>('');
-
   // const handleSubmit = async (code: string) => {
   //   setLoading(true);
   //   const success = await validateCode(code);

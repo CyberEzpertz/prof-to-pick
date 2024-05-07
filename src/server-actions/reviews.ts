@@ -55,7 +55,6 @@ export const createReview = async (data: z.infer<typeof reviewFormSchema>) => {
           })),
         });
       }
-      revalidateTag('reviews');
 
       return true;
     })
