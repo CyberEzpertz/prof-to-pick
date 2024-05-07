@@ -5,7 +5,7 @@ import { Vote } from '@prisma/client';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React, { useOptimistic } from 'react';
-import { useToast } from './ui/use-toast';
+import { toast } from './ui/use-toast';
 
 type Props = {
   voteCount: number;
@@ -21,7 +21,6 @@ type voteState = {
 
 const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
   const pathname = usePathname();
-  const { toast } = useToast();
 
   const handleSubmit = async (
     type: 'LIKE' | 'DISLIKE',
@@ -91,7 +90,8 @@ const VoteButtons = ({ voteCount, vote, reviewId, isPhone }: Props) => {
           className="mr-4 inline-flex cursor-pointer text-slate-400 transition-colors duration-300 hover:text-slate-200"
         />
       </div>
-      {!isPhone && `${voteState.voteCount} found this helpful`}
+      {!isPhone &&
+        `${voteState.voteCount} ${voteState.voteCount === 1 ? 'person' : 'people'} found this helpful`}
     </>
   );
 };

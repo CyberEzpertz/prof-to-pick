@@ -220,11 +220,11 @@ const ReviewCard = ({
       <CardContent className="flex flex-col gap-4 pb-4">
         <p className="text-justify text-[15px]">{review.comment}</p>
         {review.tags.length !== 0 && (
-          <Card className="flex flex-wrap gap-2 p-4 dark:border-slate-800/80 dark:bg-slate-900">
+          <div className="flex flex-wrap gap-2 pt-2">
             {review.tags.map((tag, index) => {
               return (
                 <Badge
-                  className="h-6 text-xs lg:h-8 lg:text-sm "
+                  className="h-6 text-xs lg:h-8 lg:text-sm"
                   variant="default"
                   key={index}
                 >
@@ -232,29 +232,29 @@ const ReviewCard = ({
                 </Badge>
               );
             })}
-          </Card>
+          </div>
         )}
       </CardContent>
-      <CardFooter className="flex flex-row flex-wrap justify-center gap-2 pt-2 text-slate-400 lg:justify-start">
-        <div className="flex flex-row items-center lg:mr-auto">
-          <VoteButtons
-            voteCount={review.voteCount}
-            vote={vote[0] || undefined}
-            reviewId={review.id}
-            isPhone={isPhone && isMounted}
-          />
-        </div>
-        <div className="flex flex-row">
-          {!byCurrentUser && (
-            <PopupReportForm reviewId={review.id}>
-              <Button variant="ghost">
-                <TriangleAlert className="lg:mr-2" strokeWidth={1} />
-                {!isPhone && isMounted && 'Report'}
-              </Button>
-            </PopupReportForm>
-          )}
-          {(byCurrentUser || isAdmin) && (
-            <>
+      <CardFooter className="w-full pt-2 text-slate-400">
+        <div className="flex w-full flex-row flex-wrap items-center justify-between gap-2 rounded-xl p-2 px-4 dark:bg-slate-950/40">
+          <div className="flex flex-row items-center px-2 lg:mr-auto">
+            <VoteButtons
+              voteCount={review.voteCount}
+              vote={vote[0] || undefined}
+              reviewId={review.id}
+              isPhone={isPhone && isMounted}
+            />
+          </div>
+          <div className="flex flex-row">
+            {!byCurrentUser && (
+              <PopupReportForm reviewId={review.id}>
+                <Button variant="ghost">
+                  <TriangleAlert className="lg:mr-2" strokeWidth={1} />
+                  {!isPhone && isMounted && 'Report'}
+                </Button>
+              </PopupReportForm>
+            )}
+            {byCurrentUser && (
               <ReviewForm
                 courses={courses}
                 profId={review.professorId}
@@ -265,12 +265,16 @@ const ReviewCard = ({
                   Edit
                 </Button>
               </ReviewForm>
-              <DeleteButton
-                reviewId={review.id}
-                isPhone={isPhone && isMounted}
-              />
-            </>
-          )}
+            )}
+            {(byCurrentUser || isAdmin) && (
+              <>
+                <DeleteButton
+                  reviewId={review.id}
+                  isPhone={isPhone && isMounted}
+                />
+              </>
+            )}
+          </div>
         </div>
       </CardFooter>
     </Card>
