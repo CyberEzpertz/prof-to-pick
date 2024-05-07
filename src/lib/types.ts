@@ -144,6 +144,12 @@ export const reportFormSchema = z.object({
   reason: z.string().max(300).nullable(),
 });
 
+export const inviteFormSchema = z.object({
+  email: z
+    .string()
+    .endsWith('@dlsu.edu.ph', 'Only DLSU students are allowed to be invited.'),
+});
+
 export const classArraySchema = z.array(classSchema);
 
 export type Schedule = z.infer<typeof scheduleSchema>;

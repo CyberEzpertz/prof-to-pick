@@ -5,8 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form, FormField } from './ui/form';
-import { ReportType } from '@prisma/client';
-import FormSelect from './form/FormSelect';
 import FormTextArea from './form/FormTextArea';
 import { AlertDialogCancel, AlertDialogFooter } from './ui/alert-dialog';
 import { Button } from './ui/button';
@@ -66,20 +64,6 @@ const ReportForm = ({ reviewId, setOpen }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="reportType"
-          render={({ field }) => (
-            <FormSelect
-              defaultValue={`${field.value}`}
-              onValueChange={field.onChange}
-              removeUnderScore
-              description="Pick the one that this review violates the most."
-              label="Report Type"
-              items={Object.values(ReportType)}
-            />
-          )}
-        />
         <FormField
           control={form.control}
           name="reason"

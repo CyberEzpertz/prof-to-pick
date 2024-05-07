@@ -42,7 +42,7 @@ model Report {
 
 model Invite {
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId String  @map("user_id")
   email  String
   used   Boolean @default(false)
 

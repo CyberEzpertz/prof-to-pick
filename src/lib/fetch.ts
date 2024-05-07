@@ -293,3 +293,25 @@ export const getCachedRecents = unstable_cache(
   ['recent-reviews'],
   { tags: ['reviews', 'searchBar'] },
 );
+
+export const getUserInvites = async (userId: string) => {
+  const userInvites = await unstable_cache(
+    async () => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          invites: true,
+          Invite: true,
+        },
+      });
+
+      return user;
+    },
+    [userId, 'invites'],
+    { tags: [`user-${userId}`, 'invites'] },
+  )();
+
+  return userInvites;
+};

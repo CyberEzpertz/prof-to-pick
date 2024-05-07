@@ -278,7 +278,7 @@ const Sidebar = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const desktopNav = (
     <>
       <nav
-        className={`flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5 ${isOpen ? 'w-80' : 'w-[80px]'} min-w-[80px] overflow-hidden transition-all duration-500`}
+        className={`flex h-full flex-col gap-3 bg-slate-900/20 px-4 py-5 ${isOpen ? 'w-72' : 'w-[80px]'} min-w-[80px] max-w-72 shrink-0 overflow-hidden transition-all duration-500`}
       >
         <Link
           href="/"
