@@ -301,15 +301,15 @@ export const generateSchedules = async () => {
   };
 
   const start = performance.now();
-  const generations = courses[0].classes.flatMap((courseClass) =>
-    generateCombination(
-      [courseClass],
-      courseClass.schedules.map((sched) => sched.id),
-      1,
-    ),
-  );
+  // const generations = courses[0].classes.flatMap((courseClass) =>
+  //   generateCombination(
+  //     [courseClass],
+  //     courseClass.schedules.map((sched) => sched.id),
+  //     1,
+  //   ),
+  // );
 
-  // const generations = generateIterativeCombination();
+  const generations = generateIterativeCombination();
   const end = performance.now();
   console.log((end - start).toFixed(4));
 
