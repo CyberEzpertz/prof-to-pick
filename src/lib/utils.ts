@@ -46,3 +46,10 @@ export function getTier(rating: number | null, amount: number) {
 
   return { tier, tierColor };
 }
+
+export function convertTime(time: number) {
+  const hour = Math.floor(time / 100);
+  const minutes = time % 100;
+
+  return `${hour}:${minutes > 10 ? '' : '0'}${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
+}

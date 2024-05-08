@@ -1,8 +1,8 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { CalendarCourse } from '@/lib/types';
+import { cn, convertTime } from '@/lib/utils';
 import { useState } from 'react';
-import { classCodeSched } from '@/server-actions/classes';
 
 enum daysEnum {
   'M',
@@ -13,40 +13,29 @@ enum daysEnum {
   'S',
 }
 
-const convertTime = (time: number) => {
-  const hour = Math.floor(time / 100);
-  const minutes = time % 100;
-
-  if (hour >= 12) return `${hour}:${minutes} PM`;
-
-  return `${hour}:${minutes} AM`;
-};
-
 const CELL_SIZE_PX = 56;
 const CELL_HEIGHT = 'h-14';
 
-const Calendar = ({ courses }: { courses: classCodeSched[] }) => {
+const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
   const [hovered, setHovered] = useState<number | false>(false);
   const cardColors = [
-    'dark:border-amber-800',
-    'dark:border-green-800',
-    'dark:border-teal-800',
-    'dark:border-indigo-800',
-    'dark:border-sky-800',
-    'dark:border-purple-800',
-    'dark:border-rose-800',
-    'dark:border-orange-800',
+    'dark:bg-amber-900',
+    'dark:bg-green-900',
+    'dark:bg-teal-900',
+    'dark:bg-indigo-900',
+    'dark:bg-sky-900',
+    'dark:bg-purple-900',
+    'dark:bg-rose-900',
   ];
 
   const cardShadows = [
-    'dark:shadow-amber-500/50',
-    'dark:shadow-green-500/50',
-    'dark:shadow-teal-500/50',
-    'dark:shadow-indigo-500/50',
-    'dark:shadow-sky-500/50',
-    'dark:shadow-purple-500/50',
-    'dark:shadow-rose-500/50',
-    'dark:shadow-orange-500/50',
+    'dark:shadow-amber-700/50',
+    'dark:shadow-green-700/50',
+    'dark:shadow-teal-700/50',
+    'dark:shadow-indigo-700/50',
+    'dark:shadow-sky-700/50',
+    'dark:shadow-purple-700/50',
+    'dark:shadow-rose-700/50',
   ];
 
   const getRandomColor = () => {
@@ -61,7 +50,7 @@ const Calendar = ({ courses }: { courses: classCodeSched[] }) => {
   const sortedClasses = courses.reduce<
     Record<
       keyof typeof daysEnum,
-      (classCodeSched & { color: string; shadow: string })[]
+      (CalendarCourse & { color: string; shadow: string })[]
     >
   >(
     (acc, course) => {
@@ -75,6 +64,7 @@ const Calendar = ({ courses }: { courses: classCodeSched[] }) => {
           acc[sched.day].push({
             code: course.code,
             schedules: [{ ...sched }],
+            professor: course.professor,
             color: courseColors[course.code].color,
             shadow: courseColors[course.code].shadow,
           });
@@ -103,7 +93,7 @@ const Calendar = ({ courses }: { courses: classCodeSched[] }) => {
     'relative h-full w-full text-center rounded-lg py-2 px-2 mx-2 font-bold';
 
   return (
-    <div className="mx-auto flex h-full min-h-0 w-5/6 flex-row">
+    <div className="m-auto flex h-full min-h-0 w-5/6 flex-row">
       <div className="flex h-full w-full flex-col">
         <div className="flex w-full flex-row border-b border-slate-800 py-4">
           <div className="w-[50px] shrink-0"></div>
@@ -165,7 +155,7 @@ const Calendar = ({ courses }: { courses: classCodeSched[] }) => {
                             onMouseEnter={() => setHovered(currClass.code)}
                             onMouseLeave={() => setHovered(false)}
                             className={cn(
-                              `border-2 p-4 ${hovered === currClass.code && `scale-105 shadow-[0_0px_10px_3px_rgba(0,0,0,0.3)] ${currClass.shadow}`} absolute w-[95%] transition-all ${currClass.color}`,
+                              `border-0 p-4 ${hovered === currClass.code && `scale-105 shadow-[0_0px_10px_3px_rgba(0,0,0,0.3)] ${currClass.shadow}`} absolute w-[95%] transition-all ${currClass.color}`,
                             )}
                             style={{
                               height: calculateHeight(start, end),

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/prisma/prisma';
-import { Class, classArraySchema } from '@/lib/types';
+import { CalendarCourse, Class, classArraySchema } from '@/lib/types';
 import { revalidateTag } from 'next/cache';
 
 const insertData = async (curr: Class) => {
@@ -183,16 +183,6 @@ export async function checkClasses() {
   }
 }
 
-export type classCodeSched = {
-  code: number;
-  schedules: {
-    id: number;
-    day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S' | 'U';
-    start: number;
-    end: number;
-  }[];
-};
-
 export const generateSchedules = async () => {
   const courses = await prisma.course.findMany({
     where: {
@@ -214,21 +204,27 @@ export const generateSchedules = async () => {
         select: {
           code: true,
           schedules: true,
+          professor: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
         },
       },
     },
   });
 
   const generateCombination = (
-    currCombination: classCodeSched[],
+    currCombination: CalendarCourse[],
     usedScheds: number[],
     courseIndex: number,
-  ): classCodeSched[][] => {
+  ): CalendarCourse[][] => {
     if (courseIndex === courses.length) {
       return [[...currCombination]];
     }
 
-    const generated: classCodeSched[][] = [];
+    const generated: CalendarCourse[][] = [];
     for (const classSched of courses[courseIndex].classes) {
       let overlap = false;
       // Check for overlapping schedules
@@ -254,12 +250,12 @@ export const generateSchedules = async () => {
   };
 
   const generateIterativeCombination = () => {
-    let memo: classCodeSched[][] = [[]];
+    let memo: CalendarCourse[][] = [[]];
 
     // Iterate throughout all of the courses here.
     for (const course of courses) {
       // We'll be storing the new combinations here for the current course.
-      const newCombinations: classCodeSched[][] = [];
+      const newCombinations: CalendarCourse[][] = [];
 
       // Iterate through all of currently generated schedules.
       for (const currCombo of memo) {
