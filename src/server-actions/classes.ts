@@ -183,17 +183,17 @@ export async function checkClasses() {
   }
 }
 
-export const generateSchedules = async () => {
-  type classCodeSched = {
-    code: number;
-    schedules: {
-      id: number;
-      day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S' | 'U';
-      start: number;
-      end: number;
-    }[];
-  };
+export type classCodeSched = {
+  code: number;
+  schedules: {
+    id: number;
+    day: 'M' | 'T' | 'W' | 'H' | 'F' | 'S' | 'U';
+    start: number;
+    end: number;
+  }[];
+};
 
+export const generateSchedules = async () => {
   const courses = await prisma.course.findMany({
     where: {
       OR: [
