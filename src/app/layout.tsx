@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Toaster } from '@/components/ui/toaster';
 import NextTopLoader from 'nextjs-toploader';
+import { QueryClient } from '@tanstack/react-query';
+import { ReactQueryClientProvider } from '@/context/QueryContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,6 +18,8 @@ const anton = Anton({
   subsets: ['latin'],
   variable: '--font-display',
 });
+
+const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: 'Vox et Ratio',
@@ -43,7 +47,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         </ThemeProvider>
         <Toaster />
       </body>

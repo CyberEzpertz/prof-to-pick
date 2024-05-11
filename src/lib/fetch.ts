@@ -315,3 +315,37 @@ export const getUserInvites = async (userId: string) => {
 
   return userInvites;
 };
+
+export const getCourseClasses = async (courseCode: string) => {
+  const getCachedResults = unstable_cache(
+    async () => {
+      try {
+        const courseClasses = await prisma.class.findMany({
+          where: {
+            course_code: courseCode,
+          },
+          include: {
+            schedules: true,
+            professor: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                avgDifficulty: true,
+                avgRating: true,
+              },
+            },
+          },
+        });
+
+        return courseClasses;
+      } catch (error) {
+        console.error('Error fetching course classes.');
+      }
+    },
+    [`${courseCode}`],
+    { tags: ['courses', courseCode] },
+  );
+
+  return await getCachedResults();
+};

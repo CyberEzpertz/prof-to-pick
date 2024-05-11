@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/prisma/prisma';
-import { CalendarCourse, Class, classArraySchema } from '@/lib/types';
+import { ClassDetails, Class, classArraySchema } from '@/lib/types';
 import { revalidateTag } from 'next/cache';
 
 const insertData = async (curr: Class) => {
@@ -201,31 +201,32 @@ export const generateSchedules = async () => {
     select: {
       code: true,
       classes: {
-        select: {
-          code: true,
+        include: {
           schedules: true,
           professor: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
+              avgDifficulty: true,
+              avgRating: true,
             },
           },
-          course_code: true,
         },
       },
     },
   });
 
   const generateCombination = (
-    currCombination: CalendarCourse[],
+    currCombination: ClassDetails[],
     usedScheds: number[],
     courseIndex: number,
-  ): CalendarCourse[][] => {
+  ): ClassDetails[][] => {
     if (courseIndex === courses.length) {
       return [[...currCombination]];
     }
 
-    const generated: CalendarCourse[][] = [];
+    const generated: ClassDetails[][] = [];
     for (const classSched of courses[courseIndex].classes) {
       let overlap = false;
       // Check for overlapping schedules
@@ -251,12 +252,12 @@ export const generateSchedules = async () => {
   };
 
   const generateIterativeCombination = () => {
-    let memo: CalendarCourse[][] = [[]];
+    let memo: ClassDetails[][] = [[]];
 
     // Iterate throughout all of the courses here.
     for (const course of courses) {
       // We'll be storing the new combinations here for the current course.
-      const newCombinations: CalendarCourse[][] = [];
+      const newCombinations: ClassDetails[][] = [];
 
       // Iterate through all of currently generated schedules.
       for (const currCombo of memo) {

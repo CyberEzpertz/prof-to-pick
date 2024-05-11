@@ -102,21 +102,22 @@ const reviewWithVotes = Prisma.validator<Prisma.ReviewDefaultArgs>()({
 });
 export type ReviewWithVotes = Prisma.ReviewGetPayload<typeof reviewWithVotes>;
 
-const calendarCourse = Prisma.validator<Prisma.ClassDefaultArgs>()({
-  select: {
-    code: true,
+const classDetails = Prisma.validator<Prisma.ClassDefaultArgs>()({
+  include: {
     schedules: true,
     professor: {
       select: {
+        id: true,
         firstName: true,
         lastName: true,
+        avgDifficulty: true,
+        avgRating: true,
       },
     },
-    course_code: true,
   },
 });
 
-export type CalendarCourse = Prisma.ClassGetPayload<typeof calendarCourse>;
+export type ClassDetails = Prisma.ClassGetPayload<typeof classDetails>;
 
 export const scheduleSchema = z.object({
   day: z.nativeEnum(Day),

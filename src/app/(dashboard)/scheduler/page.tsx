@@ -1,7 +1,10 @@
 import BackButton from '@/components/BackButton';
 import Calendar from '@/components/Calendar';
 import ScheduleSelect from '@/components/ScheduleSelect';
+import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { columns } from '@/components/columns';
+import { getCourseClasses } from '@/lib/fetch';
 import { generateSchedules } from '@/server-actions/classes';
 import { CalendarFold, SlidersVertical } from 'lucide-react';
 
@@ -11,6 +14,7 @@ export default async function Scheduler({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const schedules = await generateSchedules();
+  const courseClasses = await getCourseClasses('CSSWENG');
   const schedIndex = Number.isNaN(Number(searchParams['schedule']))
     ? 0
     : Number(searchParams['schedule']);
@@ -37,10 +41,19 @@ export default async function Scheduler({
           </TabsTrigger>
         </TabsList>
       </div>
-      <TabsContent value="Parameters" className="mt-0"></TabsContent>
-      <TabsContent value="Schedules" className="mt-0 h-full min-h-0 w-full">
-        <ScheduleSelect schedules={scheduleItems} />
-        <Calendar courses={schedules[schedIndex]} />
+      <TabsContent value="Parameters" className="mt-0 flex-col">
+        {courseClasses && (
+          <DataTable columns={columns} data={courseClasses}></DataTable>
+        )}
+      </TabsContent>
+      <TabsContent
+        value="Schedules"
+        className="mt-0 h-full min-h-0 w-full gap-4"
+      >
+        <div className="flex h-full min-h-0 flex-col">
+          <ScheduleSelect schedules={scheduleItems} />
+          <Calendar courses={schedules[schedIndex]} />
+        </div>
       </TabsContent>
     </Tabs>
   );
