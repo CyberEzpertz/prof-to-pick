@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarCourse } from '@/lib/types';
-import { cn, convertTime } from '@/lib/utils';
+import { cn, convertTime, toProperCase } from '@/lib/utils';
 import { useState } from 'react';
 
 enum daysEnum {
@@ -16,26 +16,40 @@ enum daysEnum {
 const CELL_SIZE_PX = 56;
 const CELL_HEIGHT = 'h-14';
 
+const calculateHeight = (start: number, end: number) => {
+  const startHour = Math.floor(start / 100);
+  const endHour = Math.floor(end / 100);
+  const startMinutes = start % 100;
+  const endMinutes = end % 100;
+
+  const totalMinutes = (endHour - startHour) * 60 + (endMinutes - startMinutes);
+
+  // 16 here is to account for offset
+  return (totalMinutes / 60) * CELL_SIZE_PX;
+};
+
 const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
   const [hovered, setHovered] = useState<number | false>(false);
   const cardColors = [
-    'dark:bg-amber-900',
-    'dark:bg-green-900',
-    'dark:bg-teal-900',
-    'dark:bg-indigo-900',
-    'dark:bg-sky-900',
-    'dark:bg-purple-900',
-    'dark:bg-rose-900',
+    'dark:bg-rose-950',
+    'dark:bg-amber-950',
+    'dark:bg-green-950',
+    'dark:bg-purple-950',
+    'dark:bg-indigo-950',
+    'dark:bg-blue-950',
+    'dark:bg-sky-950',
+    'dark:bg-teal-950',
   ];
 
   const cardShadows = [
-    'dark:shadow-amber-700/50',
-    'dark:shadow-green-700/50',
-    'dark:shadow-teal-700/50',
-    'dark:shadow-indigo-700/50',
-    'dark:shadow-sky-700/50',
-    'dark:shadow-purple-700/50',
-    'dark:shadow-rose-700/50',
+    'dark:bg-rose-800 dark:shadow-rose-700/50',
+    'dark:bg-amber-800 dark:shadow-amber-700/50',
+    'dark:bg-green-800 dark:shadow-green-700/50',
+    'dark:bg-purple-800 dark:shadow-purple-700/50',
+    'dark:bg-indigo-800 dark:shadow-indigo-700/50',
+    'dark:bg-blue-800 dark:shadow-blue-700/50',
+    'dark:bg-sky-800 dark:shadow-sky-700/50',
+    'dark:bg-teal-800 dark:shadow-teal-700/50',
   ];
 
   const getRandomColor = () => {
@@ -67,6 +81,7 @@ const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
             professor: course.professor,
             color: courseColors[course.code].color,
             shadow: courseColors[course.code].shadow,
+            course_code: course.course_code,
           });
         }
       }
@@ -76,43 +91,35 @@ const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
     { M: [], T: [], W: [], H: [], F: [], S: [] },
   );
 
-  const calculateHeight = (start: number, end: number) => {
-    const startHour = Math.floor(start / 100);
-    const endHour = Math.floor(end / 100);
-    const startMinutes = start % 100;
-    const endMinutes = end % 100;
-
-    const totalMinutes =
-      (endHour - startHour) * 60 + (endMinutes - startMinutes);
-
-    // 16 here is to account for offset
-    return (totalMinutes / 60) * CELL_SIZE_PX;
-  };
-
   const headerStyle =
-    'relative h-full w-full text-center rounded-lg py-2 px-2 mx-2 font-bold';
+    'relative h-full w-full text-center rounded-lg py-2 px-2 mx-2 font-bold text-slate-400';
 
   return (
-    <div className="m-auto flex h-full min-h-0 w-5/6 flex-row">
+    <div className="flex h-full min-h-0 w-full flex-row">
       <div className="flex h-full w-full flex-col">
-        <div className="flex w-full flex-row border-b border-slate-800 py-4">
+        {/* Top Row */}
+        <div className="flex w-full flex-row border-b border-slate-800 py-1">
           <div className="w-[50px] shrink-0"></div>
           <div className="w-2 shrink-0" />
 
-          <div className={headerStyle}>Monday</div>
-          <div className={headerStyle}>Tuesday</div>
-          <div className={headerStyle}>Wednesday</div>
-          <div className={headerStyle}>Thursday</div>
-          <div className={headerStyle}>Friday</div>
-          <div className={headerStyle}>Saturday</div>
+          <div className={headerStyle}>MONDAY</div>
+          <div className={headerStyle}>TUESDAY</div>
+          <div className={headerStyle}>WEDNESDAY</div>
+          <div className={headerStyle}>THURSDAY</div>
+          <div className={headerStyle}>FRIDAY</div>
+          <div className={headerStyle}>SATURDAY</div>
         </div>
-        <div className="flex h-full w-full overflow-auto">
+
+        {/* Scrollable Container */}
+        <div className="flex h-full min-h-0 w-full overflow-scroll">
+          {/* Calendar Content */}
           <div className="flex h-max w-full flex-row">
-            <div className="flex h-max w-[50px] shrink-0 flex-col items-end">
+            {/* Time indicators */}
+            <div className="ml-2 flex h-max w-[50px] shrink-0 flex-col items-end">
               {[...Array(16)].map((_, index) => (
                 <div className={cn(`${CELL_HEIGHT} shrink-0`)} key={index}>
                   {' '}
-                  <span className="relative top-[3px] w-7 text-nowrap pr-2 text-right text-sm text-slate-500">
+                  <span className="relative top-[3px] w-7 text-nowrap pr-2 text-right text-xs text-slate-500">
                     {index + 7 > 12 ? index - 5 : index + 7}{' '}
                     {index + 7 >= 12 ? 'PM' : 'AM'}
                   </span>
@@ -120,7 +127,7 @@ const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
               ))}
             </div>
 
-            <div className="relative flex w-full flex-row pb-4">
+            <div className="relative flex w-full flex-row">
               <div className="h-full w-0 pt-4">
                 {[...Array(15)].map((_, index) => (
                   <div
@@ -142,7 +149,7 @@ const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
                 (day) => {
                   return (
                     <div
-                      className="relative flex h-full w-full flex-col border-l border-slate-800 pr-2"
+                      className={`relative flex h-full w-full flex-col border-l border-slate-800 pr-2 ${['M', 'W', 'F'].includes(day) && 'bg-slate-900/30'}`}
                       key={day}
                     >
                       {sortedClasses[day].map((currClass, index) => {
@@ -155,17 +162,30 @@ const Calendar = ({ courses }: { courses: CalendarCourse[] }) => {
                             onMouseEnter={() => setHovered(currClass.code)}
                             onMouseLeave={() => setHovered(false)}
                             className={cn(
-                              `border-0 p-4 ${hovered === currClass.code && `scale-105 shadow-[0_0px_10px_3px_rgba(0,0,0,0.3)] ${currClass.shadow}`} absolute w-[95%] transition-all ${currClass.color}`,
+                              `border-0 p-3 ${hovered === currClass.code && `scale-105 shadow-[0_0px_10px_3px_rgba(0,0,0,0.3)]`} absolute w-[95%] transition-all ${currClass.color}`,
+                              hovered === currClass.code && currClass.shadow,
                             )}
                             style={{
                               height: calculateHeight(start, end),
                               top: calculateHeight(700, start) + 16,
                             }}
                           >
-                            <CardTitle>{currClass.code}</CardTitle>
-                            <span>
-                              {convertTime(start)} - {convertTime(end)}
-                            </span>
+                            <div className="flex h-full flex-col justify-center gap-1">
+                              <CardTitle className="text-xs font-bold">
+                                {`${currClass.course_code} [${currClass.code}]`}
+                              </CardTitle>
+                              <div className="text-xs">
+                                <div>
+                                  {convertTime(start)} - {convertTime(end)}
+                                </div>
+                                {currClass.professor && (
+                                  <div className="overflow-hidden text-ellipsis text-nowrap">
+                                    {`${toProperCase(currClass.professor?.firstName)}
+                                    ${toProperCase(currClass.professor?.lastName)}`}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           </Card>
                         );
                       })}

@@ -51,5 +51,5 @@ export function convertTime(time: number) {
   const hour = Math.floor(time / 100);
   const minutes = time % 100;
 
-  return `${hour}:${minutes > 10 ? '' : '0'}${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
+  return `${hour > 12 ? hour - 12 : hour}:${minutes > 10 ? '' : '0'}${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
 }

@@ -1,7 +1,9 @@
+import BackButton from '@/components/BackButton';
 import Calendar from '@/components/Calendar';
-import { buttonVariants } from '@/components/ui/button';
+import ScheduleSelect from '@/components/ScheduleSelect';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { generateSchedules } from '@/server-actions/classes';
-import Link from 'next/link';
+import { CalendarFold, SlidersVertical } from 'lucide-react';
 
 export default async function Scheduler({
   searchParams,
@@ -13,22 +15,33 @@ export default async function Scheduler({
     ? 0
     : Number(searchParams['schedule']);
 
+  const scheduleItems = schedules.map((_, index) => {
+    return { label: `Schedule ${index}`, value: `${index}` };
+  });
+
   return (
-    <div className="flex w-full flex-row">
-      <div className="flex h-full max-w-[200px] flex-col">
-        <div className="flex w-full flex-col gap-2 overflow-scroll">
-          {schedules.map((_, index) => (
-            <Link
-              className={buttonVariants({ variant: 'outline' })}
-              key={index}
-              href={`/scheduler?schedule=${index}`}
-            >
-              Schedule {index}
-            </Link>
-          ))}
-        </div>
+    <Tabs
+      className="flex h-full w-full min-w-0 flex-col"
+      defaultValue="Parameters"
+    >
+      <div className="flex gap-2 border-b border-slate-800 p-8">
+        <BackButton />
+        <h1 className="text-3xl font-extrabold text-slate-100">Scheduler</h1>
+        <TabsList className="ml-auto">
+          <TabsTrigger value="Parameters">
+            <SlidersVertical className="mr-2" size={16} />
+            Parameters
+          </TabsTrigger>
+          <TabsTrigger value="Schedules">
+            <CalendarFold className="mr-2" size={16} /> Schedules
+          </TabsTrigger>
+        </TabsList>
       </div>
-      <Calendar courses={schedules[schedIndex]} />
-    </div>
+      <TabsContent value="Parameters" className="mt-0"></TabsContent>
+      <TabsContent value="Schedules" className="mt-0 h-full min-h-0 w-full">
+        <ScheduleSelect schedules={scheduleItems} />
+        <Calendar courses={schedules[schedIndex]} />
+      </TabsContent>
+    </Tabs>
   );
 }

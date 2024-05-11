@@ -210,6 +210,7 @@ export const generateSchedules = async () => {
               lastName: true,
             },
           },
+          course_code: true,
         },
       },
     },

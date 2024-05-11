@@ -112,6 +112,7 @@ const calendarCourse = Prisma.validator<Prisma.ClassDefaultArgs>()({
         lastName: true,
       },
     },
+    course_code: true,
   },
 });
 
